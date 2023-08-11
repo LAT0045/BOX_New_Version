@@ -6,6 +6,26 @@ import '../utils/colors.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
+  void _onPressedForgot() {
+    //TODO: Thêm hàm quên mật khẩu
+  }
+
+  void _onPressedLogin() {
+    //TODO: Thêm hàm đăng nhập
+  }
+
+  void _onPressedFacebook() {
+    //TODO: Thêm hàm đăng nhập bằng Facebook
+  }
+
+  void _onPressedGmail() {
+    //TODO: Thêm hàm đăng nhập bằng Gmail
+  }
+
+  void _onPressedSignUp() {
+    //TODO: Thêm hàm chuyển sang trang đăng ký
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,7 +99,7 @@ class LoginScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35.0),
               child: TextButton(
-                onPressed: onPressedForgot,
+                onPressed: _onPressedForgot,
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.orangeColor,
                 ),
@@ -104,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                   colors: [AppColors.orangeColor, AppColors.yellowColor],
                 )),
             child: TextButton(
-              onPressed: onPressedLogin,
+              onPressed: _onPressedLogin,
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.all(15),
                   backgroundColor: Colors.transparent,
@@ -164,7 +184,7 @@ class LoginScreen extends StatelessWidget {
 
           // Facebook button
           TextButton.icon(
-              onPressed: onPressedFacebook,
+              onPressed: _onPressedFacebook,
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.lightGrayColor,
                 padding: const EdgeInsets.all(15),
@@ -193,7 +213,7 @@ class LoginScreen extends StatelessWidget {
 
           // Gmail button
           TextButton.icon(
-              onPressed: onPressedGmail,
+              onPressed: _onPressedGmail,
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.lightGrayColor,
                 padding: const EdgeInsets.all(15),
@@ -232,7 +252,7 @@ class LoginScreen extends StatelessWidget {
                     fontSize: 15),
               ),
               TextButton(
-                  onPressed: onPressedSignUp,
+                  onPressed: _onPressedSignUp,
                   child: const Text(
                     "Đăng Ký Ngay >>>>",
                     style: TextStyle(
@@ -245,27 +265,5 @@ class LoginScreen extends StatelessWidget {
         ]),
       ),
     );
-  }
-
-  //--------------------------------------------
-  // Functions
-  void onPressedForgot() {
-    // TODO: Thêm hàm quên mật khẩu
-  }
-
-  void onPressedLogin() {
-    // TODO: Thêm hàm login
-  }
-
-  void onPressedFacebook() {
-    // TODO: Thêm hàm đăng nhập bằng facebook
-  }
-
-  void onPressedGmail() {
-    // TODO: Thêm hàm đăng nhập bằng Gmail
-  }
-
-  void onPressedSignUp() {
-    // TODO: Thêm hàm chuyển sang trang đăng ký
   }
 }
