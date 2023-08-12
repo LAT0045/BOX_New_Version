@@ -12,7 +12,27 @@ class SignUpInfoScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(children: [
           const SizedBox(
-            height: 80,
+            height: 20,
+          ),
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 18.0),
+              child: GestureDetector(
+                onTap: onPressedBackBtn,
+                child: SvgPicture.asset(
+                  "assets/svg/backarrow.svg",
+                  width: 50,
+                  height: 50,
+                  color: AppColors.orangeColor,
+                ),
+              ),
+            ),
+          ), 
+      
+          const SizedBox(
+            height: 40,
           ),
 
           // Name input
@@ -151,4 +171,5 @@ class SignUpInfoScreen extends StatelessWidget {
   // Functions
   void onPressedUpdate(){}
   void onPressedChooseAva(){}
+  void onPressedBackBtn(){}
 }

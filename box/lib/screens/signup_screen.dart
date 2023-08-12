@@ -12,8 +12,24 @@ class SignUpScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(children: [
           const SizedBox(
-            height: 30,
+            height: 20,
           ),
+
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 18.0),
+              child: GestureDetector(
+                onTap: onPressedBackBtn,
+                child: SvgPicture.asset(
+                  "assets/svg/backarrow.svg",
+                  width: 50,
+                  height: 50,
+                  color: AppColors.orangeColor,
+                ),
+              ),
+            ),
+          ), 
 
           // Logo
           SvgPicture.asset(
@@ -135,4 +151,6 @@ class SignUpScreen extends StatelessWidget {
   //--------------------------------------------
   // Functions
   void onPressedSignUp(){}
+  void onPressedBackBtn(){}
+
 }
