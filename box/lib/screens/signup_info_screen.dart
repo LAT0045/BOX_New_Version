@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
 import '../utils/colors.dart';
 
 class SignUpInfoScreen extends StatelessWidget {
@@ -64,15 +62,16 @@ class SignUpInfoScreen extends StatelessWidget {
 
           //Avatar Text
           const Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 45.0),
-              child: Text(
-              "Ảnh đại diện",
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa', fontWeight: FontWeight.bold,)
-              ),
-            ) 
-          ),
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: EdgeInsets.only(left: 45.0),
+                child: Text("Ảnh đại diện",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.bold,
+                    )),
+              )),
 
           const SizedBox(
             height: 50,
@@ -94,7 +93,7 @@ class SignUpInfoScreen extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          
+
           //Choose Avatar
           TextButton(
             onPressed: onPressedChooseAva,
@@ -103,7 +102,10 @@ class SignUpInfoScreen extends StatelessWidget {
             ),
             child: const Text(
               "Chọn Ảnh",
-              style: TextStyle(fontFamily: 'Comfortaa', fontSize: 21, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 21,
+                  fontWeight: FontWeight.bold),
             ),
           ),
 
@@ -122,7 +124,8 @@ class SignUpInfoScreen extends StatelessWidget {
             child: TextButton(
               onPressed: onPressedUpdate,
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -141,7 +144,7 @@ class SignUpInfoScreen extends StatelessWidget {
 
           const SizedBox(
             height: 30,
-          ),     
+          ),
         ]),
       ),
     );
@@ -149,6 +152,6 @@ class SignUpInfoScreen extends StatelessWidget {
 
   //--------------------------------------------
   // Functions
-  void onPressedUpdate(){}
-  void onPressedChooseAva(){}
+  void onPressedUpdate() {}
+  void onPressedChooseAva() {}
 }

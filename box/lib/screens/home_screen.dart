@@ -1,3 +1,4 @@
+import 'package:box/tabs/favorite_tab.dart';
 import 'package:box/tabs/home_tab.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final List tabs = [
       const HomeTab(),
-      Container(),
+      const FavoriteTab(isEmpty: false),
       Container(),
       Container(),
       Container()
