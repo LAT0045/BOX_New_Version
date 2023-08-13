@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../utils/colors.dart';
 
 class SignUpInfoScreen extends StatelessWidget {
@@ -23,7 +24,8 @@ class SignUpInfoScreen extends StatelessWidget {
                   "assets/svg/backarrow.svg",
                   width: 50,
                   height: 50,
-                  color: AppColors.orangeColor,
+                  colorFilter: const ColorFilter.mode(
+                      AppColors.orangeColor, BlendMode.srcIn),
                 ),
               ),
             ),
@@ -175,6 +177,4 @@ class SignUpInfoScreen extends StatelessWidget {
   void onPressedUpdate() {}
   void onPressedChooseAva() {}
   void onPressedBackBtn() {}
-  void onPressedUpdate() {}
-  void onPressedChooseAva() {}
 }

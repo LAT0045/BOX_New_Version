@@ -25,11 +25,12 @@ class SignUpScreen extends StatelessWidget {
                   "assets/svg/backarrow.svg",
                   width: 50,
                   height: 50,
-                  color: AppColors.orangeColor,
+                  colorFilter: const ColorFilter.mode(
+                      AppColors.orangeColor, BlendMode.srcIn),
                 ),
               ),
             ),
-          ), 
+          ),
 
           // Logo
           SvgPicture.asset(
@@ -111,7 +112,7 @@ class SignUpScreen extends StatelessWidget {
           const SizedBox(
             height: 80,
           ),
-          
+
           // SignUp button
           Container(
             decoration: ShapeDecoration(
@@ -123,7 +124,8 @@ class SignUpScreen extends StatelessWidget {
             child: TextButton(
               onPressed: onPressedSignUp,
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -142,7 +144,7 @@ class SignUpScreen extends StatelessWidget {
 
           const SizedBox(
             height: 30,
-          ),     
+          ),
         ]),
       ),
     );
@@ -150,7 +152,6 @@ class SignUpScreen extends StatelessWidget {
 
   //--------------------------------------------
   // Functions
-  void onPressedSignUp(){}
-  void onPressedBackBtn(){}
-
+  void onPressedSignUp() {}
+  void onPressedBackBtn() {}
 }
