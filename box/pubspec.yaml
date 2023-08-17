@@ -40,6 +40,7 @@ dependencies:
   dots_indicator: ^3.0.0
   slide_countdown: ^0.6.0
   lottie: ^2.6.0
+  dotted_decoration: ^2.0.0
 
 dev_dependencies:
   flutter_test:

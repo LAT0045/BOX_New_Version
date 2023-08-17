@@ -241,13 +241,10 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
 
-              const SizedBox(
-                height: 10,
-              ),
-
               // Categories
-              SizedBox(
+              Container(
                 height: 70,
+                alignment: Alignment.center,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
@@ -273,13 +270,13 @@ class _HomeTabState extends State<HomeTab> {
                           style: TextStyle(
                               fontFamily: 'LilitaOne',
                               color: AppColors.orangeColor,
-                              fontSize: 25),
+                              fontSize: 35),
                           textAlign: TextAlign.center,
                         ),
                         SvgPicture.asset(
                           "assets/svg/flash_sale.svg",
-                          height: 30,
-                          width: 30,
+                          height: 35,
+                          width: 35,
                           colorFilter: const ColorFilter.mode(
                               AppColors.orangeColor, BlendMode.srcIn),
                         ),
