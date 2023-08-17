@@ -77,20 +77,6 @@ class OrderTrackingCard extends StatelessWidget {
               
             ],
           ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: SvgPicture.asset(
-                  "assets/svg/heart_icon.svg",
-                  height: 20,
-                  width: 20,
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

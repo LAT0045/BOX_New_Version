@@ -1,4 +1,5 @@
 import 'package:box/tabs/favorite_tab.dart';
+import 'package:box/tabs/notification_tab.dart';
 import 'package:box/tabs/order_tab.dart';
 import 'package:box/tabs/home_tab.dart';
 import 'package:box/tabs/personal_info.dart';
@@ -30,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const HomeTab(),
       const FavoriteTab(isEmpty: true),
       const OrderTab(isEmpty: true),
-      Container(),
+      const NotificationTab(isEmpty: true),
       const PersonalInfoScreen()
     ];
 
