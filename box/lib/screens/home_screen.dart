@@ -1,4 +1,5 @@
 import 'package:box/tabs/favorite_tab.dart';
+import 'package:box/tabs/order_tab.dart';
 import 'package:box/tabs/home_tab.dart';
 import 'package:box/tabs/personal_info.dart';
 import 'package:box/utils/colors.dart';
@@ -28,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List tabs = [
       const HomeTab(),
       const FavoriteTab(isEmpty: true),
-      Container(),
+      const OrderTab(isEmpty: true),
       Container(),
       const PersonalInfoScreen()
     ];

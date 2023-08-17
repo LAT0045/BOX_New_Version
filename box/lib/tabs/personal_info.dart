@@ -22,7 +22,7 @@ class PersonalInfoScreen extends StatelessWidget {
                 height: 230,
                 fit: BoxFit.cover,
               ),
-
+        
               Positioned(
                 top: 15,
                 left: 5,
@@ -75,11 +75,11 @@ class PersonalInfoScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-
+        
                     const SizedBox(
                       height: 20,
                     ),
-
+        
                     //Avatar
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -99,9 +99,9 @@ class PersonalInfoScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-
+        
                         const SizedBox(width: 30),
-
+        
                         //Info
                         const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,9 +125,9 @@ class PersonalInfoScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-
+        
                         const SizedBox(width: 40),
-
+        
                         GestureDetector(
                           onTap: onPressedEdit,
                           child: SvgPicture.asset(
@@ -147,11 +147,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ],
           ),
-
+        
           const SizedBox(
             height: 20,
           ),
-
+        
           //Order button
           Container(
             width: 330,
@@ -211,11 +211,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
+        
           const SizedBox(
             height: 10,
           ),
-
+        
           //BuyAgain
           Container(
             width: 330,
@@ -275,75 +275,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
+        
           const SizedBox(
             height: 10,
           ),
-
-          //Favour
-          Container(
-            width: 330,
-            height: 60,
-            decoration: const BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      color: AppColors.orangeColor, width: 1.5)), // Viền dưới
-            ),
-            child: ElevatedButton(
-              onPressed: onPressedFavour,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                alignment: Alignment.centerLeft,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(
-                    "assets/svg/favour.svg",
-                    width: 45,
-                    height: 45,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.orangeColor, // Màu mới bạn muốn thay đổi
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 7,
-                  ),
-                  const Text(
-                    "Yêu Thích",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Comfortaa',
-                      color: AppColors.orangeColor,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 110,
-                  ),
-                  Transform.rotate(
-                    angle: 3.14159265,
-                    child: SvgPicture.asset(
-                      "assets/svg/backarrow.svg", // Đường dẫn đến tệp SVG
-                      width: 30,
-                      height: 30,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.orangeColor, // Màu mới bạn muốn thay đổi
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(
-            height: 10,
-          ),
-
+        
           //Voucher
           Container(
             width: 330,
@@ -403,11 +339,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
+        
           const SizedBox(
             height: 10,
           ),
-
+        
           //Payments
           Container(
             width: 330,
@@ -467,11 +403,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
+        
           const SizedBox(
             height: 10,
           ),
-
+        
           //Logout
           Container(
             width: 330,
@@ -531,7 +467,7 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
+        
           const SizedBox(
             height: 30,
           ),

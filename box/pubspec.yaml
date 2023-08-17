@@ -87,6 +87,8 @@ flutter:
          - asset: fonts/Comfortaa-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
+         - asset: fonts/Comfortaa-Bold.ttf
+           weight: 500
      - family: LilitaOne
        fonts:
          - asset: fonts/LilitaOne-Regular.ttf

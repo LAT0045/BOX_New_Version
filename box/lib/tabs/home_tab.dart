@@ -169,6 +169,8 @@ class _HomeTabState extends State<HomeTab> {
                         borderSide: const BorderSide(
                             width: 0, style: BorderStyle.none)),
                     hintText: "Hôm nay bạn muốn ăn gì?",
+                    hintStyle: const TextStyle(fontFamily: 'Comfortaa'),
+                    
                     suffixIcon: Container(
                       margin: const EdgeInsets.only(right: 15.0),
                       child: SvgPicture.asset(
@@ -417,7 +419,7 @@ class _HomeTabState extends State<HomeTab> {
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                       fontSize: 15,
-                      fontWeight: FontWeight.w600),
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(
