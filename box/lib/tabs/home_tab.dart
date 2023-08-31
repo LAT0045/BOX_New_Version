@@ -8,6 +8,7 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -26,18 +27,36 @@ class _HomeTabState extends State<HomeTab> {
   ];
   int _currentIndex = 0;
 
-  final List<CategoryCard> _categories = [
-    const CategoryCard(iconPath: "assets/svg/deal.svg", name: "Hot Deal"),
-    const CategoryCard(iconPath: "assets/svg/voucher.svg", name: "Voucher"),
-    const CategoryCard(iconPath: "assets/svg/all.svg", name: "Tất Cả"),
-    const CategoryCard(iconPath: "assets/svg/fastfood.svg", name: "Fastfood"),
-    const CategoryCard(iconPath: "assets/svg/bubble_tea.svg", name: "Trà Sữa"),
-    const CategoryCard(
-        iconPath: "assets/svg/vietnamese_food.svg", name: "Món Việt"),
-    const CategoryCard(iconPath: "assets/svg/korean_food.svg", name: "Món Hàn"),
-    const CategoryCard(
-        iconPath: "assets/svg/japanese_food.svg", name: "Món Nhật")
-  ];
+  List<CategoryCard> _initializeCategories(BuildContext context) {
+    final List<CategoryCard> categories = [
+      CategoryCard(
+          iconPath: "assets/svg/deal.svg",
+          name: AppLocalizations.of(context)!.hotDeal),
+      CategoryCard(
+          iconPath: "assets/svg/voucher.svg",
+          name: AppLocalizations.of(context)!.voucher),
+      CategoryCard(
+          iconPath: "assets/svg/all.svg",
+          name: AppLocalizations.of(context)!.all),
+      CategoryCard(
+          iconPath: "assets/svg/fastfood.svg",
+          name: AppLocalizations.of(context)!.fastFood),
+      CategoryCard(
+          iconPath: "assets/svg/bubble_tea.svg",
+          name: AppLocalizations.of(context)!.bobaTea),
+      CategoryCard(
+          iconPath: "assets/svg/vietnamese_food.svg",
+          name: AppLocalizations.of(context)!.vietnameseFood),
+      CategoryCard(
+          iconPath: "assets/svg/korean_food.svg",
+          name: AppLocalizations.of(context)!.koreanFood),
+      CategoryCard(
+          iconPath: "assets/svg/japanese_food.svg",
+          name: AppLocalizations.of(context)!.japaneseFood)
+    ];
+
+    return categories;
+  }
 
   final List<LastestCard> _testCards = [
     const LastestCard(
@@ -76,8 +95,8 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Slogan
-              Container(
-                margin: const EdgeInsets.only(left: 5.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
                 child: Row(
                   children: [
                     SvgPicture.asset(
@@ -85,15 +104,18 @@ class _HomeTabState extends State<HomeTab> {
                       width: 35,
                       height: 35,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Text(
-                        "Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu.",
-                        style: TextStyle(
-                            color: AppColors.orangeColor,
-                            fontFamily: 'Comfortaa',
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500),
+                    Flexible(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.homeSlogan,
+                          overflow: TextOverflow.visible,
+                          style: const TextStyle(
+                              color: AppColors.orangeColor,
+                              fontFamily: 'Comfortaa',
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     )
                   ],
@@ -107,9 +129,9 @@ class _HomeTabState extends State<HomeTab> {
               // Location
               Container(
                 margin: const EdgeInsets.only(left: 10.0),
-                child: const Text(
-                  "Có phải bạn đang ở:",
-                  style: TextStyle(fontFamily: 'Comfortaa'),
+                child: Text(
+                  AppLocalizations.of(context)!.locationQuestion,
+                  style: const TextStyle(fontFamily: 'Comfortaa'),
                 ),
               ),
 
@@ -168,9 +190,8 @@ class _HomeTabState extends State<HomeTab> {
                         borderRadius: BorderRadius.circular(10.0),
                         borderSide: const BorderSide(
                             width: 0, style: BorderStyle.none)),
-                    hintText: "Hôm nay bạn muốn ăn gì?",
+                    hintText: AppLocalizations.of(context)!.homeHintText,
                     hintStyle: const TextStyle(fontFamily: 'Comfortaa'),
-                    
                     suffixIcon: Container(
                       margin: const EdgeInsets.only(right: 15.0),
                       child: SvgPicture.asset(
@@ -242,15 +263,20 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Categories
-              Container(
-                height: 70,
-                alignment: Alignment.center,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _categories.length,
-                    itemBuilder: (context, index) {
-                      return _categories[index];
-                    }),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0;
+                        i < _initializeCategories(context).length;
+                        i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: _initializeCategories(context)[i],
+                      ),
+                  ],
+                ),
               ),
 
               Container(
@@ -326,9 +352,9 @@ class _HomeTabState extends State<HomeTab> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Đã Xem Gần Đây",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.recentlyViewed,
+                      style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           color: AppColors.orangeColor,
                           fontSize: 15,
@@ -336,9 +362,9 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     TextButton(
                         onPressed: _onPressedSeeMore,
-                        child: const Text(
-                          "Xem thêm >>",
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.seeMore,
+                          style: const TextStyle(
                               fontFamily: 'Comfortaa',
                               color: AppColors.blueColor,
                               fontSize: 15,
@@ -368,9 +394,9 @@ class _HomeTabState extends State<HomeTab> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Dành Riêng Cho Bạn",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.forYou,
+                      style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           color: AppColors.orangeColor,
                           fontSize: 15,
@@ -378,9 +404,9 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                     TextButton(
                         onPressed: _onPressedSeeMore,
-                        child: const Text(
-                          "Xem thêm >>",
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.seeMore,
+                          style: const TextStyle(
                               fontFamily: 'Comfortaa',
                               color: AppColors.blueColor,
                               fontSize: 15,
@@ -408,11 +434,11 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Nearby
-              const Padding(
-                padding: EdgeInsets.all(10.0),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: Text(
-                  "Ở Gần Bạn",
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.nearYou,
+                  style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                       fontSize: 15,

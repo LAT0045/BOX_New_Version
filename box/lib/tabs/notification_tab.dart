@@ -2,6 +2,7 @@ import 'package:box/cards/notification_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationTab extends StatefulWidget {
   final bool isEmpty;
@@ -18,8 +19,8 @@ class _NotificationTabState extends State<NotificationTab> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:widget.isEmpty ? const EmptyNotification() : const Notification()
-    );
+        child:
+            widget.isEmpty ? const EmptyNotification() : const Notification());
   }
 }
 
@@ -30,11 +31,11 @@ class EmptyNotification extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0),
           child: Text(
-            "Thông Báo",
-            style: TextStyle(
+            AppLocalizations.of(context)!.notification,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -73,9 +74,9 @@ class EmptyNotification extends StatelessWidget {
                 const SizedBox(
                   width: 16,
                 ),
-                const Text(
-                  "Thông báo ưu đãi",
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.dealNotification,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontFamily: 'Comfortaa',
                     color: AppColors.grayColor,
@@ -84,7 +85,6 @@ class EmptyNotification extends StatelessWidget {
                 const SizedBox(
                   width: 70,
                 ),
-
                 Transform.rotate(
                   angle: 3.14159265,
                   child: SvgPicture.asset(
@@ -101,11 +101,9 @@ class EmptyNotification extends StatelessWidget {
             ),
           ),
         ),
-
         const SizedBox(
           height: 150,
         ),
-
         SvgPicture.asset(
           "assets/svg/note.svg",
           width: 100,
@@ -114,22 +112,20 @@ class EmptyNotification extends StatelessWidget {
             AppColors.orangeColor,
             BlendMode.srcIn,
           ),
-        ),     
-
+        ),
         const SizedBox(
           height: 20,
         ),
-
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 25.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
           child: Text(
-            "Chỗ này để thông báo về đơn hàng nhe :3",
+            AppLocalizations.of(context)!.orderNotification,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 18,
               color: AppColors.grayColor,
-              ),
+            ),
           ),
         ),
       ],
@@ -156,7 +152,6 @@ class Notification extends StatelessWidget {
             ),
           ),
         ),
-
         Container(
           width: 330,
           height: 50,
@@ -199,7 +194,6 @@ class Notification extends StatelessWidget {
                 const SizedBox(
                   width: 70,
                 ),
-
                 Transform.rotate(
                   angle: 3.14159265,
                   child: SvgPicture.asset(
@@ -216,11 +210,9 @@ class Notification extends StatelessWidget {
             ),
           ),
         ),
-
         const SizedBox(
           height: 20,
         ),
-
         Expanded(
           child: ListView.builder(
               itemCount: 3,
@@ -232,4 +224,5 @@ class Notification extends StatelessWidget {
     );
   }
 }
+
 void onPressedVoucher() {}

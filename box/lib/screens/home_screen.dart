@@ -2,10 +2,11 @@ import 'package:box/tabs/favorite_tab.dart';
 import 'package:box/tabs/notification_tab.dart';
 import 'package:box/tabs/order_tab.dart';
 import 'package:box/tabs/home_tab.dart';
-import 'package:box/tabs/personal_info.dart';
+import 'package:box/tabs/personal_info_tab.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
       const FavoriteTab(isEmpty: true),
       const OrderTab(isEmpty: true),
       const NotificationTab(isEmpty: true),
-      const PersonalInfoScreen()
+      const PersonalInfoTab()
     ];
 
     return Scaffold(
@@ -55,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : AppColors.grayColor,
                       BlendMode.srcIn),
                 ),
-                label: "Trang Chủ"),
+                label: AppLocalizations.of(context)!.homePage),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/svg/favorite_icon.svg",
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : AppColors.grayColor,
                       BlendMode.srcIn),
                 ),
-                label: "Yêu Thích"),
+                label: AppLocalizations.of(context)!.favorite),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/svg/order_icon.svg",
@@ -91,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : AppColors.grayColor,
                       BlendMode.srcIn),
                 ),
-                label: "Thông Báo"),
+                label: AppLocalizations.of(context)!.notification),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
                   "assets/svg/user_icon.svg",

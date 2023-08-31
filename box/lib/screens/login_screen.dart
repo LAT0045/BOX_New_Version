@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -47,21 +47,21 @@ class LoginScreen extends StatelessWidget {
           ),
 
           // Email input
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Email",
+                hintText: AppLocalizations.of(context)!.email,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
             ),
           ),
 
@@ -70,21 +70,21 @@ class LoginScreen extends StatelessWidget {
           ),
 
           // Password input
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Mật khẩu",
+                hintText: AppLocalizations.of(context)!.password,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
               obscureText: true,
             ),
           ),
@@ -103,9 +103,9 @@ class LoginScreen extends StatelessWidget {
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.orangeColor,
                 ),
-                child: const Text(
-                  "Quên mật khẩu?",
-                  style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
+                child: Text(
+                  AppLocalizations.of(context)!.forgotPassword,
+                  style: const TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
                 ),
               ),
             ),
@@ -117,6 +117,7 @@ class LoginScreen extends StatelessWidget {
 
           // Login button
           Container(
+            width: 180,
             decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
@@ -126,15 +127,15 @@ class LoginScreen extends StatelessWidget {
             child: TextButton(
               onPressed: _onPressedLogin,
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shadowColor: Colors.transparent),
-              child: const Text(
-                "Đăng Nhập",
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.signIn,
+                style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 20,
                   color: Colors.white,
@@ -148,27 +149,27 @@ class LoginScreen extends StatelessWidget {
           ),
 
           // Divider
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                Expanded(
+                const Expanded(
                   child: Divider(
                     thickness: 1,
                     color: AppColors.orangeColor,
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    "Hoặc",
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.or,
+                    style: const TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 18,
                         color: AppColors.orangeColor),
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: Divider(
                     thickness: 1,
                     color: AppColors.orangeColor,
@@ -196,11 +197,11 @@ class LoginScreen extends StatelessWidget {
                 width: 20,
                 height: 20,
               ),
-              label: const SizedBox(
+              label: SizedBox(
                 width: 260,
                 child: Text(
-                  "Đăng Nhập Bằng Facebook",
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.signInFacebook,
+                  style: const TextStyle(
                       color: AppColors.orangeColor,
                       fontFamily: 'Comfortaa',
                       fontSize: 18),
@@ -225,11 +226,11 @@ class LoginScreen extends StatelessWidget {
                 width: 20,
                 height: 20,
               ),
-              label: const SizedBox(
+              label: SizedBox(
                 width: 260,
                 child: Text(
-                  "Đăng Nhập Bằng Gmail",
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.signInGmail,
+                  style: const TextStyle(
                       color: AppColors.orangeColor,
                       fontFamily: 'Comfortaa',
                       fontSize: 18),
@@ -241,21 +242,21 @@ class LoginScreen extends StatelessWidget {
           ),
 
           // Question and sign up button
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
-              const Text(
-                "Bạn chưa có tài khoản?",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context)!.noAccount,
+                style: const TextStyle(
                     color: AppColors.orangeColor,
                     fontFamily: 'Comfortaa',
                     fontSize: 15),
               ),
               TextButton(
                   onPressed: _onPressedSignUp,
-                  child: const Text(
-                    "Đăng Ký Ngay >>>>",
-                    style: TextStyle(
+                  child: Text(
+                    AppLocalizations.of(context)!.signUpNow,
+                    style: const TextStyle(
                         color: AppColors.blueColor,
                         fontFamily: 'Comfortaa',
                         fontSize: 15),

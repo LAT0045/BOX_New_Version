@@ -1,0 +1,63 @@
+{
+    "email": "Email",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "signIn": "Connexion",
+    "or": "Ou",
+    "signInFacebook": "Connexion Avec Facebook",
+    "signInGmail": "Connexion Avec Gmail",
+    "noAccount": "Vous n'avez pas de compte?",
+    "signUpNow": "S'inscrire Maintenant >>>>",
+
+    "congratulation": "Félicitations, vous avez réussi à créer un compte avec succès. Maintenant, vivons l'expérience BOX ensemble.",
+    "getStarted": "C'est Parti",
+
+    "reEnterPassword": "Répétez le mot de passe",
+    "signUp": "Inscrire",
+
+    "nameAsking": "Comment vous appelez-vous?",
+    "address": "Votre adresse, veuillez",
+    "avatar": "Avatar",
+    "selectImage": "Sélectionnez Image",
+    "update": "Mise à jour",
+
+    "orderSuccessfully": "Commandé Avec Succès",
+    "viewOrder": "Afficher La Commande ",
+    "homePage": "Page d'accueil",
+
+    "homeSlogan": "L'amour n'est qu'un grain de sable, car la nourriture a submergé l'amour.",
+    "locationQuestion": "Es-tu actuellement à: ",
+    "homeHintText": "Que veux-tu manger aujourd'hui?",
+    "hotDeal": "Offre Spéciale",
+    "voucher": "Coupon",
+    "all": "Tous",
+    "fastFood": "Fast Food",
+    "bobaTea": "Thé Au Lait",
+    "vietnameseFood": "Cuisine Vietnamienne",
+    "koreanFood": "Cuisine Coréenne",
+    "japaneseFood": "Cuisine Japonaise",
+    "recentlyViewed": "Récemment Consulté",
+    "seeMore": "Voir plus >>",
+    "forYou": "Pour Vous",
+    "nearYou": "Près De Vous",
+
+    "favoriteDishes": "Plats Préférés",
+    "favoriteEmpty": "La boîte de favoris est déjà vide :<<<",
+    "addDish": "Ajouter Un Plat",
+
+    "order": "Commande",
+    "noComing": "Personne ne vient vers toi :<<<",
+    "orderMore": "Commandez Plus De Plats",
+
+    "notification": "Notification",
+    "dealNotification": "Notification de promotion",
+    "orderNotification": "Cet espace est réservé aux notifications de commande :3",
+
+    "personalInformation": "Information Personnelle",
+    "repurchase": "Racheter",
+    "payment": "Paiement",
+    "signOut": "Déconnexion",
+    
+    "favorite": "Favori",
+    "account": "Compte"
+}

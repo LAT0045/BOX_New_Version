@@ -2,6 +2,7 @@ import 'package:box/cards/favorite_food_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoriteTab extends StatefulWidget {
   final bool isEmpty;
@@ -29,11 +30,11 @@ class EmptyFavorite extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            "Món Yêu Thích",
-            style: TextStyle(
+            AppLocalizations.of(context)!.favoriteDishes,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -52,9 +53,9 @@ class EmptyFavorite extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        const Text(
-          "Hộp yêu thích rỗng mất rồi :<<<",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.favoriteEmpty,
+          style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 20,
               color: AppColors.grayColor),
@@ -62,20 +63,28 @@ class EmptyFavorite extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: AppColors.mediumOrangeColor),
+              child: SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.addDish,
+                    style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 18,
+                        color: Colors.white),
+                  ),
                 ),
-                backgroundColor: AppColors.mediumOrangeColor),
-            child: const Text(
-              "Thêm Món Ăn Nào",
-              style: TextStyle(
-                  fontFamily: 'Comfortaa', fontSize: 18, color: Colors.white),
-            ))
+              )),
+        )
       ],
     );
   }
@@ -88,11 +97,11 @@ class Favorite extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            "Món Yêu Thích",
-            style: TextStyle(
+            AppLocalizations.of(context)!.favoriteDishes,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
               fontWeight: FontWeight.bold,

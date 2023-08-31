@@ -19,9 +19,18 @@ class CategoryCard extends StatelessWidget {
             height: 40,
             width: 40,
           ),
-          Text(
-            name,
-            style: const TextStyle(fontFamily: 'Comfortaa'),
+          const SizedBox(
+            height: 5.0,
+          ),
+          SizedBox(
+            width: 70,
+            child: Center(
+              child: Text(
+                name,
+                style: const TextStyle(fontFamily: 'Comfortaa'),
+                textAlign: TextAlign.center,
+              ),
+            ),
           )
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class OrderTrackingCard extends StatelessWidget {
   const OrderTrackingCard({super.key});
@@ -35,7 +34,10 @@ class OrderTrackingCard extends StatelessWidget {
                 width: 200,
                 child: Text(
                   "Milano Coffeeeeeeeeeeeeeeeeeeeeeee",
-                  style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: Color(0xFF000000)),
+                  style: TextStyle(
+                      fontFamily: 'Comfortaa',
+                      fontSize: 15,
+                      color: Color(0xFF000000)),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -46,7 +48,10 @@ class OrderTrackingCard extends StatelessWidget {
                   width: 200,
                   child: Text(
                     "Địa chỉiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: Color(0xFF000000)),
+                    style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 15,
+                        color: Color(0xFF000000)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -56,7 +61,10 @@ class OrderTrackingCard extends StatelessWidget {
                 width: 200,
                 child: Text(
                   "Đang giao",
-                  style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: AppColors.blueColor),
+                  style: TextStyle(
+                      fontFamily: 'Comfortaa',
+                      fontSize: 15,
+                      color: AppColors.blueColor),
                 ),
               ),
               SizedBox(
@@ -64,17 +72,17 @@ class OrderTrackingCard extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.topRight,
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                     child: Text(
                       "Xem chi tiết",
-                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: AppColors.mediumOrangeColor),
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 15,
+                          color: AppColors.mediumOrangeColor),
                     ),
                   ),
-                ),     
+                ),
               ),
-
-              
             ],
           ),
         ],

@@ -2,6 +2,7 @@ import 'package:box/cards/order_tracking_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderTab extends StatefulWidget {
   final bool isEmpty;
@@ -17,8 +18,7 @@ class OrderTab extends StatefulWidget {
 class _OrderTabState extends State<OrderTab> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: widget.isEmpty ? const EmptyOrder() : const Order());
+    return SafeArea(child: widget.isEmpty ? const EmptyOrder() : const Order());
   }
 }
 
@@ -29,11 +29,11 @@ class EmptyOrder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            "Đơn Hàng",
-            style: TextStyle(
+            AppLocalizations.of(context)!.order,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -52,9 +52,9 @@ class EmptyOrder extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        const Text(
-          "Hong có ai đang đến với bạn cạ :<<<",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context)!.noComing,
+          style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 20,
               color: AppColors.grayColor),
@@ -62,20 +62,28 @@ class EmptyOrder extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 80, vertical: 10),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: TextButton(
+              onPressed: () {},
+              style: TextButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: AppColors.mediumOrangeColor),
+              child: SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.orderMore,
+                    style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 18,
+                        color: Colors.white),
+                  ),
                 ),
-                backgroundColor: AppColors.mediumOrangeColor),
-            child: const Text(
-              "Đặt Thêm Món Nào",
-              style: TextStyle(
-                  fontFamily: 'Comfortaa', fontSize: 18, color: Colors.white),
-            ))
+              )),
+        )
       ],
     );
   }
@@ -88,11 +96,11 @@ class Order extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 15.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            "Đơn Hàng",
-            style: TextStyle(
+            AppLocalizations.of(context)!.order,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
               fontWeight: FontWeight.bold,

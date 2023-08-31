@@ -1,6 +1,5 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({super.key});
@@ -36,7 +35,11 @@ class NotificationCard extends StatelessWidget {
                   width: 200,
                   child: Text(
                     "Tiêu đề thông báo",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 16, color: Color(0xFF000000), fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 16,
+                        color: Color(0xFF000000),
+                        fontWeight: FontWeight.bold),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -47,7 +50,10 @@ class NotificationCard extends StatelessWidget {
                     width: 230,
                     child: Text(
                       "Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu.Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. ",
-                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: Color(0xFF000000)),
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 15,
+                          color: Color(0xFF000000)),
                       maxLines: 5,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -57,7 +63,10 @@ class NotificationCard extends StatelessWidget {
                   width: 200,
                   child: Text(
                     "12:00",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15, color: AppColors.darkGrayColor),
+                    style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 15,
+                        color: AppColors.darkGrayColor),
                   ),
                 ),
               ],

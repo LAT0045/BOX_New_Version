@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -67,21 +67,21 @@ class SignUpScreen extends StatelessWidget {
           ),
 
           // Password input
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Mật khẩu",
+                hintText: AppLocalizations.of(context)!.password,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
               obscureText: true,
             ),
           ),
@@ -90,21 +90,21 @@ class SignUpScreen extends StatelessWidget {
             height: 18,
           ),
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Nhập lại mật khẩu",
+                hintText: AppLocalizations.of(context)!.reEnterPassword,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
               obscureText: true,
             ),
           ),
@@ -115,6 +115,7 @@ class SignUpScreen extends StatelessWidget {
 
           // SignUp button
           Container(
+            width: 180,
             decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
@@ -124,16 +125,15 @@ class SignUpScreen extends StatelessWidget {
             child: TextButton(
               onPressed: onPressedSignUp,
               style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shadowColor: Colors.transparent),
-              child: const Text(
-                "Đăng ký",
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.signUp,
+                style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 20,
                   color: Colors.white,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class SignUpInfoScreen extends StatelessWidget {
@@ -36,21 +37,21 @@ class SignUpInfoScreen extends StatelessWidget {
           ),
 
           // Name input
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Tên của bạn là gì?",
+                hintText: AppLocalizations.of(context)!.nameAsking,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
             ),
           ),
 
@@ -59,21 +60,21 @@ class SignUpInfoScreen extends StatelessWidget {
           ),
 
           // address input
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 45.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 45.0),
             child: TextField(
               decoration: InputDecoration(
-                enabledBorder: UnderlineInputBorder(
+                enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(
                   color: AppColors.orangeColor,
                 )),
-                focusedBorder: UnderlineInputBorder(
+                focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(color: AppColors.orangeColor),
                 ),
-                hintText: "Địa chỉ nè",
+                hintText: AppLocalizations.of(context)!.address,
               ),
               cursorColor: AppColors.orangeColor,
-              style: TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+              style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
               obscureText: true,
             ),
           ),
@@ -83,12 +84,12 @@ class SignUpInfoScreen extends StatelessWidget {
           ),
 
           //Avatar Text
-          const Align(
+          Align(
               alignment: Alignment.centerLeft,
               child: Padding(
-                padding: EdgeInsets.only(left: 45.0),
-                child: Text("Ảnh đại diện",
-                    style: TextStyle(
+                padding: const EdgeInsets.only(left: 45.0),
+                child: Text(AppLocalizations.of(context)!.avatar,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       fontWeight: FontWeight.bold,
@@ -122,9 +123,9 @@ class SignUpInfoScreen extends StatelessWidget {
             style: TextButton.styleFrom(
               foregroundColor: AppColors.blueColor,
             ),
-            child: const Text(
-              "Chọn Ảnh",
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context)!.selectImage,
+              style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 21,
                   fontWeight: FontWeight.bold),
@@ -137,6 +138,7 @@ class SignUpInfoScreen extends StatelessWidget {
 
           // Update button
           Container(
+            width: 180,
             decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18)),
@@ -146,16 +148,15 @@ class SignUpInfoScreen extends StatelessWidget {
             child: TextButton(
               onPressed: onPressedUpdate,
               style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shadowColor: Colors.transparent),
-              child: const Text(
-                "Cập Nhật",
-                style: TextStyle(
+              child: Text(
+                AppLocalizations.of(context)!.update,
+                style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 20,
                   color: Colors.white,

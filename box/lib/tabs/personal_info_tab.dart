@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
-class PersonalInfoScreen extends StatelessWidget {
-  const PersonalInfoScreen({super.key});
+class PersonalInfoTab extends StatelessWidget {
+  const PersonalInfoTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,116 +22,30 @@ class PersonalInfoScreen extends StatelessWidget {
                 height: 230,
                 fit: BoxFit.cover,
               ),
-        
-              Positioned(
-                top: 15,
-                left: 5,
-                //Back button
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: onPressedBackBtn,
-                              child: SvgPicture.asset(
-                                "assets/svg/backarrow.svg",
-                                width: 50,
-                                height: 50,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.white,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            "Thông tin cá nhân",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Comfortaa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          GestureDetector(
-                            onTap: onPressedSettingBtn,
-                            child: SvgPicture.asset(
-                              "assets/svg/setting.svg",
-                              width: 35,
-                              height: 35,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-        
-                    const SizedBox(
-                      height: 20,
-                    ),
-        
-                    //Avatar
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         const SizedBox(
-                          width: 20,
+                          width: 35,
                         ),
-                        //Avatar
-                        Container(
-                          width: 105,
-                          height: 105,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/svg/avatest.jpg"),
-                            ),
+                        Text(
+                          AppLocalizations.of(context)!.personalInformation,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Comfortaa',
                           ),
                         ),
-        
-                        const SizedBox(width: 30),
-        
-                        //Info
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Họ Tên",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'Comfortaa',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "0769816622",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Comfortaa',
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-        
-                        const SizedBox(width: 40),
-        
                         GestureDetector(
-                          onTap: onPressedEdit,
+                          onTap: onPressedSettingBtn,
                           child: SvgPicture.asset(
-                            "assets/svg/edit.svg",
+                            "assets/svg/setting.svg",
                             width: 35,
                             height: 35,
                             colorFilter: const ColorFilter.mode(
@@ -141,17 +55,84 @@ class PersonalInfoScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  //Avatar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      //Avatar
+                      Container(
+                        width: 105,
+                        height: 105,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage("assets/svg/avatest.jpg"),
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 30),
+
+                      //Info
+                      const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Họ Tên",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Comfortaa',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            "0769816622",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Comfortaa',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(width: 40),
+
+                      GestureDetector(
+                        onTap: onPressedEdit,
+                        child: SvgPicture.asset(
+                          "assets/svg/edit.svg",
+                          width: 35,
+                          height: 35,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ],
           ),
-        
+
           const SizedBox(
             height: 20,
           ),
-        
+
           //Order button
           Container(
             width: 330,
@@ -184,9 +165,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Đơn Hàng",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.order,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -211,11 +192,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //BuyAgain
           Container(
             width: 330,
@@ -248,9 +229,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Mua Lại",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.repurchase,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -275,11 +256,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Voucher
           Container(
             width: 330,
@@ -312,9 +293,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 16,
                   ),
-                  const Text(
-                    "Ưu đãi",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.hotDeal,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -339,11 +320,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Payments
           Container(
             width: 330,
@@ -376,9 +357,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Thanh toán",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.payment,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -403,11 +384,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Logout
           Container(
             width: 330,
@@ -440,9 +421,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Đăng xuất",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.signOut,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -467,7 +448,7 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 30,
           ),

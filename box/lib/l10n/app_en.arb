@@ -1,0 +1,63 @@
+{
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign In",
+    "or": "Or",
+    "signInFacebook": "Sign In With Facebook",
+    "signInGmail": "Sign In With Gmail",
+    "noAccount": "Don't have an account",
+    "signUpNow": "Sign Up Now >>>>",
+
+    "congratulation": "Congratulations, you have successfully registered an account. Now, let's experience BOX together.",
+    "getStarted": "Let's Get Started",
+
+    "reEnterPassword": "Re-Enter password",
+    "signUp": "Sign Up",
+
+    "nameAsking": "What's your name?",
+    "address": "Your address please",
+    "avatar": "Avatar",
+    "selectImage": "Select Image",
+    "update": "Update",
+
+    "orderSuccessfully": "Order Successfully",
+    "viewOrder": "View Order",
+    "homePage": "Home Page",
+
+    "homeSlogan": "Love is just a grain of sand, for food has overwhelmed love.",
+    "locationQuestion": "Are you currently at: ",
+    "homeHintText": "What do you want to eat today?",
+    "hotDeal": "Hot Deal",
+    "voucher": "Voucher",
+    "all": "All",
+    "fastFood": "Fast Food",
+    "bobaTea": "Boba Tea",
+    "vietnameseFood": "Vietnamese Food",
+    "koreanFood": "Korean Food",
+    "japaneseFood": "Japanese Food",
+    "recentlyViewed": "Recently Viewed",
+    "seeMore": "See more >>",
+    "forYou": "For You",
+    "nearYou": "Near You",
+
+    "favoriteDishes": "Favorite Dishes",
+    "favoriteEmpty": "Favorite box is empty now :<<<",
+    "addDish": "Add Any Dishes",
+
+    "order": "Order",
+    "noComing": "Nobody is coming to you :<<<",
+    "orderMore": "Order More Dishes",
+
+    "notification": "Notification",
+    "dealNotification": "Deal notification",
+    "orderNotification": "This area is for order notification :3",
+
+    "personalInformation": "Personal Information",
+    "repurchase": "Repurchase",
+    "payment": "Payment",
+    "signOut": "Sign Out",
+
+    "favorite": "Favorite",
+    "account": "Account"
+}
