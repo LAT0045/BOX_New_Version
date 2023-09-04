@@ -59,5 +59,14 @@
     "signOut": "Déconnexion",
     
     "favorite": "Favori",
-    "account": "Compte"
+    "account": "Compte",
+
+    "product": "produit",
+    "pay": "Payer",
+    "save": "Save",
+
+    "add": "Ajouter",
+    "note": "Note",
+    "checkOut": "Procéder Au Paiement",
+    "orderEmpty": "Il n'y a rien dans la boîte :<<<"
 }

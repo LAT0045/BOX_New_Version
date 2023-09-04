@@ -14,8 +14,6 @@ class CheckOutDetail extends StatefulWidget {
     const DeliveryFoodCard()
   ];
 
-  int _selectedValue = 1;
-
   @override
   State<StatefulWidget> createState() {
     return _CheckOutDetailState();
@@ -23,9 +21,11 @@ class CheckOutDetail extends StatefulWidget {
 }
 
 class _CheckOutDetailState extends State<CheckOutDetail> {
+  int _selectedValue = 1;
+
   void _selectPaymentMethod(int value) {
     setState(() {
-      widget._selectedValue = value;
+      _selectedValue = value;
     });
   }
 
@@ -188,7 +188,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                   "Thanh toán tiền mặt",
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
-                groupValue: widget._selectedValue,
+                groupValue: _selectedValue,
                 activeColor: AppColors.orangeColor,
                 onChanged: (value) => _selectPaymentMethod(value!)),
 
@@ -198,7 +198,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                   "Thanh toán online",
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
-                groupValue: widget._selectedValue,
+                groupValue: _selectedValue,
                 activeColor: AppColors.orangeColor,
                 onChanged: (value) => _selectPaymentMethod(value!)),
 
@@ -240,22 +240,25 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
 
             // Checkout button
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30.0),
+              padding: const EdgeInsets.all(10.0),
               child: TextButton(
                   onPressed: () {},
                   style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 130, vertical: 10),
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                       backgroundColor: AppColors.mediumOrangeColor),
-                  child: const Text(
-                    "Đặt Hàng",
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 18,
-                        color: Colors.white),
+                  child: const SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      "Đặt Hàng",
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 18,
+                          color: Colors.white),
+                      textAlign: TextAlign.center,
+                    ),
                   )),
             )
           ],

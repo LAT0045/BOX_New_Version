@@ -2,9 +2,7 @@ import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalFoodCard extends StatefulWidget {
-  HorizontalFoodCard({super.key});
-
-  int _quantity = 0;
+  const HorizontalFoodCard({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -13,15 +11,17 @@ class HorizontalFoodCard extends StatefulWidget {
 }
 
 class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
+  int _quantity = 0;
+
   void _onPressIncrease() {
     setState(() {
-      widget._quantity++;
+      _quantity++;
     });
   }
 
   void _onPressDecrease() {
     setState(() {
-      widget._quantity--;
+      _quantity--;
     });
   }
 
@@ -34,6 +34,7 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
         width: double.infinity,
         child: Row(
           children: [
+            // Food Image
             Image.asset(
               'assets/test/ca_phe_kem_trung.jpeg',
               height: 80,
@@ -43,76 +44,85 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
             const SizedBox(
               width: 10,
             ),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 180,
-                  child: Text(
-                    "Cà Phê Kem Trứng",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                  width: 180,
-                  child: Text(
-                    "25.000Đ",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
-                  ),
-                ),
-              ],
-            ),
+
+            // Food Information
             Expanded(
-              child: SizedBox(
-                height: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      onTap: _onPressDecrease,
-                      child: Visibility(
-                        visible: widget._quantity > 0,
-                        child: const CircleAvatar(
-                          radius: 10,
-                          backgroundColor: AppColors.orangeColor,
-                          child: Icon(
-                            Icons.remove_outlined,
-                            color: Colors.white,
-                            size: 15,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(
+                    width: 180,
+                    child: Text(
+                      "Cà Phê Kem Trứng",
+                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Price
+                      const Text(
+                        "25.000Đ",
+                        style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                      ),
+
+                      Row(
+                        children: [
+                          //Decrease button
+                          Visibility(
+                            visible: _quantity > 0,
+                            child: GestureDetector(
+                              onTap: _onPressDecrease,
+                              child: const CircleAvatar(
+                                radius: 10,
+                                backgroundColor: AppColors.orangeColor,
+                                child: Icon(
+                                  Icons.remove_outlined,
+                                  color: Colors.white,
+                                  size: 15,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: widget._quantity > 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          widget._quantity.toString(),
-                          style: const TextStyle(fontFamily: 'Comfortaa'),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _onPressIncrease,
-                      child: const CircleAvatar(
-                        radius: 10,
-                        backgroundColor: AppColors.orangeColor,
-                        child: Icon(
-                          Icons.add_outlined,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+
+                          // Quantity
+                          Visibility(
+                            visible: _quantity > 0,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Text(
+                                _quantity.toString(),
+                                style: const TextStyle(fontFamily: 'Comfortaa'),
+                              ),
+                            ),
+                          ),
+
+                          // Increase button
+                          GestureDetector(
+                            onTap: _onPressIncrease,
+                            child: const CircleAvatar(
+                              radius: 10,
+                              backgroundColor: AppColors.orangeColor,
+                              child: Icon(
+                                Icons.add_outlined,
+                                color: Colors.white,
+                                size: 15,
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),

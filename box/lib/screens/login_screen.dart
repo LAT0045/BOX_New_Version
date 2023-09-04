@@ -6,25 +6,15 @@ import '../utils/colors.dart';
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  void _onPressedForgot() {
-    //TODO: Thêm hàm quên mật khẩu
-  }
+  void _onPressedForgot() {}
 
-  void _onPressedLogin() {
-    //TODO: Thêm hàm đăng nhập
-  }
+  void _onPressedLogin() {}
 
-  void _onPressedFacebook() {
-    //TODO: Thêm hàm đăng nhập bằng Facebook
-  }
+  void _onPressedFacebook() {}
 
-  void _onPressedGmail() {
-    //TODO: Thêm hàm đăng nhập bằng Gmail
-  }
+  void _onPressedGmail() {}
 
-  void _onPressedSignUp() {
-    //TODO: Thêm hàm chuyển sang trang đăng ký
-  }
+  void _onPressedSignUp() {}
 
   @override
   Widget build(BuildContext context) {

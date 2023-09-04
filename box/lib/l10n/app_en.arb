@@ -59,5 +59,14 @@
     "signOut": "Sign Out",
 
     "favorite": "Favorite",
-    "account": "Account"
+    "account": "Account",
+
+    "product": "product",
+    "pay": "Pay",
+    "save": "Save",
+
+    "add": "Add",
+    "note": "Note",
+    "checkOut": "Check Out",
+    "orderEmpty": "There is nothing in the box :<<<"
 }

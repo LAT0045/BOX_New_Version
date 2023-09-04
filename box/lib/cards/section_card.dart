@@ -15,7 +15,7 @@ class SectionCard extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
               sectionName,
               style: const TextStyle(

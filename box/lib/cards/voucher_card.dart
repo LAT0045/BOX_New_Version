@@ -2,6 +2,7 @@ import 'package:box/utils/colors.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VoucherCard extends StatelessWidget {
   const VoucherCard({super.key});
@@ -94,11 +95,12 @@ class VoucherCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(width: 1, color: AppColors.orangeColor),
             ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
               child: Text(
-                "Lưu",
-                style: TextStyle(
+                AppLocalizations.of(context)!.save,
+                style: const TextStyle(
                     fontFamily: 'Comfortaa', color: AppColors.orangeColor),
               ),
             ),

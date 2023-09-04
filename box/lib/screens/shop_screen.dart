@@ -3,7 +3,7 @@ import 'package:box/cards/horizontal_food_card.dart';
 import 'package:box/cards/voucher_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -16,9 +16,9 @@ class ShopScreen extends StatefulWidget {
   ];
 
   final List<HorizontalFoodCard> _foods = [
-    HorizontalFoodCard(),
-    HorizontalFoodCard(),
-    HorizontalFoodCard()
+    const HorizontalFoodCard(),
+    const HorizontalFoodCard(),
+    const HorizontalFoodCard()
   ];
 
   @override
@@ -178,7 +178,7 @@ class _ShopScreenState extends State<ShopScreen> {
 
               // Voucher
               const Padding(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(10.0),
                 child: SizedBox(
                   width: double.infinity,
                   child: Align(
@@ -213,6 +213,10 @@ class _ShopScreenState extends State<ShopScreen> {
 
               // Food 2
               SectionCard(sectionName: "Trà Sữa", widgets: widget._foods),
+
+              const SizedBox(
+                height: 50.0,
+              )
             ],
           ),
         ),
@@ -237,9 +241,9 @@ class _ShopScreenState extends State<ShopScreen> {
                   colorFilter:
                       const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
-                const Text(
-                  "2 sản phẩm",
-                  style: TextStyle(
+                Text(
+                  "2 ${AppLocalizations.of(context)!.product}",
+                  style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       color: Colors.white,
                       fontSize: 15),
@@ -256,21 +260,22 @@ class _ShopScreenState extends State<ShopScreen> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.white,
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                     child: Row(
                       children: [
                         Text(
-                          "T.Toán",
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.pay,
+                          style: const TextStyle(
                               fontFamily: 'Comfortaa',
                               color: AppColors.mediumOrangeColor,
                               fontSize: 15),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 5,
                         ),
-                        Icon(
+                        const Icon(
                           Icons.east_outlined,
                           color: AppColors.mediumOrangeColor,
                           size: 20,

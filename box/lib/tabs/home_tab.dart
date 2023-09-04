@@ -73,13 +73,9 @@ class _HomeTabState extends State<HomeTab> {
     )
   ];
 
-  void _onPressedAddress() {
-    // TODO: Thêm hàm thay đổi địa chỉ
-  }
+  void _onPressedAddress() {}
 
-  void _onPressedSeeMore() {
-    // TODO: Thêm hàm xem thêm
-  }
+  void _onPressedSeeMore() {}
 
   @override
   Widget build(BuildContext context) {
@@ -285,60 +281,66 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Flash Sale
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "FLASH \nSALE",
-                          style: TextStyle(
-                              fontFamily: 'LilitaOne',
-                              color: AppColors.orangeColor,
-                              fontSize: 35),
-                          textAlign: TextAlign.center,
-                        ),
-                        SvgPicture.asset(
-                          "assets/svg/flash_sale.svg",
-                          height: 35,
-                          width: 35,
-                          colorFilter: const ColorFilter.mode(
-                              AppColors.orangeColor, BlendMode.srcIn),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const SlideCountdownSeparated(
-                          duration: Duration(hours: 12),
-                          decoration: BoxDecoration(color: Colors.black),
-                          textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                          height: 20,
-                          width: 18,
-                        )
-                      ],
-                    ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          // Flash sale
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30.0, vertical: 20.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "FLASH \nSALE",
+                                    style: TextStyle(
+                                        fontFamily: 'LilitaOne',
+                                        color: AppColors.orangeColor,
+                                        fontSize: 35),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SvgPicture.asset(
+                                    "assets/svg/flash_sale.svg",
+                                    height: 35,
+                                    width: 35,
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.orangeColor, BlendMode.srcIn),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const SlideCountdownSeparated(
+                                    duration: Duration(hours: 12),
+                                    decoration:
+                                        BoxDecoration(color: Colors.black),
+                                    textStyle: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    height: 20,
+                                    width: 18,
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+
+                          // Flash sale items
+                          else {
+                            return const FoodCard(
+                              type: FoodCard.salesFood,
+                            );
+                          }
+                        }),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return const FoodCard(
-                                type: FoodCard.salesFood,
-                              );
-                            }),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
 
               Container(

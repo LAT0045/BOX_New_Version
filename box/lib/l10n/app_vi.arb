@@ -59,5 +59,14 @@
     "signOut": "Đăng Xuất",
 
     "favorite": "Yêu Thích",
-    "account": "Tài Khoản"
+    "account": "Tài Khoản",
+
+    "product": "sản phẩm",
+    "pay": "T.Toán",
+    "save": "Lưu",
+
+    "add": "Thêm",
+    "note": "Ghi chú",
+    "checkOut": "Thanh Toán",
+    "orderEmpty": "Hông có gì trong hộp cả :<<<"
 }
