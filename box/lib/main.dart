@@ -1,10 +1,25 @@
-import 'package:box/screens/home_screen.dart';
+import 'package:box/screens/login_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'l10n/l10n.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: const FirebaseOptions(
+      apiKey: 'AIzaSyA-jb9J27ArBrzGChVuJemdOqmgZxgWiHY',
+      authDomain: 'pbox-b4a17.firebaseapp.com',
+      projectId: 'pbox-b4a17',
+      storageBucket: 'pbox-b4a17.appspot.com',
+      messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
+      appId: '1:1049009016949:android:3aa88260719a2baf89283c',
+    ),
+  );
+
   runApp(const MyApp());
 }
 
@@ -24,6 +39,6 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
-        home: const HomeScreen());
+        home: const LoginScreen());
   }
 }

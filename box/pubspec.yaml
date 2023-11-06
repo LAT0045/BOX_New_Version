@@ -44,6 +44,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: any 
+  google_sign_in: ^6.1.5
+  firebase_auth: ^4.12.1
+  firebase_core: ^2.21.0
 
 dev_dependencies:
   flutter_test:
