@@ -1,5 +1,7 @@
+import 'package:box/cards/topping_card.dart';
 import 'package:box/screens/home_screen.dart';
-import 'package:box/tabs/notification_tab.dart';
+import 'package:box/cards/option_card.dart';
+import 'package:box/details/food_detail.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,8 +16,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
     debugShowCheckedModeBanner: false, home: HomeScreen()
-    //home: NotificationTab(isEmpty: false,),
+    //home: SectionCard(sectionName: "Chọn Size", widgets: [ToppingCard(name: "Size S", price: "0đ",),ToppingCard(name: "Size M", price: "5000đ",),ToppingCard(name: "Size L", price: "10000đ",),],)
     );
-      
+    
   }
 }

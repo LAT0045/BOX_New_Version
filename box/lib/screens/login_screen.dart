@@ -158,7 +158,7 @@ class LoginScreen extends StatelessWidget {
                     color: AppColors.orangeColor,
                   ),
                 ),
-                Padding(
+                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
                     "Hoặc",

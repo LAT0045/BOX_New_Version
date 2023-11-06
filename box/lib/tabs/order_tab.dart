@@ -18,6 +18,7 @@ class _OrderTabState extends State<OrderTab> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      
         child: widget.isEmpty ? const EmptyOrder() : const Order());
   }
 }
@@ -102,10 +103,11 @@ class Order extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return const OrderTrackingCard();
-              }),
+            itemCount: 3,
+            itemBuilder: (context, index) {
+              return const OrderTrackingCard();
+            }
+          ),
         )
       ],
     );
