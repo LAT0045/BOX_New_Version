@@ -32,7 +32,7 @@
     "voucher": "Giảm Giá",
     "all": "Tất Cả",
     "fastFood": "Thức Ăn Nhanh",
-    "bobaTea": "Trà Sữa",
+    "drink": "Nước Uống",
     "vietnameseFood": "Món Việt",
     "koreanFood": "Món Hàn",
     "japaneseFood": "Món Nhật",
@@ -68,5 +68,7 @@
     "add": "Thêm",
     "note": "Ghi chú",
     "checkOut": "Thanh Toán",
-    "orderEmpty": "Hông có gì trong hộp cả :<<<"
+    "orderEmpty": "Hông có gì trong hộp cả :<<<",
+
+    "notUpdate": "Chưa cập nhật"
 }

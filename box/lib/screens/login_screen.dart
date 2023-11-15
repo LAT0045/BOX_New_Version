@@ -1,34 +1,91 @@
 import 'package:box/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../utils/colors.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  void _onPressedForgot() {}
-
-  void _onPressedLogin() {}
-
-  void _onPressedFacebook() {}
-
-  void _onPressedSignUp() {}
-
   @override
   Widget build(BuildContext context) {
-    void navigateToHomeScreen() {
+    void navigateToHomeScreen(UserCredential userCredential, String address) {
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              const HomeScreen(), // Replace with your SuccessScreen widget
+          builder: (context) => HomeScreen(
+            userCredential: userCredential,
+            address: address,
+          ), // Replace with your SuccessScreen widget
         ),
       );
     }
 
-    Future<void> signInWithGoogle() async {
+    Future<Position> getCurrentLocation() async {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+      return position;
+    }
+
+    Placemark? findPlacemarkWithAllInfo(List<Placemark> placemarks) {
+      try {
+        return placemarks.firstWhere((placemark) {
+          return placemark.street != null &&
+              placemark.subLocality != null &&
+              placemark.subAdministrativeArea != null &&
+              placemark.administrativeArea != null;
+        });
+      } catch (e) {
+        // No placemark meets the requirements
+        return placemarks[0];
+      }
+    }
+
+    Future<String> getAddressFromCoordinates(Position position) async {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isEmpty) {
+        return "";
+      }
+
+      Placemark? placemark = findPlacemarkWithAllInfo(placemarks);
+
+      String address =
+          "${placemark?.street}, ${placemark?.subLocality}, ${placemark?.subAdministrativeArea}, ${placemark?.administrativeArea}";
+
+      return address;
+    }
+
+    void getLocationAndAddress(UserCredential userCredential) async {
+      try {
+        Position position = await getCurrentLocation();
+        String address = await getAddressFromCoordinates(position);
+
+        navigateToHomeScreen(userCredential, address);
+      } catch (error) {
+        // Error handling
+      }
+    }
+
+    void requestLocationPermission(UserCredential userCredential) async {
+      PermissionStatus status = await Permission.location.request();
+      if (status.isGranted) {
+        getLocationAndAddress(userCredential);
+      } else {
+        // Access denied
+      }
+    }
+
+    Future<void> signInWithGoogle(Function(String message) showMessage) async {
       try {
         // Trigger the authentication flow
         final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -49,12 +106,32 @@ class LoginScreen extends StatelessWidget {
 
         // Check if the user is signed in successfully
         if (userCredential.user != null) {
-          navigateToHomeScreen();
+          // Check if the user is a new user
+          final bool isNewUser =
+              userCredential.additionalUserInfo?.isNewUser ?? false;
+
+          if (isNewUser) {
+            // Update user information
+            final databaseReference = FirebaseDatabase.instance.ref("Users");
+
+            // Set user uid
+            DatabaseReference userReference =
+                databaseReference.child(userCredential.user!.uid);
+
+            // Set user other information
+            userReference.set({
+              "name": userCredential.user!.displayName,
+              "avatar": userCredential.user!.photoURL,
+              "phoneNumber": userCredential.user!.phoneNumber,
+            }).catchError((error) {
+              showMessage(error.toString());
+            });
+          }
+
+          requestLocationPermission(userCredential);
         }
       } catch (error) {
-        // Handle the error, for example, by displaying an error message
-        print("Error while signing in with Google: $error");
-        // You can show an error message to the user here
+        showMessage(error.toString());
       }
     }
 
@@ -129,7 +206,7 @@ class LoginScreen extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35.0),
               child: TextButton(
-                onPressed: _onPressedForgot,
+                onPressed: () {},
                 style: TextButton.styleFrom(
                   foregroundColor: AppColors.orangeColor,
                 ),
@@ -155,7 +232,7 @@ class LoginScreen extends StatelessWidget {
                   colors: [AppColors.orangeColor, AppColors.yellowColor],
                 )),
             child: TextButton(
-              onPressed: _onPressedLogin,
+              onPressed: () {},
               style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   backgroundColor: Colors.transparent,
@@ -215,7 +292,7 @@ class LoginScreen extends StatelessWidget {
 
           // Facebook button
           TextButton.icon(
-              onPressed: _onPressedFacebook,
+              onPressed: () {},
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.lightGrayColor,
                 padding: const EdgeInsets.all(15),
@@ -244,7 +321,13 @@ class LoginScreen extends StatelessWidget {
 
           // Gmail button
           TextButton.icon(
-              onPressed: signInWithGoogle,
+              onPressed: () => signInWithGoogle((String message) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                      ),
+                    );
+                  }),
               style: TextButton.styleFrom(
                 backgroundColor: AppColors.lightGrayColor,
                 padding: const EdgeInsets.all(15),
@@ -283,7 +366,7 @@ class LoginScreen extends StatelessWidget {
                     fontSize: 15),
               ),
               TextButton(
-                  onPressed: _onPressedSignUp,
+                  onPressed: () {},
                   child: Text(
                     AppLocalizations.of(context)!.signUpNow,
                     style: const TextStyle(

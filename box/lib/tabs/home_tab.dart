@@ -11,7 +11,9 @@ import 'package:slide_countdown/slide_countdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+  final String address;
+
+  const HomeTab({super.key, required this.address});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,29 +32,45 @@ class _HomeTabState extends State<HomeTab> {
   List<CategoryCard> _initializeCategories(BuildContext context) {
     final List<CategoryCard> categories = [
       CategoryCard(
-          iconPath: "assets/svg/deal.svg",
-          name: AppLocalizations.of(context)!.hotDeal),
+        iconPath: "assets/svg/deal.svg",
+        name: AppLocalizations.of(context)!.hotDeal,
+        category: "hotDeal",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/voucher.svg",
-          name: AppLocalizations.of(context)!.voucher),
+        iconPath: "assets/svg/voucher.svg",
+        name: AppLocalizations.of(context)!.voucher,
+        category: "voucher",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/all.svg",
-          name: AppLocalizations.of(context)!.all),
+        iconPath: "assets/svg/all.svg",
+        name: AppLocalizations.of(context)!.all,
+        category: "all",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/fastfood.svg",
-          name: AppLocalizations.of(context)!.fastFood),
+        iconPath: "assets/svg/fastfood.svg",
+        name: AppLocalizations.of(context)!.fastFood,
+        category: "fastFood",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/bubble_tea.svg",
-          name: AppLocalizations.of(context)!.bobaTea),
+        iconPath: "assets/svg/bubble_tea.svg",
+        name: AppLocalizations.of(context)!.drink,
+        category: "drink",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/vietnamese_food.svg",
-          name: AppLocalizations.of(context)!.vietnameseFood),
+        iconPath: "assets/svg/vietnamese_food.svg",
+        name: AppLocalizations.of(context)!.vietnameseFood,
+        category: "vietnameseFood",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/korean_food.svg",
-          name: AppLocalizations.of(context)!.koreanFood),
+        iconPath: "assets/svg/korean_food.svg",
+        name: AppLocalizations.of(context)!.koreanFood,
+        category: "koreanFood",
+      ),
       CategoryCard(
-          iconPath: "assets/svg/japanese_food.svg",
-          name: AppLocalizations.of(context)!.japaneseFood)
+        iconPath: "assets/svg/japanese_food.svg",
+        name: AppLocalizations.of(context)!.japaneseFood,
+        category: "japaneseFood",
+      )
     ];
 
     return categories;
@@ -72,10 +90,6 @@ class _HomeTabState extends State<HomeTab> {
       otherInfo: "100m",
     )
   ];
-
-  void _onPressedAddress() {}
-
-  void _onPressedSeeMore() {}
 
   @override
   Widget build(BuildContext context) {
@@ -148,19 +162,19 @@ class _HomeTabState extends State<HomeTab> {
                       colorFilter: const ColorFilter.mode(
                           AppColors.orangeColor, BlendMode.srcIn),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Text(
-                          "155A Đường Gì Đó, P. Phường gì đó, Q. Quận gì đó, Tỉnh/Thành Gì đó",
-                          style: TextStyle(fontFamily: 'Comfortaa'),
+                          widget.address,
+                          style: const TextStyle(fontFamily: 'Comfortaa'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ),
                     GestureDetector(
-                      onTap: _onPressedAddress,
+                      onTap: () {},
                       child: SvgPicture.asset(
                         "assets/svg/next_icon.svg",
                         height: 15,
@@ -363,7 +377,7 @@ class _HomeTabState extends State<HomeTab> {
                           fontWeight: FontWeight.w600),
                     ),
                     TextButton(
-                        onPressed: _onPressedSeeMore,
+                        onPressed: () {},
                         child: Text(
                           AppLocalizations.of(context)!.seeMore,
                           style: const TextStyle(
@@ -405,7 +419,7 @@ class _HomeTabState extends State<HomeTab> {
                           fontWeight: FontWeight.w600),
                     ),
                     TextButton(
-                        onPressed: _onPressedSeeMore,
+                        onPressed: () {},
                         child: Text(
                           AppLocalizations.of(context)!.seeMore,
                           style: const TextStyle(

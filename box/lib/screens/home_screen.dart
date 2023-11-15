@@ -4,12 +4,17 @@ import 'package:box/tabs/order_tab.dart';
 import 'package:box/tabs/home_tab.dart';
 import 'package:box/tabs/personal_info_tab.dart';
 import 'package:box/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final UserCredential userCredential;
+  final String address;
+
+  const HomeScreen(
+      {super.key, required this.userCredential, required this.address});
 
   @override
   State<StatefulWidget> createState() {
@@ -29,11 +34,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List tabs = [
-      const HomeTab(),
+      HomeTab(
+        address: widget.address,
+      ),
       const FavoriteTab(isEmpty: true),
       const OrderTab(isEmpty: true),
       const NotificationTab(isEmpty: true),
-      const PersonalInfoTab()
+      PersonalInfoTab(
+        userCredential: widget.userCredential,
+      )
     ];
 
     return Scaffold(

@@ -1,10 +1,60 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../utils/colors.dart';
 
-class PersonalInfoTab extends StatelessWidget {
-  const PersonalInfoTab({super.key});
+class PersonalInfoTab extends StatefulWidget {
+  final UserCredential userCredential;
+
+  const PersonalInfoTab({super.key, required this.userCredential});
+
+  @override
+  State<PersonalInfoTab> createState() => _PersonalInfoTabState();
+}
+
+class _PersonalInfoTabState extends State<PersonalInfoTab> {
+  String _name = "";
+  String _avatar = "";
+  String _phoneNumber = "";
+
+  Future<void> getUserInfo() async {
+    final databaseReference = FirebaseDatabase.instance.ref("Users");
+    DatabaseReference userReference =
+        databaseReference.child(widget.userCredential.user!.uid);
+
+    final snapshot = await userReference.get();
+    if (snapshot.exists) {
+      setState(() {
+        _name = (snapshot.value as Map)["name"];
+        _avatar = (snapshot.value as Map)["avatar"];
+        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+            AppLocalizations.of(context)!.notUpdate;
+      });
+    } else {
+      // User info doesn't exist
+    }
+  }
+
+  void navigateToLoginScreen() {
+    Navigator.of(context).pop();
+  }
+
+  void signOutFromGoogle() async {
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
+
+    navigateToLoginScreen();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +123,12 @@ class PersonalInfoTab extends StatelessWidget {
                       Container(
                         width: 105,
                         height: 105,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage("assets/svg/avatest.jpg"),
+                            image: NetworkImage(_avatar),
+                            onError: (exception, stackTrace) {},
                           ),
                         ),
                       ),
@@ -85,21 +136,21 @@ class PersonalInfoTab extends StatelessWidget {
                       const SizedBox(width: 30),
 
                       //Info
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Họ Tên",
-                            style: TextStyle(
+                            _name,
+                            style: const TextStyle(
                                 fontSize: 20,
                                 fontFamily: 'Comfortaa',
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           Text(
-                            "0769816622",
-                            style: TextStyle(
+                            _phoneNumber,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontFamily: 'Comfortaa',
                               color: Colors.white,
@@ -399,7 +450,7 @@ class PersonalInfoTab extends StatelessWidget {
                       color: AppColors.orangeColor, width: 1.5)), // Viền dưới
             ),
             child: ElevatedButton(
-              onPressed: onPressedLogout,
+              onPressed: signOutFromGoogle,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.white,
@@ -430,7 +481,7 @@ class PersonalInfoTab extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    width: 110,
+                    width: 100,
                   ),
                   Transform.rotate(
                     angle: 3.14159265,
@@ -458,14 +509,19 @@ class PersonalInfoTab extends StatelessWidget {
   }
 
   //--------------------------------------------
-  // Functions
   void onPressedBackBtn() {}
+
   void onPressedSettingBtn() {}
+
   void onPressedEdit() {}
+
   void onPressedOrder() {}
+
   void onPressedBuyAgain() {}
+
   void onPressedFavour() {}
+
   void onPressedVoucher() {}
+
   void onPressedPayments() {}
-  void onPressedLogout() {}
 }

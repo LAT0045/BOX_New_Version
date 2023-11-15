@@ -32,7 +32,7 @@
     "voucher": "Voucher",
     "all": "All",
     "fastFood": "Fast Food",
-    "bobaTea": "Boba Tea",
+    "drink": "Drink",
     "vietnameseFood": "Vietnamese Food",
     "koreanFood": "Korean Food",
     "japaneseFood": "Japanese Food",
@@ -68,5 +68,7 @@
     "add": "Add",
     "note": "Note",
     "checkOut": "Check Out",
-    "orderEmpty": "There is nothing in the box :<<<"
+    "orderEmpty": "There is nothing in the box :<<<",
+
+    "notUpdate": "Not update yet"
 }
