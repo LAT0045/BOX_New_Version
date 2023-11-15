@@ -1,0 +1,71 @@
+{
+  "project_info": {
+    "project_number": "1049009016949",
+    "firebase_url": "https://pbox-b4a17-default-rtdb.firebaseio.com",
+    "project_id": "pbox-b4a17",
+    "storage_bucket": "pbox-b4a17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049009016949:android:3aa88260719a2baf89283c",
+        "android_client_info": {
+          "package_name": "com.example.box"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1049009016949-2od4jbb860q0o6u2b2ghtv38np5dsuu2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.box",
+            "certificate_hash": "807c63a53329e3e77a8d8a2fbb2ca5d1b55aeee6"
+          }
+        },
+        {
+          "client_id": "1049009016949-6h01sj0vdjuaj0043671ras69vqhvdo8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.box",
+            "certificate_hash": "09e17f1db2a88d7dd774624bf12cc6750ca95373"
+          }
+        },
+        {
+          "client_id": "1049009016949-alk6a93fqtr24t866em701u7idpeeb6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.box",
+            "certificate_hash": "4ca47a65ff1aee7e80122d1999cb6775b7cde5e2"
+          }
+        },
+        {
+          "client_id": "1049009016949-bej8ib8ci789upa85sknt3bav2f6f552.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-jb9J27ArBrzGChVuJemdOqmgZxgWiHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049009016949-bej8ib8ci789upa85sknt3bav2f6f552.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1049009016949-470b6cjj0gkq0elmj2onlqmh0n6jppn4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.box"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

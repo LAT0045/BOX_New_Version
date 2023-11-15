@@ -1,11 +1,16 @@
+import 'package:box/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/colors.dart';
 
-class SignUpCongrateScreen extends StatelessWidget {
-  const SignUpCongrateScreen({super.key});
+class SignUpCongrateScreen extends StatefulWidget {
 
+  @override
+  State<SignUpCongrateScreen> createState() => _SignUpCongrateScreenState();
+}
+
+class _SignUpCongrateScreenState extends State<SignUpCongrateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,5 +95,8 @@ class SignUpCongrateScreen extends StatelessWidget {
 
   //--------------------------------------------
   // Functions
-  void onPressedStart(){}
+  void onPressedStart(){
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => HomeScreen()));
+  }
 }

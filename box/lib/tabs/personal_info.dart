@@ -480,7 +480,9 @@ class PersonalInfoScreen extends StatelessWidget {
   // Functions
   void onPressedBackBtn() {}
   void onPressedSettingBtn() {}
-  void onPressedEdit() {}
+  void onPressedEdit() {
+    
+  }
   void onPressedOrder() {}
   void onPressedBuyAgain() {}
   void onPressedFavour() {}
