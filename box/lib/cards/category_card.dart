@@ -2,16 +2,18 @@ import 'package:box/details/category_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../class/shop.dart';
+
 class CategoryCard extends StatelessWidget {
   final String iconPath;
   final String name;
-  final String category;
+  final List<Shop> shops;
 
   const CategoryCard(
       {super.key,
       required this.iconPath,
       required this.name,
-      required this.category});
+      required this.shops});
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +23,8 @@ class CategoryCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => CategoryDetail(
               name: name,
-              category: category,
-            ), // Replace with your SuccessScreen widget
+              shops: shops,
+            ),
           ),
         );
       },

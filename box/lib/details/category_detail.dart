@@ -2,13 +2,14 @@ import 'package:box/cards/shop_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../class/shop.dart';
 import '../utils/colors.dart';
 
 class CategoryDetail extends StatelessWidget {
   final String name;
-  final String category;
+  final List<Shop> shops;
 
-  const CategoryDetail({super.key, required this.name, required this.category});
+  const CategoryDetail({super.key, required this.name, required this.shops});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,9 @@ class CategoryDetail extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
                         child: SvgPicture.asset(
                           "assets/svg/backarrow.svg",
                           height: 30,
@@ -58,11 +61,14 @@ class CategoryDetail extends StatelessWidget {
             //
             Expanded(
                 child: ListView.builder(
-                    itemCount: 3,
+                    itemCount: shops.length,
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
-                      return const ShopCard(
-                          imagePath: "assets/test/milano_coffee.jpg");
+                      return ShopCard(
+                        imagePath: shops[index].shopImage,
+                        shopName: shops[index].shopName,
+                        shopRating: shops[index].ratingScore.toString(),
+                      );
                     }))
           ],
         ),

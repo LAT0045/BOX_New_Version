@@ -5,8 +5,14 @@ import '../utils/colors.dart';
 
 class ShopCard extends StatelessWidget {
   final String imagePath;
+  final String shopName;
+  final String shopRating;
 
-  const ShopCard({super.key, required this.imagePath});
+  const ShopCard(
+      {super.key,
+      required this.imagePath,
+      required this.shopName,
+      required this.shopRating});
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +30,19 @@ class ShopCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage(imagePath),
+                backgroundImage: NetworkImage(imagePath),
               ),
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 250,
                     child: Text(
-                      "Milano Coffee",
-                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 18),
+                      shopName,
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa', fontSize: 18),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -79,11 +86,11 @@ class ShopCard extends StatelessWidget {
                           colorFilter: const ColorFilter.mode(
                               AppColors.orangeColor, BlendMode.srcIn),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Text(
-                            "5.0",
-                            style: TextStyle(
+                            shopRating,
+                            style: const TextStyle(
                                 fontFamily: 'Comfortaa', fontSize: 15),
                           ),
                         )
