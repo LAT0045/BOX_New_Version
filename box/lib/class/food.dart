@@ -10,6 +10,7 @@ class Food {
   late final String _foodType;
   late final List<Option> _options;
   late final bool _isOutOfStock;
+  late String _sectionId;
 
   Food(
       this._foodId,
@@ -20,7 +21,8 @@ class Food {
       this._foodDescription,
       this._foodType,
       this._options,
-      this._isOutOfStock);
+      this._isOutOfStock,
+      this._sectionId);
 
   factory Food.fromJson(String foodId, Map<String, dynamic> json) {
     int price = 0;
@@ -39,16 +41,16 @@ class Food {
         : [];
 
     return Food(
-      foodId,
-      json['shopId'] ?? "",
-      json['foodName'] ?? "",
-      json['foodImage'] ?? "",
-      price,
-      json['foodDescription'] ?? "",
-      json['foodType'] ?? "",
-      options,
-      json['isOutOfStock'] ?? "",
-    );
+        foodId,
+        json['shopId'] ?? "",
+        json['foodName'] ?? "",
+        json['foodImage'] ?? "",
+        price,
+        json['foodDescription'] ?? "",
+        json['foodType'] ?? "",
+        options,
+        json['isOutOfStock'] ?? "",
+        json['sectionId'] ?? "");
   }
 
   String get foodId {
@@ -85,5 +87,9 @@ class Food {
 
   bool get isOutOfStock {
     return _isOutOfStock;
+  }
+
+  String get sectionId {
+    return _sectionId;
   }
 }

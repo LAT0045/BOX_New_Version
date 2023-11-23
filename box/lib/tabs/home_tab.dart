@@ -12,6 +12,7 @@ import 'package:slide_countdown/slide_countdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../class/food.dart';
+import '../class/section.dart';
 import '../class/shop.dart';
 
 class HomeTab extends StatefulWidget {
@@ -103,19 +104,36 @@ class _HomeTabState extends State<HomeTab> {
     )
   ];
 
-  Shop? getShopById(String shopId) {
-    for (Shop shop in _shops) {
-      if (shop.shopId == shopId) {
-        return shop;
+  int getShopById(String shopId) {
+    for (int i = 0; i < _shops.length; i++) {
+      if (_shops[i].shopId == shopId) {
+        return i;
       }
     }
 
-    return null;
+    return -1;
+  }
+
+  bool isFoodExist(Food food, List<Food> foods) {
+    for (Food curFood in foods) {
+      if (curFood.foodId == food.foodId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void addFoodToSection(Food food, Section section) {
+    if (section.sectionId == food.sectionId &&
+        !isFoodExist(food, section.foods)) {
+      section.addFood(food);
+    }
   }
 
   void sortShop(Shop shop, String type) {
     switch (type) {
-      case "fastFood":
+      case "fastfood":
         isExisted(_fastFoodShops, shop) ? null : _fastFoodShops.add(shop);
         break;
       case "drink":
@@ -166,10 +184,14 @@ class _HomeTabState extends State<HomeTab> {
 
       foods.add(food);
 
-      Shop? shop = getShopById(food.shopId);
+      int shopIndex = getShopById(food.shopId);
 
-      if (shop != null) {
-        sortShop(shop, food.foodType);
+      if (shopIndex != -1) {
+        sortShop(_shops[shopIndex], food.foodType);
+
+        for (Section section in _shops[shopIndex].sections) {
+          addFoodToSection(food, section);
+        }
       }
     });
 

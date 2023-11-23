@@ -156,7 +156,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             ),
 
             // Chosen food section
-            SectionCard(sectionName: "Các Món Đã Chọn", widgets: widgets),
+            //SectionCard(sectionName: "Các Món Đã Chọn", widgets: widgets),
 
             const SizedBox(
               height: 20.0,

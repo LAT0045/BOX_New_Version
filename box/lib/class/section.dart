@@ -1,32 +1,29 @@
 import 'food.dart';
 
 class Section {
+  late String _sectionId;
   late String _sectionName;
-  late List<String> _foodIds;
   late List<Food> _foods;
 
-  Section(this._sectionName, this._foodIds);
+  Section(this._sectionId, this._sectionName, this._foods);
 
-  factory Section.fromJson(Map<String, dynamic> json) {
-    List<String> foodIds = [];
-    List<Object?> tmp = json['foods'];
+  void addFood(Food food) {
+    _foods.add(food);
+  }
 
-    for (var element in tmp) {
-      foodIds.add(element.toString());
-    }
+  factory Section.fromJson(String sectionId, Map<String, dynamic> json) {
+    return Section(sectionId, json['sectionName'] ?? "", []);
+  }
 
-    return Section(json['sectionName'] ?? "", foodIds);
+  String get sectionId {
+    return _sectionId;
   }
 
   String get sectionName {
     return _sectionName;
   }
 
-  List<String> get foodIds {
-    return _foodIds;
-  }
-
-  List<Food> get food {
+  List<Food> get foods {
     return _foods;
   }
 }

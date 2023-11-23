@@ -4,21 +4,18 @@ import 'package:box/cards/voucher_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../class/shop.dart';
 import '../utils/colors.dart';
 
 class ShopScreen extends StatefulWidget {
-  ShopScreen({super.key});
+  final Shop shop;
+
+  ShopScreen({super.key, required this.shop});
 
   final List<VoucherCard> _vouchers = [
     const VoucherCard(),
     const VoucherCard(),
     const VoucherCard()
-  ];
-
-  final List<HorizontalFoodCard> _foods = [
-    const HorizontalFoodCard(),
-    const HorizontalFoodCard(),
-    const HorizontalFoodCard()
   ];
 
   @override
@@ -39,8 +36,8 @@ class _ShopScreenState extends State<ShopScreen> {
               // Shop Image and back button
               Stack(
                 children: [
-                  Image.asset(
-                    'assets/test/milano_coffee.jpg',
+                  Image.network(
+                    widget.shop.shopImage,
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -69,13 +66,13 @@ class _ShopScreenState extends State<ShopScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
                     child: SizedBox(
                       width: 250,
                       child: Text(
-                        "Milano Coffee",
-                        style: TextStyle(
+                        widget.shop.shopName,
+                        style: const TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 23,
                             fontWeight: FontWeight.bold),
@@ -92,12 +89,12 @@ class _ShopScreenState extends State<ShopScreen> {
                         colorFilter: const ColorFilter.mode(
                             AppColors.orangeColor, BlendMode.srcIn),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 3, left: 5),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 3, left: 5),
                         child: Text(
-                          "4.5/5.0",
-                          style:
-                              TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
+                          "${widget.shop.ratingScore}/5.0",
+                          style: const TextStyle(
+                              fontFamily: 'Comfortaa', fontSize: 15),
                         ),
                       )
                     ]),
@@ -124,9 +121,9 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Text(
-                      "Địa chỉ nè",
-                      style: TextStyle(
+                    Text(
+                      widget.shop.shopAddress,
+                      style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 15,
                           color: AppColors.grayColor),
@@ -154,11 +151,11 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(top: 2.5),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.5),
                       child: Text(
-                        "07:00 - 22:00",
-                        style: TextStyle(
+                        "${widget.shop.openingTime} - ${widget.shop.closingTime}",
+                        style: const TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 15,
                             color: AppColors.grayColor),
@@ -204,16 +201,10 @@ class _ShopScreenState extends State<ShopScreen> {
                 height: 10,
               ),
 
-              // Food
-              SectionCard(sectionName: "Cà Phê", widgets: widget._foods),
+              for (int i = 0; i < widget.shop.sections.length; i++)
+                SectionCard(section: widget.shop.sections[i]),
 
-              const SizedBox(
-                height: 10,
-              ),
-
-              // Food 2
-              SectionCard(sectionName: "Trà Sữa", widgets: widget._foods),
-
+              //
               const SizedBox(
                 height: 50.0,
               )

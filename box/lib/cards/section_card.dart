@@ -1,12 +1,16 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class SectionCard extends StatelessWidget {
-  final String sectionName;
-  final List<Widget> widgets;
+import '../class/section.dart';
+import 'horizontal_food_card.dart';
 
-  const SectionCard(
-      {super.key, required this.sectionName, required this.widgets});
+class SectionCard extends StatelessWidget {
+  final Section section;
+
+  const SectionCard({
+    super.key,
+    required this.section,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class SectionCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              sectionName,
+              section.sectionName,
               style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 18,
@@ -29,7 +33,10 @@ class SectionCard extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        for (int i = 0; i < widgets.length; i++) widgets[i]
+        for (int i = 0; i < section.foods.length; i++)
+          HorizontalFoodCard(
+            food: section.foods[i],
+          ),
       ],
     );
   }

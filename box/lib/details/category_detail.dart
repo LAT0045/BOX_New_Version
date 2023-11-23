@@ -65,9 +65,7 @@ class CategoryDetail extends StatelessWidget {
                     scrollDirection: Axis.vertical,
                     itemBuilder: (context, index) {
                       return ShopCard(
-                        imagePath: shops[index].shopImage,
-                        shopName: shops[index].shopName,
-                        shopRating: shops[index].ratingScore.toString(),
+                        shop: shops[index],
                       );
                     }))
           ],

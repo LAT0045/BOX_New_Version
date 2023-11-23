@@ -161,8 +161,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
             ),
 
             // Chosen food
-            SectionCard(
-                sectionName: "Các Món Đã Chọn", widgets: widget._widgets),
+            //SectionCard(
+            //sectionName: "Các Món Đã Chọn", widgets: widget._widgets),
 
             const SizedBox(
               height: 20,

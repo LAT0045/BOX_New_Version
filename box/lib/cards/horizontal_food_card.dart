@@ -1,8 +1,12 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../class/food.dart';
+
 class HorizontalFoodCard extends StatefulWidget {
-  const HorizontalFoodCard({super.key});
+  final Food food;
+
+  const HorizontalFoodCard({super.key, required this.food});
 
   @override
   State<StatefulWidget> createState() {
@@ -35,8 +39,8 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
         child: Row(
           children: [
             // Food Image
-            Image.asset(
-              'assets/test/ca_phe_kem_trung.jpeg',
+            Image.network(
+              widget.food.foodImage,
               height: 80,
               width: 80,
               fit: BoxFit.fill,
@@ -51,11 +55,12 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
+                  SizedBox(
                     width: 180,
                     child: Text(
-                      "Cà Phê Kem Trứng",
-                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                      widget.food.foodName,
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa', fontSize: 17),
                     ),
                   ),
                   const SizedBox(
@@ -66,9 +71,10 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Price
-                      const Text(
-                        "25.000Đ",
-                        style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                      Text(
+                        "${widget.food.foodPrice}Đ",
+                        style: const TextStyle(
+                            fontFamily: 'Comfortaa', fontSize: 17),
                       ),
 
                       Row(
