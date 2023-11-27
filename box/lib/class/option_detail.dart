@@ -3,8 +3,10 @@ class OptionDetail {
   late String _image;
   late bool _isOutOfStock;
   late int _price;
+  late bool _isChosen;
 
-  OptionDetail(this._name, this._image, this._isOutOfStock, this._price);
+  OptionDetail(
+      this._name, this._image, this._isOutOfStock, this._price, this._isChosen);
 
   factory OptionDetail.fromJson(Map<String, dynamic> json) {
     int price = 0;
@@ -16,10 +18,12 @@ class OptionDetail {
       } catch (e) {
         // Error
       }
+    } else {
+      price = json['price'];
     }
 
     return OptionDetail(json['name'] ?? "", json['image'] ?? "",
-        json['isOutOfStock'] ?? true, price);
+        json['isOutOfStock'] ?? true, price, false);
   }
 
   String get name {
@@ -36,5 +40,13 @@ class OptionDetail {
 
   int get price {
     return _price;
+  }
+
+  bool get isChosen {
+    return _isChosen;
+  }
+
+  set isChosen(bool value) {
+    _isChosen = value;
   }
 }

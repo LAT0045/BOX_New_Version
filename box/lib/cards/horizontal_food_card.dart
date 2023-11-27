@@ -1,3 +1,4 @@
+import 'package:box/details/food_detail.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -5,8 +6,16 @@ import '../class/food.dart';
 
 class HorizontalFoodCard extends StatefulWidget {
   final Food food;
+  final Function(int, bool) updateTotalFoods;
+  final Function(int, bool) updateTotalPrice;
+  final Function(Food, bool) updatePurchasedFoods;
 
-  const HorizontalFoodCard({super.key, required this.food});
+  const HorizontalFoodCard(
+      {super.key,
+      required this.food,
+      required this.updateTotalFoods,
+      required this.updateTotalPrice,
+      required this.updatePurchasedFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,17 +24,31 @@ class HorizontalFoodCard extends StatefulWidget {
 }
 
 class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
-  int _quantity = 0;
+  int quantity = 0;
 
   void _onPressIncrease() {
     setState(() {
-      _quantity++;
+      //quantity++;
+      //widget.updateTotalFoods(1, false);
+      //widget.updateTotalPrice(widget.food.foodPrice, false);
+      //widget.updatePurchasedFoods(widget.food, false);
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FoodDetail(
+            food: widget.food,
+          ),
+        ),
+      );
     });
   }
 
   void _onPressDecrease() {
     setState(() {
-      _quantity--;
+      quantity--;
+      widget.updateTotalFoods(1, true);
+      widget.updateTotalPrice(widget.food.foodPrice, true);
+      widget.updatePurchasedFoods(widget.food, true);
     });
   }
 
@@ -81,7 +104,7 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                         children: [
                           //Decrease button
                           Visibility(
-                            visible: _quantity > 0,
+                            visible: quantity > 0,
                             child: GestureDetector(
                               onTap: _onPressDecrease,
                               child: const CircleAvatar(
@@ -98,12 +121,12 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
 
                           // Quantity
                           Visibility(
-                            visible: _quantity > 0,
+                            visible: quantity > 0,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 10.0),
                               child: Text(
-                                _quantity.toString(),
+                                quantity.toString(),
                                 style: const TextStyle(fontFamily: 'Comfortaa'),
                               ),
                             ),

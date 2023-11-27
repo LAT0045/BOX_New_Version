@@ -33,6 +33,8 @@ class Food {
       } catch (e) {
         // Error
       }
+    } else {
+      price = json['foodPrice'];
     }
 
     final List<Option> options = json['options'] != null

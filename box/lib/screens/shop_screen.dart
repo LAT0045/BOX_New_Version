@@ -1,9 +1,9 @@
 import 'package:box/cards/section_card.dart';
-import 'package:box/cards/horizontal_food_card.dart';
 import 'package:box/cards/voucher_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../class/food.dart';
 import '../class/shop.dart';
 import '../utils/colors.dart';
 
@@ -25,6 +25,38 @@ class ShopScreen extends StatefulWidget {
 }
 
 class _ShopScreenState extends State<ShopScreen> {
+  int totalFoods = 0;
+  int totalPrice = 0;
+  List<Food> purchasedFoods = [];
+
+  void updateTotalFoods(int quantity, bool isDecreased) {
+    setState(() {
+      if (isDecreased) {
+        totalFoods -= quantity;
+      } else {
+        totalFoods += quantity;
+      }
+    });
+  }
+
+  void updateTotalPrice(int price, bool isDecreased) {
+    setState(() {
+      if (isDecreased) {
+        totalPrice -= price;
+      } else {
+        totalPrice += price;
+      }
+    });
+  }
+
+  void updatePurchasedFood(Food food, bool isRemoved) {
+    if (isRemoved) {
+      purchasedFoods.removeWhere((element) => element.foodId == food.foodId);
+    } else {
+      purchasedFoods.add(food);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,6 +142,7 @@ class _ShopScreenState extends State<ShopScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SvgPicture.asset(
                       "assets/svg/location_icon.svg",
@@ -121,12 +154,14 @@ class _ShopScreenState extends State<ShopScreen> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Text(
-                      widget.shop.shopAddress,
-                      style: const TextStyle(
-                          fontFamily: 'Comfortaa',
-                          fontSize: 15,
-                          color: AppColors.grayColor),
+                    Expanded(
+                      child: Text(
+                        widget.shop.shopAddress,
+                        style: const TextStyle(
+                            fontFamily: 'Comfortaa',
+                            fontSize: 15,
+                            color: AppColors.grayColor),
+                      ),
                     ),
                   ],
                 ),
@@ -202,7 +237,12 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
 
               for (int i = 0; i < widget.shop.sections.length; i++)
-                SectionCard(section: widget.shop.sections[i]),
+                SectionCard(
+                  section: widget.shop.sections[i],
+                  updateTotalFoods: updateTotalFoods,
+                  updateTotalPrice: updateTotalPrice,
+                  updatePurchasedFoods: updatePurchasedFood,
+                ),
 
               //
               const SizedBox(
@@ -233,15 +273,15 @@ class _ShopScreenState extends State<ShopScreen> {
                       const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                 ),
                 Text(
-                  "2 ${AppLocalizations.of(context)!.product}",
+                  "$totalFoods ${AppLocalizations.of(context)!.product}",
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       color: Colors.white,
                       fontSize: 15),
                 ),
-                const Text(
-                  "100.000Đ",
-                  style: TextStyle(
+                Text(
+                  "$totalPriceĐ",
+                  style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       color: Colors.white,
                       fontSize: 20),

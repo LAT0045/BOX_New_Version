@@ -1,7 +1,5 @@
 import 'package:box/class/section.dart';
 
-import 'food.dart';
-
 class Shop {
   late String _shopId;
   late String _shopName;
@@ -25,16 +23,11 @@ class Shop {
       this._sections);
 
   factory Shop.fromJson(String shopId, Map<String, dynamic> json) {
-    List<Section> sections = [];
-
-    if (json['sections'] != null) {
-      final sectionMap = json['sections'] as Map;
-
-      sectionMap.forEach((key, value) {
-        sections.add(Section.fromJson(
-            key.toString(), Map<String, dynamic>.from(value as Map)));
-      });
-    }
+    final List<Section> sections = json['sections'] != null
+        ? List<Section>.from(json['sections'].asMap().entries.map((entry) =>
+            Section.fromJson(entry.key.toString(),
+                Map<String, dynamic>.from(entry.value as Map))))
+        : [];
 
     var tmp = json['ratingScore'];
     double score = 0;

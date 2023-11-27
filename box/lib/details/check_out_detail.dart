@@ -1,18 +1,10 @@
-import 'package:box/cards/section_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../cards/delivery_food_card.dart';
 import '../utils/colors.dart';
 
 class CheckOutDetail extends StatefulWidget {
-  CheckOutDetail({super.key});
-
-  final List<Widget> _widgets = [
-    const DeliveryFoodCard(),
-    const DeliveryFoodCard(),
-    const DeliveryFoodCard()
-  ];
+  const CheckOutDetail({super.key});
 
   @override
   State<StatefulWidget> createState() {

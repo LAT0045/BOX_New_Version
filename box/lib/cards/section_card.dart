@@ -1,15 +1,22 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../class/food.dart';
 import '../class/section.dart';
 import 'horizontal_food_card.dart';
 
 class SectionCard extends StatelessWidget {
   final Section section;
+  final Function(int, bool) updateTotalFoods;
+  final Function(int, bool) updateTotalPrice;
+  final Function(Food, bool) updatePurchasedFoods;
 
   const SectionCard({
     super.key,
     required this.section,
+    required this.updateTotalFoods,
+    required this.updateTotalPrice,
+    required this.updatePurchasedFoods,
   });
 
   @override
@@ -36,6 +43,9 @@ class SectionCard extends StatelessWidget {
         for (int i = 0; i < section.foods.length; i++)
           HorizontalFoodCard(
             food: section.foods[i],
+            updateTotalFoods: updateTotalFoods,
+            updateTotalPrice: updateTotalPrice,
+            updatePurchasedFoods: updatePurchasedFoods,
           ),
       ],
     );
