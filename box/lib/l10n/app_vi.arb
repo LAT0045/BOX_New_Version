@@ -70,5 +70,10 @@
     "checkOut": "Thanh Toán",
     "orderEmpty": "Hông có gì trong hộp cả :<<<",
 
-    "notUpdate": "Chưa cập nhật"
+    "notUpdate": "Chưa cập nhật",
+
+    "note": "Ghi chú",
+    "noteAsk": "Bạn có gì cần dặn dò không?",
+    "addToCart": "Thêm Vào Giỏ Hàng",
+    "cart": "Giỏ Hàng"
 }

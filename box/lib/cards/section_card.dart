@@ -5,20 +5,26 @@ import '../class/food.dart';
 import '../class/section.dart';
 import 'horizontal_food_card.dart';
 
-class SectionCard extends StatelessWidget {
+class SectionCard extends StatefulWidget {
   final Section section;
   final Function(int, bool) updateTotalFoods;
-  final Function(int, bool) updateTotalPrice;
+  final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
+  final List<Food> foods;
 
-  const SectionCard({
-    super.key,
-    required this.section,
-    required this.updateTotalFoods,
-    required this.updateTotalPrice,
-    required this.updatePurchasedFoods,
-  });
+  const SectionCard(
+      {super.key,
+      required this.section,
+      required this.updateTotalFoods,
+      required this.updateTotalPrice,
+      required this.updatePurchasedFoods,
+      required this.foods});
 
+  @override
+  State<SectionCard> createState() => _SectionCardState();
+}
+
+class _SectionCardState extends State<SectionCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +34,7 @@ class SectionCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              section.sectionName,
+              widget.section.sectionName,
               style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 18,
@@ -40,12 +46,13 @@ class SectionCard extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        for (int i = 0; i < section.foods.length; i++)
+        for (int i = 0; i < widget.section.foods.length; i++)
           HorizontalFoodCard(
-            food: section.foods[i],
-            updateTotalFoods: updateTotalFoods,
-            updateTotalPrice: updateTotalPrice,
-            updatePurchasedFoods: updatePurchasedFoods,
+            food: widget.section.foods[i],
+            updateTotalFoods: widget.updateTotalFoods,
+            updateTotalPrice: widget.updateTotalPrice,
+            updatePurchasedFoods: widget.updatePurchasedFoods,
+            foods: widget.foods,
           ),
       ],
     );

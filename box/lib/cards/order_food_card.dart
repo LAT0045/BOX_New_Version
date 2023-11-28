@@ -1,10 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../class/food.dart';
+import '../class/option.dart';
+import '../class/option_detail.dart';
 import '../utils/colors.dart';
 
 class OrderFoodCard extends StatefulWidget {
-  const OrderFoodCard({super.key});
+  final Food food;
+  final Function(int, bool) updateTotalFoods;
+  final Function(Food, bool) updateTotalPrice;
+  final Function(Food, bool) updatePurchasedFoods;
+  final Function(int, bool) updateQuantity;
+
+  const OrderFoodCard({
+    super.key,
+    required this.food,
+    required this.updateTotalFoods,
+    required this.updateTotalPrice,
+    required this.updatePurchasedFoods,
+    required this.updateQuantity,
+  });
 
   @override
   State<StatefulWidget> createState() {
@@ -14,16 +30,57 @@ class OrderFoodCard extends StatefulWidget {
 
 class _OrderFoodCardState extends State<OrderFoodCard> {
   int _quantity = 0;
+  int _totalFoodPrice = 0;
 
   void _onPressIncrease() {
     setState(() {
       _quantity++;
+      widget.updateTotalFoods(1, false);
+      widget.updateTotalPrice(widget.food, false);
+      widget.updatePurchasedFoods(widget.food, false);
+      widget.updateQuantity(1, false);
+      _totalFoodPrice += calculateTotalPrice(widget.food);
     });
   }
 
   void _onPressDecrease() {
     setState(() {
       _quantity--;
+      widget.updateTotalFoods(1, true);
+      widget.updateTotalPrice(widget.food, true);
+      widget.updatePurchasedFoods(widget.food, true);
+      widget.updateQuantity(1, true);
+      _totalFoodPrice -= calculateTotalPrice(widget.food);
+    });
+  }
+
+  int calculateTotalPrice(Food food) {
+    int res = food.foodPrice;
+
+    for (Option option in food.options) {
+      res += calculateOptionDetail(option.optionList);
+    }
+
+    return res;
+  }
+
+  int calculateOptionDetail(List<OptionDetail> optionDetails) {
+    int res = 0;
+
+    for (OptionDetail optionDetail in optionDetails) {
+      res += optionDetail.price;
+    }
+
+    return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _quantity = widget.food.quantity;
+      _totalFoodPrice = calculateTotalPrice(widget.food);
     });
   }
 
@@ -33,8 +90,8 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Food Image
-        Image.asset(
-          'assets/test/ca_phe_kem_trung.jpeg',
+        Image.network(
+          widget.food.foodImage,
           height: 80,
           width: 80,
           fit: BoxFit.fill,
@@ -51,22 +108,23 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Food name
-              const SizedBox(
-                width: 200,
+              SizedBox(
+                width: 210,
                 child: Text(
-                  "Cà Phê Kem Trứng",
-                  style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                  widget.food.foodName,
+                  style: const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
                 ),
               ),
 
               // Food price
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: SizedBox(
-                  width: 200,
+                  width: 210,
                   child: Text(
-                    "25.000Đ",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                    "${_totalFoodPrice.toString()}Đ",
+                    style:
+                        const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
                   ),
                 ),
               ),
@@ -79,21 +137,22 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
                   // Topping and notes
                   Column(
                     children: [
-                      //Add
-                      SizedBox(
-                          width: 180,
-                          child: Text(
-                            "${AppLocalizations.of(context)!.add}: topping 1, topping 2",
-                            style: TextStyle(
-                                fontFamily: 'Comfortaa',
-                                color: Colors.grey[600]),
-                          )),
+                      for (int i = 0; i < widget.food.options.length; i++)
+                        //Add
+                        SizedBox(
+                            width: 210,
+                            child: Text(
+                              "${widget.food.options[i].optionName}: ${widget.food.options[i].optionList.map((optionDetail) => optionDetail.name).join(', ')}",
+                              style: TextStyle(
+                                  fontFamily: 'Comfortaa',
+                                  color: Colors.grey[600]),
+                            )),
 
                       //Note
                       SizedBox(
-                          width: 180,
+                          width: 210,
                           child: Text(
-                            "${AppLocalizations.of(context)!.note}: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                            "${AppLocalizations.of(context)!.note}: ${widget.food.foodNote}",
                             style: TextStyle(
                                 fontFamily: 'Comfortaa',
                                 color: Colors.grey[600]),

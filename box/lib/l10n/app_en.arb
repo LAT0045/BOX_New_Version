@@ -70,5 +70,10 @@
     "checkOut": "Check Out",
     "orderEmpty": "There is nothing in the box :<<<",
 
-    "notUpdate": "Not update yet"
+    "notUpdate": "Not update yet",
+
+    "note": "Note",
+    "noteAsk": "Do you want to leave a note?",
+    "addToCart": "Add To Cart",
+    "cart": "Cart"
 }

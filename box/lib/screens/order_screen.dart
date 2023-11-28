@@ -1,4 +1,3 @@
-import 'package:box/cards/order_food_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -65,10 +64,9 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: ListView.builder(
                     itemCount: 3,
                     itemBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: OrderFoodCard(),
-                      );
+                      return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container());
                     }),
               ),
             ]),

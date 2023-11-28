@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../class/food.dart';
+import '../class/option.dart';
+import '../class/option_detail.dart';
 import '../class/shop.dart';
 import '../utils/colors.dart';
 
@@ -39,22 +41,81 @@ class _ShopScreenState extends State<ShopScreen> {
     });
   }
 
-  void updateTotalPrice(int price, bool isDecreased) {
+  void updateTotalPrice(Food food, bool isRemoved) {
     setState(() {
-      if (isDecreased) {
-        totalPrice -= price;
+      if (isRemoved) {
+        totalPrice -= calculateTotalPrice(food);
       } else {
-        totalPrice += price;
+        totalPrice += calculateTotalPrice(food);
       }
     });
   }
 
-  void updatePurchasedFood(Food food, bool isRemoved) {
-    if (isRemoved) {
-      purchasedFoods.removeWhere((element) => element.foodId == food.foodId);
-    } else {
-      purchasedFoods.add(food);
+  int calculateTotalPrice(Food food) {
+    int res = food.foodPrice;
+
+    for (Option option in food.options) {
+      res += calculateOptionDetail(option.optionList);
     }
+
+    return res;
+  }
+
+  int calculateOptionDetail(List<OptionDetail> optionDetails) {
+    int res = 0;
+
+    for (OptionDetail optionDetail in optionDetails) {
+      res += optionDetail.price;
+    }
+
+    return res;
+  }
+
+  int getFoodFromList(Food food, List<Food> foods) {
+    int res = -1;
+
+    for (int i = 0; i < foods.length; i++) {
+      if (foods[i].equals(food)) {
+        res = i;
+      }
+    }
+
+    return res;
+  }
+
+  int findFoodToRemove(Food food, List<Food> foods) {
+    int res = -1;
+
+    for (int i = 0; i < foods.length; i++) {
+      if (food.equals(foods[i])) {
+        res = i;
+      }
+    }
+
+    return res;
+  }
+
+  void updatePurchasedFood(Food food, bool isRemoved) {
+    setState(() {
+      if (isRemoved) {
+        int index = findFoodToRemove(food, purchasedFoods);
+
+        if (index != -1) {
+          purchasedFoods.removeAt(index);
+        }
+      } else {
+        int index = getFoodFromList(food, purchasedFoods);
+
+        if (index != -1) {
+          // Already has same food in list
+          purchasedFoods[index].updateQuantity(food.quantity, false);
+        } else {
+          // No food exists in list
+          // Add new one
+          purchasedFoods.add(food);
+        }
+      }
+    });
   }
 
   @override
@@ -77,7 +138,9 @@ class _ShopScreenState extends State<ShopScreen> {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
                       child: SvgPicture.asset(
                         "assets/svg/backarrow.svg",
                         height: 35,
@@ -242,6 +305,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   updateTotalFoods: updateTotalFoods,
                   updateTotalPrice: updateTotalPrice,
                   updatePurchasedFoods: updatePurchasedFood,
+                  foods: purchasedFoods,
                 ),
 
               //

@@ -1,4 +1,5 @@
 import 'package:box/details/food_detail.dart';
+import 'package:box/details/order_food_detail.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -7,15 +8,17 @@ import '../class/food.dart';
 class HorizontalFoodCard extends StatefulWidget {
   final Food food;
   final Function(int, bool) updateTotalFoods;
-  final Function(int, bool) updateTotalPrice;
+  final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
+  final List<Food> foods;
 
   const HorizontalFoodCard(
       {super.key,
       required this.food,
       required this.updateTotalFoods,
       required this.updateTotalPrice,
-      required this.updatePurchasedFoods});
+      required this.updatePurchasedFoods,
+      required this.foods});
 
   @override
   State<StatefulWidget> createState() {
@@ -26,17 +29,24 @@ class HorizontalFoodCard extends StatefulWidget {
 class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
   int quantity = 0;
 
+  void updateQuantity(int value, bool isDecreased) {
+    if (isDecreased) {
+      quantity -= value;
+    } else {
+      quantity += value;
+    }
+  }
+
   void _onPressIncrease() {
     setState(() {
-      //quantity++;
-      //widget.updateTotalFoods(1, false);
-      //widget.updateTotalPrice(widget.food.foodPrice, false);
-      //widget.updatePurchasedFoods(widget.food, false);
-
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => FoodDetail(
             food: widget.food,
+            updateTotalFoods: widget.updateTotalFoods,
+            updateTotalPrice: widget.updateTotalPrice,
+            updatePurchasedFoods: widget.updatePurchasedFoods,
+            updateQuantity: updateQuantity,
           ),
         ),
       );
@@ -45,10 +55,24 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
 
   void _onPressDecrease() {
     setState(() {
-      quantity--;
-      widget.updateTotalFoods(1, true);
-      widget.updateTotalPrice(widget.food.foodPrice, true);
-      widget.updatePurchasedFoods(widget.food, true);
+      List<Food> foods = [];
+
+      for (Food food in widget.foods) {
+        if (food.foodId == widget.food.foodId) {
+          foods.add(food);
+        }
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => OrderFoodDetail(
+                  foods: foods,
+                  updateTotalFoods: widget.updateTotalFoods,
+                  updateTotalPrice: widget.updateTotalPrice,
+                  updatePurchasedFoods: widget.updatePurchasedFoods,
+                  updateQuantity: updateQuantity,
+                )),
+      );
     });
   }
 
