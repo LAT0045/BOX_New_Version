@@ -78,6 +78,23 @@ class Food {
         "");
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'foodId': _foodId,
+      'shopId': _shopId,
+      'foodName': _foodName,
+      'foodImage': _foodImage,
+      'foodPrice': _foodPrice,
+      'foodDescription': _foodDescription,
+      'foodType': _foodType,
+      'options': _options.map((option) => option.toJson()).toList(),
+      'isOutOfStock': _isOutOfStock,
+      'sectionId': _sectionId,
+      'quantity': _quantity,
+      'foodNote': _foodNote,
+    };
+  }
+
   //_________OPERATOR_________
 
   bool equals(Food other) {

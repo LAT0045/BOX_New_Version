@@ -4,56 +4,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../class/food.dart';
 import '../class/option.dart';
 import '../class/option_detail.dart';
-import '../utils/colors.dart';
 
-class OrderFoodCard extends StatefulWidget {
+class CheckOutFoodCard extends StatefulWidget {
   final Food food;
-  final Function(int, bool) updateTotalFoods;
-  final Function(Food, bool) updateTotalPrice;
-  final Function(Food, bool) updatePurchasedFoods;
-  final Function(int, bool) updateQuantity;
 
-  const OrderFoodCard({
-    super.key,
-    required this.food,
-    required this.updateTotalFoods,
-    required this.updateTotalPrice,
-    required this.updatePurchasedFoods,
-    required this.updateQuantity,
-  });
+  const CheckOutFoodCard({super.key, required this.food});
 
   @override
   State<StatefulWidget> createState() {
-    return _OrderFoodCardState();
+    return _CheckOutFoodCardState();
   }
 }
 
-class _OrderFoodCardState extends State<OrderFoodCard> {
+class _CheckOutFoodCardState extends State<CheckOutFoodCard> {
   int _quantity = 0;
   int _totalFoodPrice = 0;
-
-  void _onPressIncrease() {
-    setState(() {
-      _quantity++;
-      widget.updateTotalFoods(1, false);
-      widget.updateTotalPrice(widget.food, false);
-      widget.updatePurchasedFoods(widget.food, false);
-      widget.updateQuantity(1, false);
-      _totalFoodPrice += calculateTotalPrice(widget.food);
-    });
-  }
-
-  void _onPressDecrease() {
-    setState(() {
-      _quantity--;
-      print("TESTTTTTTTTTHERRRRRRRRREEEEEEEEE");
-      widget.updateTotalFoods(1, true);
-      widget.updateTotalPrice(widget.food, true);
-      widget.updatePurchasedFoods(widget.food, true);
-      widget.updateQuantity(1, true);
-      _totalFoodPrice -= calculateTotalPrice(widget.food);
-    });
-  }
 
   int calculateTotalPrice(Food food) {
     int res = food.foodPrice;
@@ -61,6 +26,8 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
     for (Option option in food.options) {
       res += calculateOptionDetail(option.optionList);
     }
+
+    res *= food.quantity;
 
     return res;
   }
@@ -81,8 +48,18 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
 
     setState(() {
       _quantity = widget.food.quantity;
-      _totalFoodPrice = calculateTotalPrice(widget.food) * _quantity;
+      _totalFoodPrice = calculateTotalPrice(widget.food);
     });
+  }
+
+  @override
+  void dispose() {
+    setState(() {
+      _quantity = 0;
+      _totalFoodPrice = 0;
+    });
+
+    super.dispose();
   }
 
   @override
@@ -161,53 +138,14 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
                     ],
                   ),
 
-                  // Increase and decrease quantiy
-                  Row(
-                    children: [
-                      //Decrease button
-                      Visibility(
-                        visible: _quantity > 0,
-                        child: GestureDetector(
-                          onTap: _onPressDecrease,
-                          child: const CircleAvatar(
-                            radius: 10,
-                            backgroundColor: AppColors.orangeColor,
-                            child: Icon(
-                              Icons.remove_outlined,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      // Quantity
-                      Visibility(
-                        visible: _quantity > 0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Text(
-                            _quantity.toString(),
-                            style: const TextStyle(fontFamily: 'Comfortaa'),
-                          ),
-                        ),
-                      ),
-
-                      // Increase button
-                      GestureDetector(
-                        onTap: _onPressIncrease,
-                        child: const CircleAvatar(
-                          radius: 10,
-                          backgroundColor: AppColors.orangeColor,
-                          child: Icon(
-                            Icons.add_outlined,
-                            color: Colors.white,
-                            size: 15,
-                          ),
-                        ),
-                      )
-                    ],
-                  )
+                  // Quantity
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      _quantity.toString(),
+                      style: const TextStyle(fontFamily: 'Comfortaa'),
+                    ),
+                  ),
                 ],
               )
             ],

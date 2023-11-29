@@ -28,6 +28,14 @@ class Option {
         json['optionType'] ?? "", json['optionName'] ?? "", optionList);
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'optionType': _optionType,
+      'optionName': _optionName,
+      'optionList': _optionList.map((detail) => detail.toJson()).toList(),
+    };
+  }
+
   //_________OPERATOR_________
 
   bool equals(Option other) {

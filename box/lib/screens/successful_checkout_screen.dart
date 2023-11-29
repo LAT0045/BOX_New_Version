@@ -1,10 +1,16 @@
+import 'package:box/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class SuccessfulCheckoutScreen extends StatelessWidget {
-  const SuccessfulCheckoutScreen({super.key});
+  final UserCredential userCredential;
+  final String address;
+
+  const SuccessfulCheckoutScreen(
+      {super.key, required this.userCredential, required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +95,13 @@ class SuccessfulCheckoutScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(
+                            userCredential: userCredential, address: address)),
+                  );
+                },
                 style: TextButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   shape: RoundedRectangleBorder(

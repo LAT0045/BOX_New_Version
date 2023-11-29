@@ -36,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List tabs = [
       HomeTab(
         address: widget.address,
+        userCredential: widget.userCredential,
       ),
       const FavoriteTab(isEmpty: true),
       const OrderTab(isEmpty: true),

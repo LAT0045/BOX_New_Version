@@ -21,7 +21,7 @@ class LoginScreen extends StatelessWidget {
           builder: (context) => HomeScreen(
             userCredential: userCredential,
             address: address,
-          ), // Replace with your SuccessScreen widget
+          ),
         ),
       );
     }

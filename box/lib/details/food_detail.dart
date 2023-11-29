@@ -81,6 +81,7 @@ class _FoodDetailState extends State<FoodDetail> {
 
   @override
   void dispose() {
+    textEditingController.dispose();
     super.dispose();
   }
 

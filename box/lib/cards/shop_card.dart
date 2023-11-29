@@ -1,4 +1,5 @@
 import 'package:box/screens/shop_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -7,8 +8,18 @@ import '../utils/colors.dart';
 
 class ShopCard extends StatelessWidget {
   final Shop shop;
+  final String username;
+  final String phoneNumber;
+  final String address;
+  final UserCredential userCredential;
 
-  const ShopCard({super.key, required this.shop});
+  const ShopCard(
+      {super.key,
+      required this.shop,
+      required this.username,
+      required this.phoneNumber,
+      required this.address,
+      required this.userCredential});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +29,10 @@ class ShopCard extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ShopScreen(
               shop: shop,
+              username: username,
+              phoneNumber: phoneNumber,
+              address: address,
+              userCredential: userCredential,
             ),
           ),
         );

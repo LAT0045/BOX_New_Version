@@ -1,3 +1,4 @@
+import 'package:box/cards/section_card.dart';
 import 'package:box/details/food_detail.dart';
 import 'package:box/details/order_food_detail.dart';
 import 'package:box/utils/colors.dart';
@@ -55,18 +56,10 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
 
   void _onPressDecrease() {
     setState(() {
-      List<Food> foods = [];
-
-      for (Food food in widget.foods) {
-        if (food.foodId == widget.food.foodId) {
-          foods.add(food);
-        }
-      }
-
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) => OrderFoodDetail(
-                  foods: foods,
+                  foods: widget.foods,
                   updateTotalFoods: widget.updateTotalFoods,
                   updateTotalPrice: widget.updateTotalPrice,
                   updatePurchasedFoods: widget.updatePurchasedFoods,
@@ -74,6 +67,39 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                 )),
       );
     });
+  }
+
+  int getNewQuantity(List<Food> foods, Food food) {
+    int res = 0;
+
+    for (Food curFood in foods) {
+      if (curFood.foodId == food.foodId) {
+        res += curFood.quantity;
+      }
+    }
+
+    return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      quantity = widget.food.quantity;
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant HorizontalFoodCard oldWidget) {
+    int newQuantity = getNewQuantity(widget.foods, widget.food);
+    if (newQuantity != oldWidget.food.quantity) {
+      setState(() {
+        quantity = newQuantity;
+      });
+    }
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override

@@ -75,5 +75,14 @@
     "note": "Ghi chú",
     "noteAsk": "Bạn có gì cần dặn dò không?",
     "addToCart": "Thêm Vào Giỏ Hàng",
-    "cart": "Giỏ Hàng"
+    "cart": "Giỏ Hàng",
+
+    "checkOutInfo": "Thông Tin Đặt Hàng",
+    "edit": "Chỉnh Sửa",
+    "paymentMethod": "Phương Thức Thanh Toán",
+    "schedule": "Đặt Lịch Hẹn",
+    "date": "Ngày Hẹn",
+    "time": "Giờ hẹn",
+    "total": "Tổng Cộng",
+    "orderCheckOut": "Đặt Hàng"
 }

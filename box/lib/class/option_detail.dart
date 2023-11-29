@@ -44,6 +44,15 @@ class OptionDetail {
         json['isOutOfStock'] ?? true, price, false);
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'name': _name,
+      'image': _image,
+      'isOutOfStock': _isOutOfStock,
+      'price': _price,
+    };
+  }
+
   //_________OPERATOR_________
   bool equals(OptionDetail other) {
     return _name == other._name &&

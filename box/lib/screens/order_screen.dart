@@ -1,11 +1,33 @@
+import 'package:box/cards/order_food_card.dart';
+import 'package:box/details/check_out_detail.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:lottie/lottie.dart';
+import '../class/food.dart';
 import '../utils/colors.dart';
 
 class OrderScreen extends StatefulWidget {
-  const OrderScreen({super.key});
+  final List<Food> foods;
+  final Function(int, bool) updateTotalFoods;
+  final Function(Food, bool) updateTotalPrice;
+  final Function(Food, bool) updatePurchasedFoods;
+  final String username;
+  final String phoneNumber;
+  final String address;
+  final UserCredential userCredential;
+
+  const OrderScreen(
+      {super.key,
+      required this.foods,
+      required this.updateTotalFoods,
+      required this.updateTotalPrice,
+      required this.updatePurchasedFoods,
+      required this.username,
+      required this.phoneNumber,
+      required this.address,
+      required this.userCredential});
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +36,8 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
+  void updateQuantity(int value, bool isRemoved) {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +57,9 @@ class _OrderScreenState extends State<OrderScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
                           child: SvgPicture.asset(
                             "assets/svg/backarrow.svg",
                             height: 30,
@@ -62,11 +88,16 @@ class _OrderScreenState extends State<OrderScreen> {
               // Items
               Expanded(
                 child: ListView.builder(
-                    itemCount: 3,
+                    itemCount: widget.foods.length,
                     itemBuilder: (context, index) {
                       return Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container());
+                          child: OrderFoodCard(
+                              food: widget.foods[index],
+                              updateTotalFoods: widget.updateTotalFoods,
+                              updateTotalPrice: widget.updateTotalPrice,
+                              updatePurchasedFoods: widget.updatePurchasedFoods,
+                              updateQuantity: updateQuantity));
                     }),
               ),
             ]),
@@ -76,7 +107,18 @@ class _OrderScreenState extends State<OrderScreen> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => CheckOutDetail(
+                              foods: widget.foods,
+                              username: widget.username,
+                              phoneNumber: widget.phoneNumber,
+                              address: widget.address,
+                              userCredential: widget.userCredential,
+                            )),
+                  );
+                },
                 style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     shape: RoundedRectangleBorder(
@@ -141,6 +183,8 @@ class EmptyOrderScreen extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
+
+        // Check out
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: TextButton(

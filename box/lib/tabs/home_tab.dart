@@ -5,6 +5,7 @@ import 'package:box/cards/nearby_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,8 +18,10 @@ import '../class/shop.dart';
 
 class HomeTab extends StatefulWidget {
   final String address;
+  final UserCredential userCredential;
 
-  const HomeTab({super.key, required this.address});
+  const HomeTab(
+      {super.key, required this.address, required this.userCredential});
 
   @override
   State<StatefulWidget> createState() {
@@ -42,47 +45,82 @@ class _HomeTabState extends State<HomeTab> {
   final List<Shop> _koreanShops = [];
   final List<Shop> _japaneseShops = [];
 
+  String _phoneNumber = "";
+  String _name = "";
+
   List<CategoryCard> _initializeCategories(BuildContext context) {
     final List<CategoryCard> categories = [
       CategoryCard(
         iconPath: "assets/svg/deal.svg",
         name: AppLocalizations.of(context)!.hotDeal,
         shops: const [],
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/voucher.svg",
         name: AppLocalizations.of(context)!.voucher,
         shops: const [],
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/all.svg",
         name: AppLocalizations.of(context)!.all,
         shops: _shops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/fastfood.svg",
         name: AppLocalizations.of(context)!.fastFood,
         shops: _fastFoodShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/bubble_tea.svg",
         name: AppLocalizations.of(context)!.drink,
         shops: _drinkShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/vietnamese_food.svg",
         name: AppLocalizations.of(context)!.vietnameseFood,
         shops: _vietnameseShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/korean_food.svg",
         name: AppLocalizations.of(context)!.koreanFood,
         shops: _koreanShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       ),
       CategoryCard(
         iconPath: "assets/svg/japanese_food.svg",
         name: AppLocalizations.of(context)!.japaneseFood,
         shops: _japaneseShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
       )
     ];
 
@@ -195,6 +233,21 @@ class _HomeTabState extends State<HomeTab> {
       }
     });
 
+    final databaseReference2 = databaseReference.ref("Users");
+    DatabaseReference userReference =
+        databaseReference2.child(widget.userCredential.user!.uid);
+
+    final snapshot = await userReference.get();
+    if (snapshot.exists) {
+      setState(() {
+        _name = (snapshot.value as Map)["name"];
+        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+            AppLocalizations.of(context)!.notUpdate;
+      });
+    } else {
+      // User info doesn't exist
+    }
+
     _isDoneGettingInfo = true;
   }
 
@@ -211,7 +264,8 @@ class _HomeTabState extends State<HomeTab> {
             future: getInfo(),
             builder: (context, snapshot) {
               if (!_isDoneGettingInfo) {
-                return const CircularProgressIndicator();
+                return const SafeArea(
+                    child: Center(child: CircularProgressIndicator()));
               } else {
                 return SingleChildScrollView(
                   child: SafeArea(

@@ -1,4 +1,5 @@
 import 'package:box/cards/shop_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -8,8 +9,19 @@ import '../utils/colors.dart';
 class CategoryDetail extends StatelessWidget {
   final String name;
   final List<Shop> shops;
+  final String username;
+  final String phoneNumber;
+  final String address;
+  final UserCredential userCredential;
 
-  const CategoryDetail({super.key, required this.name, required this.shops});
+  const CategoryDetail(
+      {super.key,
+      required this.name,
+      required this.shops,
+      required this.username,
+      required this.phoneNumber,
+      required this.address,
+      required this.userCredential});
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +78,10 @@ class CategoryDetail extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ShopCard(
                         shop: shops[index],
+                        username: username,
+                        phoneNumber: phoneNumber,
+                        address: address,
+                        userCredential: userCredential,
                       );
                     }))
           ],

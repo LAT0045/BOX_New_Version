@@ -1,5 +1,7 @@
 import 'package:box/cards/section_card.dart';
 import 'package:box/cards/voucher_card.dart';
+import 'package:box/screens/order_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,8 +13,18 @@ import '../utils/colors.dart';
 
 class ShopScreen extends StatefulWidget {
   final Shop shop;
+  final String username;
+  final String phoneNumber;
+  final String address;
+  final UserCredential userCredential;
 
-  ShopScreen({super.key, required this.shop});
+  ShopScreen(
+      {super.key,
+      required this.shop,
+      required this.username,
+      required this.phoneNumber,
+      required this.address,
+      required this.userCredential});
 
   final List<VoucherCard> _vouchers = [
     const VoucherCard(),
@@ -83,37 +95,34 @@ class _ShopScreenState extends State<ShopScreen> {
     return res;
   }
 
-  int findFoodToRemove(Food food, List<Food> foods) {
-    int res = -1;
-
-    for (int i = 0; i < foods.length; i++) {
-      if (food.equals(foods[i])) {
-        res = i;
-      }
-    }
-
-    return res;
-  }
-
   void updatePurchasedFood(Food food, bool isRemoved) {
     setState(() {
-      if (isRemoved) {
-        int index = findFoodToRemove(food, purchasedFoods);
+      int index = getFoodFromList(food, purchasedFoods);
 
+      if (isRemoved) {
         if (index != -1) {
-          purchasedFoods.removeAt(index);
+          purchasedFoods[index].updateQuantity(1, true);
+
+          if (purchasedFoods[index].quantity == 0) {
+            purchasedFoods.removeAt(index);
+          }
         }
       } else {
-        int index = getFoodFromList(food, purchasedFoods);
-
         if (index != -1) {
           // Already has same food in list
-          purchasedFoods[index].updateQuantity(food.quantity, false);
+          purchasedFoods[index].updateQuantity(1, false);
         } else {
           // No food exists in list
           // Add new one
           purchasedFoods.add(food);
         }
+      }
+
+      for (Food food in purchasedFoods) {
+        print("_______________________");
+        print(food.foodName);
+        print(food.foodPrice);
+        print(food.quantity);
       }
     });
   }
@@ -350,32 +359,51 @@ class _ShopScreenState extends State<ShopScreen> {
                       color: Colors.white,
                       fontSize: 20),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    child: Row(
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!.pay,
-                          style: const TextStyle(
-                              fontFamily: 'Comfortaa',
-                              color: AppColors.mediumOrangeColor,
-                              fontSize: 15),
-                        ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        const Icon(
-                          Icons.east_outlined,
-                          color: AppColors.mediumOrangeColor,
-                          size: 20,
-                        ),
-                      ],
+
+                // Check out button
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => OrderScreen(
+                                foods: purchasedFoods,
+                                updateTotalFoods: updateTotalFoods,
+                                updateTotalPrice: updateTotalPrice,
+                                updatePurchasedFoods: updatePurchasedFood,
+                                username: widget.username,
+                                phoneNumber: widget.phoneNumber,
+                                address: widget.address,
+                                userCredential: widget.userCredential,
+                              )),
+                    );
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 5),
+                      child: Row(
+                        children: [
+                          Text(
+                            AppLocalizations.of(context)!.pay,
+                            style: const TextStyle(
+                                fontFamily: 'Comfortaa',
+                                color: AppColors.mediumOrangeColor,
+                                fontSize: 15),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          const Icon(
+                            Icons.east_outlined,
+                            color: AppColors.mediumOrangeColor,
+                            size: 20,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )

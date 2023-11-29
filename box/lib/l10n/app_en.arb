@@ -75,5 +75,14 @@
     "note": "Note",
     "noteAsk": "Do you want to leave a note?",
     "addToCart": "Add To Cart",
-    "cart": "Cart"
+    "cart": "Cart",
+
+    "checkOutInfo": "Checkout Information",
+    "edit": "Edit",
+    "paymentMethod": "Payment Method",
+    "schedule": "Schedule A Date",
+    "date": "Date",
+    "time": "Time",
+    "total": "Total",
+    "orderCheckOut": "Order"
 }
