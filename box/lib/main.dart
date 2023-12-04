@@ -1,6 +1,15 @@
-import 'package:box/screens/signup_screen.dart';
+import 'package:box/class/shop.dart';
+import 'package:box/screens/edit_checkout_info_screen.dart';
+import 'package:box/screens/edit_info_screen.dart';
+import 'package:box/screens/map_screen.dart';
+import 'package:box/screens/login_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:geolocator/geolocator.dart';
+import 'l10n/l10n.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +32,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-    //initialRoute: 'sign',
-    debugShowCheckedModeBanner: false, home: SignUpScreen(),
+    return MaterialApp(
+    debugShowCheckedModeBanner: false,
+        supportedLocales: L10n.all,
+        locale: const Locale('vi'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+    home: LoginScreen()
     
     //home: SectionCard(sectionName: "Chọn Size", widgets: [ToppingCard(name: "Size S", price: "0đ",),ToppingCard(name: "Size M", price: "5000đ",),ToppingCard(name: "Size L", price: "10000đ",),],)
     );

@@ -1,5 +1,5 @@
 import 'package:box/screens/otp_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -223,7 +223,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   // Functions
   Future<void> onPressedSignUp() async {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => OtpScreen(countryController.text + phone))
+      MaterialPageRoute(builder: (context) => OtpScreen(countryController.text + phone, false))
     );
   }
   void onPressedBackBtn() {}

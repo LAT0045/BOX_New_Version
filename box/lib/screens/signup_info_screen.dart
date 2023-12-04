@@ -1,18 +1,22 @@
 import 'dart:io';
 import 'package:box/screens/signup_congrate_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../utils/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class SignUpInfoScreen extends StatefulWidget {
   final String phone;
-  final String uid; 
+  UserCredential userCredential;
 
-  SignUpInfoScreen({required this.phone, required this.uid});
+  SignUpInfoScreen({required this.phone, required this.userCredential});
   @override
   _SignUpInfoScreenState createState() => _SignUpInfoScreenState();
   
@@ -21,6 +25,7 @@ class SignUpInfoScreen extends StatefulWidget {
 class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
   File? _image;
   TextEditingController _nameController = TextEditingController();
+  LocationService locationService = LocationService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,7 +204,7 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
 
       if (userName.isNotEmpty) {
         await saveUserInfoToDatabase(userName, imageURL);
-        navigateToNextScreen();
+        requestLocationPermission(widget.userCredential);
       } else {
         print('Vui lòng nhập tên của bạn.');
       }
@@ -210,7 +215,7 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
 
   Future<void> saveUserInfoToDatabase(String userName, String imageURL) async {
     final databaseReference = FirebaseDatabase.instance.ref("Users");
-      DatabaseReference userReference = databaseReference.child(widget.uid);
+      DatabaseReference userReference = databaseReference.child(widget.userCredential.user!.uid);
       // Set user other information
       userReference.set({
       "name": userName,
@@ -234,12 +239,37 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
     });
   }
 
-  void navigateToNextScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SignUpCongrateScreen()), // Thay NextWidget bằng tên widget bạn muốn chuyển đến
+  void getLocationAndAddress(UserCredential userCredential) async {
+    try {
+      Position position = await locationService.getCurrentLocation();
+      String address = await locationService.getAddressFromCoordinates(position);
+
+      navigateToNextScreen(widget.userCredential, address);
+    } catch (error) {
+      // Xử lý lỗi
+    }
+  }
+  void requestLocationPermission(UserCredential userCredential) async {
+      PermissionStatus status = await Permission.location.request();
+      if (status.isGranted) {
+        getLocationAndAddress(userCredential);
+      } else {
+        // Access denied
+      }
+    }
+  
+
+  void navigateToNextScreen(UserCredential userCredential, String address) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => SignUpCongrateScreen(
+          userCredential: userCredential,
+          address: address,
+        ), // Replace with your SuccessScreen widget
+      ),
     );
   }
+  
 
   void onPressedBackBtn() {}
 }

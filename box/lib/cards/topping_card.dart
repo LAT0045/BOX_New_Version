@@ -1,9 +1,9 @@
-import 'package:box/cards/favorite_food_card.dart';
+//import 'package:box/cards/favorite_food_card.dart';
 import 'package:box/cards/option_card.dart';
-import 'package:box/cards/section_card.dart';
+//import 'package:box/cards/section_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
+//import 'package:lottie/lottie.dart';
 
 class ToppingCard extends StatefulWidget {
   final bool isObg;
@@ -54,7 +54,7 @@ class ObgToppingCard extends StatelessWidget {
               child: ListView.builder(
               itemCount: 5,
               itemBuilder: (context, index) {
-              return const OptionCard(name: 'Size S', price: '59000',);
+              //return const OptionCard(name: 'Size S', price: '59000',);
             }
           ),
         )
@@ -91,7 +91,7 @@ class NotObgToppingCard extends StatelessWidget {
               child: ListView.builder(
               itemCount: 3,
               itemBuilder: (context, index) {
-              return const OptionCard(name: 'Size S', price: '59000',);
+             // return const OptionCard(name: 'Size S', price: '59000',);
             }
           ),
         )

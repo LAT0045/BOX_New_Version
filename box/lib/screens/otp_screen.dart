@@ -1,15 +1,20 @@
+//import 'package:box/screens/home_screen.dart';
 import 'package:box/screens/home_screen.dart';
 import 'package:box/screens/signup_info_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phone;
-  OtpScreen(this.phone);
+  final bool login;
+
+  OtpScreen(this.phone, this.login);
   //const OtpScreen(String text, {Key? key}) : super(key: key);
 
   @override
@@ -21,11 +26,12 @@ class _OtpScreenState extends State<OtpScreen> {
   bool otpVisibility = false;
   String verificationID = "";
   String _otpCode = '';
-  
+  final LocationService _locationService = LocationService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,      
       body:SafeArea(
         child: Column(
@@ -135,11 +141,57 @@ class _OtpScreenState extends State<OtpScreen> {
 
   //--------------------------------------------
   // 
+   void onPressedSend() async {
+    bool isLocationPermissionGranted = await _checkLocationPermission();
+
+    if (!isLocationPermissionGranted) {
+      _requestLocationPermission();
+    } else {
+      loginWithPhone();
+    }
+  }
+
+  Future<bool> _checkLocationPermission() async {
+    final permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
+      return false;
+    }
+    return true;
+  }
+
+  void _requestLocationPermission() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.deniedForever) {
+      // Hiển thị thông báo yêu cầu quyền truy cập vị trí
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Yêu cầu quyền truy cập vị trí'),
+            content: Text('Vui lòng cho phép truy cập vị trí trong cài đặt'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  // Chuyển hướng đến cài đặt để cho phép quyền truy cập vị trí
+                  Geolocator.openAppSettings();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   void loginWithPhone() async {
     auth.verifyPhoneNumber(
       phoneNumber: widget.phone,
       verificationCompleted: (PhoneAuthCredential credential) async {
-        await auth.signInWithCredential(credential).then((value){
+        await auth.signInWithCredential(credential).then((value) {
           print("You are logged in successfully");
         });
       },
@@ -151,25 +203,46 @@ class _OtpScreenState extends State<OtpScreen> {
         verifyOTP();
         setState(() {});
       },
-      codeAutoRetrievalTimeout: (String verificationId) {
-
-      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
     );
   }
 
   void verifyOTP() async {
-    PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationID, smsCode: _otpCode);
-    await auth.signInWithCredential(credential).then((userCredential) {
-      String uid = userCredential.user!.uid;
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => SignUpInfoScreen(phone: widget.phone, uid: uid)),
-      );
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+      verificationId: verificationID,
+      smsCode: _otpCode,
+    );
+
+    await auth.signInWithCredential(credential).then((userCredential) async {
+      // Lấy vị trí hiện tại từ LocationService
+      Position position = await _locationService.getCurrentLocation();
+      String address =
+          await _locationService.getAddressFromCoordinates(position);
+
+      // Chuyển hướng sang HomeScreen và truyền userCredential và address
+      if(widget.login){
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              userCredential: userCredential,
+              address: address,
+            ),
+          ),
+        );
+      }
+      else{
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => SignUpInfoScreen(
+              userCredential: userCredential,
+              phone: widget.phone,
+            ),
+          ),
+        );
+      }
+      
     }).catchError((error) {
       print(error);
     });
-  }
-  void onPressedSend() {
-    loginWithPhone();
-    //verifyOTP();
   }
 }

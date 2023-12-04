@@ -1,10 +1,15 @@
 import 'package:box/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../utils/colors.dart';
 
 class SignUpCongrateScreen extends StatefulWidget {
+  UserCredential userCredential;
+  String address;
+
+  SignUpCongrateScreen({required this.address, required this.userCredential});
 
   @override
   State<SignUpCongrateScreen> createState() => _SignUpCongrateScreenState();
@@ -66,14 +71,14 @@ class _SignUpCongrateScreenState extends State<SignUpCongrateScreen> {
                   colors: [AppColors.orangeColor, AppColors.yellowColor],
                 )),
             child: TextButton(
-              onPressed: onPressedStart,
-              style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  shadowColor: Colors.transparent),
+                onPressed: () => onPressedStart(widget.userCredential, widget.address),             
+                style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20)),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                shadowColor: Colors.transparent),
               child: const Text(
                 "Bắt Đầu Thôi",
                 style: TextStyle(
@@ -95,8 +100,15 @@ class _SignUpCongrateScreenState extends State<SignUpCongrateScreen> {
 
   //--------------------------------------------
   // Functions
-  void onPressedStart(){
+
+  void onPressedStart(UserCredential userCredential, String address) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => HomeScreen()));
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(
+          userCredential: userCredential,
+          address: address,
+        ), // Replace with your SuccessScreen widget
+      ),
+    );
   }
 }

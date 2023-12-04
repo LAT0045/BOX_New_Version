@@ -1,0 +1,88 @@
+{
+    "email": "Email",
+    "password": "Mật khẩu",
+    "forgotPassword": "Quên mật khẩu?",
+    "signIn": "Đăng Nhập",
+    "or": "Hoặc",
+    "signInFacebook": "Đăng Nhập Bằng Facebook",
+    "signInGmail": "Đăng Nhập Bằng Gmail",
+    "noAccount": "Bạn chưa có tài khoản?",
+    "signUpNow": "Đăng Ký Ngay >>>>",
+
+    "congratulation": "Chúc mừng bạn đã đăng ký tài khoản thành công. Bây giờ chúng ta cùng trải nghiệm BOX nào.",
+    "getStarted": "Bắt Đầu Thôi",
+
+    "reEnterPassword": "Nhập lại mật khẩu",
+    "signUp": "Đăng Ký",
+
+    "nameAsking": "Tên của bạn là gì?",
+    "address": "Địa chỉ nè",
+    "avatar": "Ảnh Đại Diện",
+    "selectImage": "Chọn Ảnh",
+    "update": "Cập Nhật",
+
+    "orderSuccessfully": "Đã Đặt Hàng Thành Công",
+    "viewOrder": "Xem Đơn Hàng",
+    "homePage": "Trang Chủ",
+
+    "homeSlogan": "Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu.",
+    "locationQuestion": "Có phải bạn đang ở: ",
+    "homeHintText": "Hôm nay bạn muốn ăn gì?",
+    "hotDeal": "Ưu Đãi",
+    "voucher": "Giảm Giá",
+    "all": "Tất Cả",
+    "fastFood": "Thức Ăn Nhanh",
+    "drink": "Nước Uống",
+    "vietnameseFood": "Món Việt",
+    "koreanFood": "Món Hàn",
+    "japaneseFood": "Món Nhật",
+    "recentlyViewed": "Đã Xem Gần Đây",
+    "seeMore": "Xem thêm >>",
+    "forYou": "Dành Riêng Cho Bạn",
+    "nearYou": "Ở Gần Bạn",
+
+    "favoriteDishes": "Món Yêu Thích",
+    "favoriteEmpty": "Hộp yêu thích rỗng mất rồi :<<<",
+    "addDish": "Thêm Món Ăn Nào",
+
+    "order": "Đơn Hàng",
+    "noComing": "Hong có ai đang đến với bạn cạ :<<<",
+    "orderMore": "Đặt Thêm Món Nào",
+
+    "notification": "Thông Báo",
+    "dealNotification": "Thông báo ưu đãi",
+    "orderNotification": "Chỗ này để thông báo về đơn hàng nhe :3",
+
+    "personalInformation": "Thông Tin Cá Nhân",
+    "repurchase": "Mua Lại",
+    "payment": "Thanh Toán",
+    "signOut": "Đăng Xuất",
+
+    "favorite": "Yêu Thích",
+    "account": "Tài Khoản",
+
+    "product": "sản phẩm",
+    "pay": "T.Toán",
+    "save": "Lưu",
+
+    "add": "Thêm",
+    "note": "Ghi chú",
+    "checkOut": "Thanh Toán",
+    "orderEmpty": "Hông có gì trong hộp cả :<<<",
+
+    "notUpdate": "Chưa cập nhật",
+
+    "note": "Ghi chú",
+    "noteAsk": "Bạn có gì cần dặn dò không?",
+    "addToCart": "Thêm Vào Giỏ Hàng",
+    "cart": "Giỏ Hàng",
+
+    "checkOutInfo": "Thông Tin Đặt Hàng",
+    "edit": "Chỉnh Sửa",
+    "paymentMethod": "Phương Thức Thanh Toán",
+    "schedule": "Đặt Lịch Hẹn",
+    "date": "Ngày Hẹn",
+    "time": "Giờ hẹn",
+    "total": "Tổng Cộng",
+    "orderCheckOut": "Đặt Hàng"
+}

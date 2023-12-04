@@ -1,10 +1,62 @@
+import 'package:box/screens/edit_info_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../utils/colors.dart';
 
-class PersonalInfoScreen extends StatelessWidget {
-  const PersonalInfoScreen({super.key});
+class PersonalInfoTab extends StatefulWidget {
+  final UserCredential userCredential;
+
+  const PersonalInfoTab({super.key, required this.userCredential});
+
+  @override
+  State<PersonalInfoTab> createState() => _PersonalInfoTabState();
+}
+
+class _PersonalInfoTabState extends State<PersonalInfoTab> {
+  String _name = "";
+  String _avatar = "";
+  String _phoneNumber = "";
+
+  Future<void> getUserInfo() async {
+    final databaseReference = FirebaseDatabase.instance.ref("Users");
+    DatabaseReference userReference =
+        databaseReference.child(widget.userCredential.user!.uid);
+
+    final snapshot = await userReference.get();
+    if (snapshot.exists) {
+      setState(() {
+        _name = (snapshot.value as Map)["name"];
+        _avatar = (snapshot.value as Map)["avatar"];
+        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+            const Text('chưa cập nhật');
+      });
+    } else {
+      // User info doesn't exist
+    }
+  }
+  void navigateToLoginScreen() {
+    Navigator.of(context).pop();
+  }
+
+  void signOutFromGoogle() async {
+    GoogleSignIn googleSignIn = GoogleSignIn();
+    await googleSignIn.signOut();
+    await FirebaseAuth.instance.signOut();
+
+    navigateToLoginScreen();
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getUserInfo();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,116 +74,30 @@ class PersonalInfoScreen extends StatelessWidget {
                 height: 230,
                 fit: BoxFit.cover,
               ),
-        
-              Positioned(
-                top: 15,
-                left: 5,
-                //Back button
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: GestureDetector(
-                              onTap: onPressedBackBtn,
-                              child: SvgPicture.asset(
-                                "assets/svg/backarrow.svg",
-                                width: 50,
-                                height: 50,
-                                colorFilter: const ColorFilter.mode(
-                                  Colors.white,
-                                  BlendMode.srcIn,
-                                ),
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            "Thông tin cá nhân",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Comfortaa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          GestureDetector(
-                            onTap: onPressedSettingBtn,
-                            child: SvgPicture.asset(
-                              "assets/svg/setting.svg",
-                              width: 35,
-                              height: 35,
-                              colorFilter: const ColorFilter.mode(
-                                Colors.white,
-                                BlendMode.srcIn,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-        
-                    const SizedBox(
-                      height: 20,
-                    ),
-        
-                    //Avatar
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         const SizedBox(
-                          width: 20,
+                          width: 35,
                         ),
-                        //Avatar
-                        Container(
-                          width: 105,
-                          height: 105,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage("assets/svg/avatest.jpg"),
-                            ),
+                        Text(
+                          AppLocalizations.of(context)!.personalInformation,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Comfortaa',
                           ),
                         ),
-        
-                        const SizedBox(width: 30),
-        
-                        //Info
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Họ Tên",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontFamily: 'Comfortaa',
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "0769816622",
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontFamily: 'Comfortaa',
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-        
-                        const SizedBox(width: 40),
-        
                         GestureDetector(
-                          onTap: onPressedEdit,
+                          onTap: onPressedSettingBtn,
                           child: SvgPicture.asset(
-                            "assets/svg/edit.svg",
+                            "assets/svg/setting.svg",
                             width: 35,
                             height: 35,
                             colorFilter: const ColorFilter.mode(
@@ -141,17 +107,85 @@ class PersonalInfoScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+
+                  const SizedBox(
+                    height: 20,
+                  ),
+
+                  //Avatar
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      //Avatar
+                      Container(
+                        width: 105,
+                        height: 105,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(_avatar),
+                            onError: (exception, stackTrace) {},
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(width: 30),
+
+                      //Info
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _name,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Comfortaa',
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            _phoneNumber,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontFamily: 'Comfortaa',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(width: 40),
+
+                      GestureDetector(
+                        onTap: onPressedEdit,
+                        child: SvgPicture.asset(
+                          "assets/svg/edit.svg",
+                          width: 35,
+                          height: 35,
+                          colorFilter: const ColorFilter.mode(
+                            Colors.white,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ],
           ),
-        
+
           const SizedBox(
             height: 20,
           ),
-        
+
           //Order button
           Container(
             width: 330,
@@ -184,16 +218,16 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Đơn Hàng",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.order,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                     ),
                   ),
                   const SizedBox(
-                    width: 110,
+                    width: 100,
                   ),
                   Transform.rotate(
                     angle: 3.14159265,
@@ -211,11 +245,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //BuyAgain
           Container(
             width: 330,
@@ -248,16 +282,16 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Mua Lại",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.repurchase,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                     ),
                   ),
                   const SizedBox(
-                    width: 130,
+                    width: 120,
                   ),
                   Transform.rotate(
                     angle: 3.14159265,
@@ -275,11 +309,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Voucher
           Container(
             width: 330,
@@ -312,16 +346,16 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 16,
                   ),
-                  const Text(
-                    "Ưu đãi",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.hotDeal,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                     ),
                   ),
                   const SizedBox(
-                    width: 140,
+                    width: 130,
                   ),
                   Transform.rotate(
                     angle: 3.14159265,
@@ -339,11 +373,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Payments
           Container(
             width: 330,
@@ -376,9 +410,9 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Thanh toán",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.payment,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
@@ -403,11 +437,11 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 10,
           ),
-        
+
           //Logout
           Container(
             width: 330,
@@ -418,7 +452,7 @@ class PersonalInfoScreen extends StatelessWidget {
                       color: AppColors.orangeColor, width: 1.5)), // Viền dưới
             ),
             child: ElevatedButton(
-              onPressed: onPressedLogout,
+              onPressed: signOutFromGoogle,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.white,
@@ -440,16 +474,16 @@ class PersonalInfoScreen extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  const Text(
-                    "Đăng xuất",
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.signOut,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
                       color: AppColors.orangeColor,
                     ),
                   ),
                   const SizedBox(
-                    width: 110,
+                    width: 90,
                   ),
                   Transform.rotate(
                     angle: 3.14159265,
@@ -467,7 +501,7 @@ class PersonalInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-        
+
           const SizedBox(
             height: 30,
           ),
@@ -481,8 +515,19 @@ class PersonalInfoScreen extends StatelessWidget {
   void onPressedBackBtn() {}
   void onPressedSettingBtn() {}
   void onPressedEdit() {
-    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditInfoScreen(
+          name: _name,
+          avatar: _avatar,
+          phoneNumber: _phoneNumber,
+          userCredential: widget.userCredential,
+        ),
+      ),
+    );
   }
+
   void onPressedOrder() {}
   void onPressedBuyAgain() {}
   void onPressedFavour() {}

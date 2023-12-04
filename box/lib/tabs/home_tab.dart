@@ -2,15 +2,29 @@ import 'package:box/cards/category_card.dart';
 import 'package:box/cards/food_card.dart';
 import 'package:box/cards/lastest_card.dart';
 import 'package:box/cards/nearby_card.dart';
+import 'package:box/class/food.dart';
+import 'package:box/class/section.dart';
+import 'package:box/class/shop.dart';
+import 'package:box/screens/map_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slide_countdown/slide_countdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({super.key});
+  final String address;
+  final UserCredential userCredential;
+
+  const HomeTab(
+      {super.key, required this.address, required this.userCredential});
+
 
   @override
   State<StatefulWidget> createState() {
@@ -19,25 +33,108 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  late String _currentAddress;
+  late String newAddress = '';
   final List _bannerList = [
     {"imagePath": 'assets/images/banner_1.png'},
     {"imagePath": 'assets/images/banner_2.png'},
     {"imagePath": 'assets/images/banner_3.png'}
   ];
   int _currentIndex = 0;
+  bool _isDoneGettingInfo = false;
 
-  final List<CategoryCard> _categories = [
-    const CategoryCard(iconPath: "assets/svg/deal.svg", name: "Hot Deal"),
-    const CategoryCard(iconPath: "assets/svg/voucher.svg", name: "Voucher"),
-    const CategoryCard(iconPath: "assets/svg/all.svg", name: "Tất Cả"),
-    const CategoryCard(iconPath: "assets/svg/fastfood.svg", name: "Fastfood"),
-    const CategoryCard(iconPath: "assets/svg/bubble_tea.svg", name: "Trà Sữa"),
-    const CategoryCard(
-        iconPath: "assets/svg/vietnamese_food.svg", name: "Món Việt"),
-    const CategoryCard(iconPath: "assets/svg/korean_food.svg", name: "Món Hàn"),
-    const CategoryCard(
-        iconPath: "assets/svg/japanese_food.svg", name: "Món Nhật")
-  ];
+  final List<Shop> _shops = [];
+  final List<Shop> _fastFoodShops = [];
+  final List<Shop> _drinkShops = [];
+  final List<Shop> _vietnameseShops = [];
+  final List<Shop> _koreanShops = [];
+  final List<Shop> _japaneseShops = [];
+  late List<Shop> _nearbyShops = [];
+
+  String _phoneNumber = "";
+  String _name = "";
+
+  LocationService locationService = LocationService();
+
+
+  List<CategoryCard> _initializeCategories(BuildContext context) {
+    final List<CategoryCard> categories = [
+      CategoryCard(
+        iconPath: "assets/svg/deal.svg",
+        name: AppLocalizations.of(context)!.hotDeal,
+        shops: const [],
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/voucher.svg",
+        name: AppLocalizations.of(context)!.voucher,
+        shops: const [],
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/all.svg",
+        name: AppLocalizations.of(context)!.all,
+        shops: _shops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/fastfood.svg",
+        name: AppLocalizations.of(context)!.fastFood,
+        shops: _fastFoodShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/bubble_tea.svg",
+        name: AppLocalizations.of(context)!.drink,
+        shops: _drinkShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/vietnamese_food.svg",
+        name: AppLocalizations.of(context)!.vietnameseFood,
+        shops: _vietnameseShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/korean_food.svg",
+        name: AppLocalizations.of(context)!.koreanFood,
+        shops: _koreanShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      ),
+      CategoryCard(
+        iconPath: "assets/svg/japanese_food.svg",
+        name: AppLocalizations.of(context)!.japaneseFood,
+        shops: _japaneseShops,
+        username: _name,
+        phoneNumber: _phoneNumber,
+        address: widget.address,
+        userCredential: widget.userCredential,
+      )
+    ];
+
+    return categories;
+  }
 
   final List<LastestCard> _testCards = [
     const LastestCard(
@@ -54,8 +151,157 @@ class _HomeTabState extends State<HomeTab> {
     )
   ];
 
-  void _onPressedAddress() {
-    // TODO: Thêm hàm thay đổi địa chỉ
+  int getShopById(String shopId) {
+    for (int i = 0; i < _shops.length; i++) {
+      if (_shops[i].shopId == shopId) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+  bool isFoodExist(Food food, List<Food> foods) {
+    for (Food curFood in foods) {
+      if (curFood.foodId == food.foodId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  void addFoodToSection(Food food, Section section) {
+    if (section.sectionId == food.sectionId &&
+        !isFoodExist(food, section.foods)) {
+      section.addFood(food);
+    }
+  }
+
+  void sortShop(Shop shop, String type) {
+    switch (type) {
+      case "fastfood":
+        isExisted(_fastFoodShops, shop) ? null : _fastFoodShops.add(shop);
+        break;
+      case "drink":
+        isExisted(_drinkShops, shop) ? null : _drinkShops.add(shop);
+        break;
+      case "vietnameseFood":
+        isExisted(_vietnameseShops, shop) ? null : _vietnameseShops.add(shop);
+        break;
+      case "koreanFood":
+        isExisted(_koreanShops, shop) ? null : _koreanShops.add(shop);
+        break;
+      case "japaneseFood":
+        isExisted(_japaneseShops, shop) ? null : _japaneseShops.add(shop);
+        break;
+      default:
+    }
+  }
+
+  bool isExisted(List<Shop> shops, Shop curShop) {
+    for (Shop shop in shops) {
+      if (shop.shopId == curShop.shopId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  Future<void> getInfo() async {
+    final databaseReference = FirebaseDatabase.instance;
+
+    final shopSnapshot = await databaseReference.ref("Shops").get();
+    final foodSnapshot = await databaseReference.ref("Foods").get();
+
+    final shopMap = shopSnapshot.value as Map;
+
+    List<Food> foods = [];
+    final foodMap = foodSnapshot.value as Map;
+
+    shopMap.forEach((key, value) {
+      _shops.add(Shop.fromJson(
+          key.toString(), Map<String, dynamic>.from(value as Map)));
+    });
+
+    foodMap.forEach((key, value) {
+      Food food = Food.fromJson(
+          key.toString(), Map<String, dynamic>.from(value as Map));
+
+      foods.add(food);
+
+      int shopIndex = getShopById(food.shopId);
+
+      if (shopIndex != -1) {
+        sortShop(_shops[shopIndex], food.foodType);
+
+        for (Section section in _shops[shopIndex].sections) {
+          addFoodToSection(food, section);
+        }
+      }
+    });
+
+    final databaseReference2 = databaseReference.ref("Users");
+    DatabaseReference userReference =
+        databaseReference2.child(widget.userCredential.user!.uid);
+
+    final snapshot = await userReference.get();
+    if (snapshot.exists) {
+      setState(() {
+        _name = (snapshot.value as Map)["name"];
+        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+            AppLocalizations.of(context)!.notUpdate;
+      });
+    } else {
+      // User info doesn't exist
+    }
+
+    // for (Shop shop in _shops) {
+    //   double calculatedDistance = await locationService.calculateDistanceBetweenAddresses(
+    //     widget.address,
+    //     shop.shopAddress,
+    //   );
+    //   if (calculatedDistance < 3.0) {
+    //     setState(() {
+    //       _nearbyShops.add(shop); 
+    //     });
+    //   }
+    // }
+    _isDoneGettingInfo = true;
+  }
+  
+
+  @override
+  void initState() {
+    super.initState();
+    getInfo();
+    _currentAddress = widget.address;
+    _loadSavedAddress();
+  }
+
+  void _loadSavedAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (newAddress.isEmpty) {
+      setState(() {
+        _currentAddress = prefs.getString('savedAddress') ?? widget.address;
+      });
+    }
+  }
+
+  void _onPressedAddress() async {
+    newAddress = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapScreen(),
+      ),
+    );
+
+    if (newAddress.isNotEmpty) {
+      setState(() {
+        _currentAddress = newAddress;
+      });
+    }
   }
 
   void _onPressedSeeMore() {
@@ -130,12 +376,12 @@ class _HomeTabState extends State<HomeTab> {
                       colorFilter: const ColorFilter.mode(
                           AppColors.orangeColor, BlendMode.srcIn),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
                         child: Text(
-                          "155A Đường Gì Đó, P. Phường gì đó, Q. Quận gì đó, Tỉnh/Thành Gì đó",
-                          style: TextStyle(fontFamily: 'Comfortaa'),
+                          _currentAddress,
+                          style: const TextStyle(fontFamily: 'Comfortaa'),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -170,7 +416,6 @@ class _HomeTabState extends State<HomeTab> {
                             width: 0, style: BorderStyle.none)),
                     hintText: "Hôm nay bạn muốn ăn gì?",
                     hintStyle: const TextStyle(fontFamily: 'Comfortaa'),
-                    
                     suffixIcon: Container(
                       margin: const EdgeInsets.only(right: 15.0),
                       child: SvgPicture.asset(
@@ -242,15 +487,20 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Categories
-              Container(
-                height: 70,
-                alignment: Alignment.center,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _categories.length,
-                    itemBuilder: (context, index) {
-                      return _categories[index];
-                    }),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    for (int i = 0;
+                        i < _initializeCategories(context).length;
+                        i++)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: _initializeCategories(context)[i],
+                      ),
+                  ],
+                ),
               ),
 
               Container(
@@ -259,60 +509,66 @@ class _HomeTabState extends State<HomeTab> {
               ),
 
               // Flash Sale
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: Column(
-                      children: [
-                        const Text(
-                          "FLASH \nSALE",
-                          style: TextStyle(
-                              fontFamily: 'LilitaOne',
-                              color: AppColors.orangeColor,
-                              fontSize: 35),
-                          textAlign: TextAlign.center,
-                        ),
-                        SvgPicture.asset(
-                          "assets/svg/flash_sale.svg",
-                          height: 35,
-                          width: 35,
-                          colorFilter: const ColorFilter.mode(
-                              AppColors.orangeColor, BlendMode.srcIn),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        const SlideCountdownSeparated(
-                          duration: Duration(hours: 12),
-                          decoration: BoxDecoration(color: Colors.black),
-                          textStyle: TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                          height: 20,
-                          width: 18,
-                        )
-                      ],
-                    ),
+              SizedBox(
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: SizedBox(
+                    height: 200,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 4,
+                        itemBuilder: (context, index) {
+                          // Flash sale
+                          if (index == 0) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30.0, vertical: 20.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "FLASH \nSALE",
+                                    style: TextStyle(
+                                        fontFamily: 'LilitaOne',
+                                        color: AppColors.orangeColor,
+                                        fontSize: 35),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SvgPicture.asset(
+                                    "assets/svg/flash_sale.svg",
+                                    height: 35,
+                                    width: 35,
+                                    colorFilter: const ColorFilter.mode(
+                                        AppColors.orangeColor, BlendMode.srcIn),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  const SlideCountdownSeparated(
+                                    duration: Duration(hours: 12),
+                                    decoration:
+                                        BoxDecoration(color: Colors.black),
+                                    textStyle: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                    height: 20,
+                                    width: 18,
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+
+                          // Flash sale items
+                          else {
+                            return const FoodCard(
+                              type: FoodCard.salesFood,
+                            );
+                          }
+                        }),
                   ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      child: SizedBox(
-                        height: 200,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return const FoodCard(
-                                type: FoodCard.salesFood,
-                              );
-                            }),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
 
               Container(
@@ -368,19 +624,19 @@ class _HomeTabState extends State<HomeTab> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Dành Riêng Cho Bạn",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.forYou,
+                      style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           color: AppColors.orangeColor,
                           fontSize: 15,
                           fontWeight: FontWeight.w600),
                     ),
                     TextButton(
-                        onPressed: _onPressedSeeMore,
-                        child: const Text(
-                          "Xem thêm >>",
-                          style: TextStyle(
+                        onPressed: () {},
+                        child: Text(
+                          AppLocalizations.of(context)!.seeMore,
+                          style: const TextStyle(
                               fontFamily: 'Comfortaa',
                               color: AppColors.blueColor,
                               fontSize: 15,
@@ -422,14 +678,20 @@ class _HomeTabState extends State<HomeTab> {
               SizedBox(
                 height: 250,
                 child: ListView.builder(
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return const NearbyCard(
-                        imagePath: "assets/test/milano_coffee.jpg",
-                        hasVoucher: true,
-                      );
-                    }),
-              )
+                  itemCount: _shops.length,
+                  itemBuilder: (context, index) {
+                    return NearbyCard(
+                      shop: _shops[index],
+                      userAddress: widget.address,
+                      hasVoucher: true,
+                      username: _name,
+                      phoneNumber: _phoneNumber,
+                      address: widget.address,
+                      userCredential: widget.userCredential,
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),

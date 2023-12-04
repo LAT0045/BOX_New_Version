@@ -1,10 +1,16 @@
+import 'package:box/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
 class SuccessfulCheckoutScreen extends StatelessWidget {
-  const SuccessfulCheckoutScreen({super.key});
+  final UserCredential userCredential;
+  final String address;
+
+  const SuccessfulCheckoutScreen(
+      {super.key, required this.userCredential, required this.address});
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +49,9 @@ class SuccessfulCheckoutScreen extends StatelessWidget {
           ),
 
           // Inform text
-          const Text(
-            "Đã Đặt Hàng Thành Công",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.orderSuccessfully,
+            style: const TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -57,55 +63,65 @@ class SuccessfulCheckoutScreen extends StatelessWidget {
           ),
 
           // Check order button
-          TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    backgroundColor: AppColors.mediumOrangeColor),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.viewOrder,
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 18,
+                          color: Colors.white),
+                    ),
                   ),
-                  backgroundColor: AppColors.mediumOrangeColor),
-              child: const SizedBox(
-                width: 150,
-                child: Center(
-                  child: Text(
-                    "Xem Đơn Hàng",
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 18,
-                        color: Colors.white),
-                  ),
-                ),
-              )),
+                )),
+          ),
 
           const SizedBox(
             height: 10,
           ),
 
           // HomePage button
-          TextButton(
-              onPressed: () {},
-              style: TextButton.styleFrom(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(
-                        width: 1, color: AppColors.mediumOrangeColor)),
-              ),
-              child: const SizedBox(
-                width: 150,
-                child: Center(
-                  child: Text(
-                    "Trang Chủ",
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 18,
-                        color: AppColors.mediumOrangeColor),
-                  ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(
+                            userCredential: userCredential, address: address)),
+                  );
+                },
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(
+                          width: 1, color: AppColors.mediumOrangeColor)),
                 ),
-              )),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.homePage,
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 18,
+                          color: AppColors.mediumOrangeColor),
+                    ),
+                  ),
+                )),
+          ),
         ],
       )),
     );

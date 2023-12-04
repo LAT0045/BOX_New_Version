@@ -15,7 +15,7 @@ class FoodCard extends StatelessWidget {
     final List<Widget> widgets = [const SoldItemProgress(), const ForYou()];
 
     return Card(
-      color: AppColors.lightGrayColor,
+      color: const Color(0xFFF7F7F7),
       elevation: 1,
       child: Column(
         children: [
@@ -26,7 +26,7 @@ class FoodCard extends StatelessWidget {
             fit: BoxFit.fill,
           ),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
           const SizedBox(
             width: 120,
@@ -39,7 +39,7 @@ class FoodCard extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
           const SizedBox(
             width: 120,

@@ -1,13 +1,30 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class SectionCard extends StatelessWidget {
-  final String sectionName;
-  final List<Widget> widgets;
+import '../class/food.dart';
+import '../class/section.dart';
+import 'horizontal_food_card.dart';
+
+class SectionCard extends StatefulWidget {
+  final Section section;
+  final Function(int, bool) updateTotalFoods;
+  final Function(Food, bool) updateTotalPrice;
+  final Function(Food, bool) updatePurchasedFoods;
+  final List<Food> foods;
 
   const SectionCard(
-      {super.key, required this.sectionName, required this.widgets});
+      {super.key,
+      required this.section,
+      required this.updateTotalFoods,
+      required this.updateTotalPrice,
+      required this.updatePurchasedFoods,
+      required this.foods});
 
+  @override
+  State<SectionCard> createState() => _SectionCardState();
+}
+
+class _SectionCardState extends State<SectionCard> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -15,9 +32,9 @@ class SectionCard extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              sectionName,
+              widget.section.sectionName,
               style: const TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 18,
@@ -29,7 +46,14 @@ class SectionCard extends StatelessWidget {
         const SizedBox(
           height: 10.0,
         ),
-        for (int i = 0; i < widgets.length; i++) widgets[i]
+        for (int i = 0; i < widget.section.foods.length; i++)
+          HorizontalFoodCard(
+            food: widget.section.foods[i],
+            updateTotalFoods: widget.updateTotalFoods,
+            updateTotalPrice: widget.updateTotalPrice,
+            updatePurchasedFoods: widget.updatePurchasedFoods,
+            foods: widget.foods,
+          ),
       ],
     );
   }

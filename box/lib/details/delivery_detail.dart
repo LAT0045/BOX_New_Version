@@ -1,5 +1,3 @@
-import 'package:box/cards/delivery_food_card.dart';
-import 'package:box/cards/section_card.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -18,12 +16,6 @@ class DeliveryDetail extends StatefulWidget {
 class _DeliveryDetailState extends State<DeliveryDetail> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [
-      const DeliveryFoodCard(),
-      const DeliveryFoodCard(),
-      const DeliveryFoodCard()
-    ];
-
     List deliverySteps = [
       {
         "title": "Shipper đến cửa hàng",
@@ -156,7 +148,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             ),
 
             // Chosen food section
-            SectionCard(sectionName: "Các Món Đã Chọn", widgets: widgets),
+            //SectionCard(sectionName: "Các Món Đã Chọn", widgets: widgets),
 
             const SizedBox(
               height: 20.0,
