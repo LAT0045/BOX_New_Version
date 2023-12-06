@@ -1,9 +1,20 @@
+import 'package:box/class/order.dart';
+import 'package:box/class/shop.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class OrderTrackingCard extends StatelessWidget {
-  const OrderTrackingCard({super.key});
+class OrderTrackingCard extends StatefulWidget {
+  final Order order;
+  final Shop shop;
 
+  const OrderTrackingCard({super.key, required this.order, required this.shop});
+  @override
+  State<StatefulWidget> createState() {
+    return _OrderTrackingCardState();
+  }
+}
+
+class _OrderTrackingCardState extends State<OrderTrackingCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,14 +37,14 @@ class OrderTrackingCard extends StatelessWidget {
               fit: BoxFit.fill,
             ),
           ),
-          const Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 200,
                 child: Text(
-                  "Milano Coffeeeeeeeeeeeeeeeeeeeeeee",
+                  widget.shop.shopName,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -47,7 +58,7 @@ class OrderTrackingCard extends StatelessWidget {
                 child: SizedBox(
                   width: 200,
                   child: Text(
-                    "Địa chỉiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+                    widget.order.address,
                     style: TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 15,
@@ -60,7 +71,7 @@ class OrderTrackingCard extends StatelessWidget {
               SizedBox(
                 width: 200,
                 child: Text(
-                  "Đang giao",
+                  widget.order.status,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
