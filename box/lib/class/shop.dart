@@ -10,6 +10,7 @@ class Shop {
   late double _ratingScore;
   late bool _isOpening;
   late List<Section> _sections;
+  late double distance = 0;
 
   Shop(
       this._shopId,

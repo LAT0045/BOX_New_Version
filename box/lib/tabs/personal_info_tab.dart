@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../screens/edit_info_screen.dart';
 import '../utils/colors.dart';
 
 class PersonalInfoTab extends StatefulWidget {
@@ -513,7 +514,19 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
 
   void onPressedSettingBtn() {}
 
-  void onPressedEdit() {}
+  void onPressedEdit() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditInfoScreen(
+          name: _name,
+          avatar: _avatar,
+          phoneNumber: _phoneNumber,
+          userCredential: widget.userCredential,
+        ),
+      ),
+    );
+  }
 
   void onPressedOrder() {}
 

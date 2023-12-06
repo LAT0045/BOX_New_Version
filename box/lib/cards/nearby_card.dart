@@ -15,7 +15,6 @@ class NearbyCard extends StatefulWidget {
   final String address;
   final UserCredential userCredential;
 
-
   const NearbyCard({
     Key? key,
     required this.userAddress,
@@ -25,8 +24,6 @@ class NearbyCard extends StatefulWidget {
     required this.phoneNumber,
     required this.address,
     required this.userCredential,
-
-
   }) : super(key: key);
 
   @override
@@ -36,25 +33,25 @@ class NearbyCard extends StatefulWidget {
 }
 
 class _NearbyCardState extends State<NearbyCard> {
-  double distance = 0.0;
+  //double distance = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _updateDistance();
+    //_updateDistance();
   }
 
-  Future<void> _updateDistance() async {
-    LocationService locationService = LocationService();
-    double calculatedDistance =
-        await locationService.calculateDistanceBetweenAddresses(
-      widget.userAddress,
-      widget.shop.shopAddress,
-    );
-    setState(() {
-      distance = calculatedDistance;
-    });
-  }
+  // Future<void> _updateDistance() async {
+  //   LocationService locationService = LocationService();
+  //   double calculatedDistance =
+  //       await locationService.calculateDistanceBetweenAddresses(
+  //     widget.userAddress,
+  //     widget.shop.shopAddress,
+  //   );
+  //   setState(() {
+  //     distance = calculatedDistance;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +116,10 @@ class _NearbyCardState extends State<NearbyCard> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                "${distance.toStringAsFixed(2)} km",
+                                "${widget.shop.distance.toStringAsFixed(2)} km",
                                 style: const TextStyle(
                                   fontFamily: 'Comfortaa',
                                   fontSize: 15,

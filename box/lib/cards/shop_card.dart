@@ -1,5 +1,4 @@
 import 'package:box/screens/shop_screen.dart';
-import 'package:box/service/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,25 +27,25 @@ class ShopCard extends StatefulWidget {
 }
 
 class _ShopCardState extends State<ShopCard> {
-  double distance = 0.0;
+  //double distance = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _updateDistance();
+    //_updateDistance();
   }
 
-  Future<void> _updateDistance() async {
-    LocationService locationService = LocationService();
-    double calculatedDistance =
-        await locationService.calculateDistanceBetweenAddresses(
-      widget.address,
-      widget.shop.shopAddress,
-    );
-    setState(() {
-      distance = calculatedDistance;
-    });
-  }
+  // Future<void> _updateDistance() async {
+  //   LocationService locationService = LocationService();
+  //   double calculatedDistance =
+  //       await locationService.calculateDistanceBetweenAddresses(
+  //     widget.address,
+  //     widget.shop.shopAddress,
+  //   );
+  //   setState(() {
+  //     distance = calculatedDistance;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +111,7 @@ class _ShopCardState extends State<ShopCard> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                "${distance.toStringAsFixed(2)} km",
+                                "${widget.shop.distance.toStringAsFixed(2)} km",
                                 style: const TextStyle(
                                     fontFamily: 'Comfortaa', fontSize: 15),
                               ),
