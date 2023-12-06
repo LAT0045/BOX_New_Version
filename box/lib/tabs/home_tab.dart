@@ -2,6 +2,11 @@ import 'package:box/cards/category_card.dart';
 import 'package:box/cards/food_card.dart';
 import 'package:box/cards/lastest_card.dart';
 import 'package:box/cards/nearby_card.dart';
+import 'package:box/class/food.dart';
+import 'package:box/class/section.dart';
+import 'package:box/class/shop.dart';
+import 'package:box/screens/map_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -9,6 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -30,6 +36,8 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  late String _currentAddress;
+  late String newAddress = '';
   final List _bannerList = [
     {"imagePath": 'assets/images/banner_1.png'},
     {"imagePath": 'assets/images/banner_2.png'},
@@ -248,6 +256,17 @@ class _HomeTabState extends State<HomeTab> {
       // User info doesn't exist
     }
 
+    // for (Shop shop in _shops) {
+    //   double calculatedDistance = await locationService.calculateDistanceBetweenAddresses(
+    //     widget.address,
+    //     shop.shopAddress,
+    //   );
+    //   if (calculatedDistance < 3.0) {
+    //     setState(() {
+    //       _nearbyShops.add(shop);
+    //     });
+    //   }
+    // }
     _isDoneGettingInfo = true;
   }
 
@@ -255,6 +274,36 @@ class _HomeTabState extends State<HomeTab> {
   void initState() {
     super.initState();
     getInfo();
+    _currentAddress = widget.address;
+    _loadSavedAddress();
+  }
+
+  void _loadSavedAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (newAddress.isEmpty) {
+      setState(() {
+        _currentAddress = prefs.getString('savedAddress') ?? widget.address;
+      });
+    }
+  }
+
+  void _onPressedAddress() async {
+    newAddress = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MapScreen(),
+      ),
+    );
+
+    if (newAddress.isNotEmpty) {
+      setState(() {
+        _currentAddress = newAddress;
+      });
+    }
+  }
+
+  void _onPressedSeeMore() {
+    // TODO: Thêm hàm xem thêm
   }
 
   @override
@@ -341,7 +390,7 @@ class _HomeTabState extends State<HomeTab> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 5.0),
                                   child: Text(
-                                    widget.address,
+                                    _currentAddress,
                                     style: const TextStyle(
                                         fontFamily: 'Comfortaa'),
                                     maxLines: 1,
@@ -350,7 +399,7 @@ class _HomeTabState extends State<HomeTab> {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: _onPressedAddress,
                                 child: SvgPicture.asset(
                                   "assets/svg/next_icon.svg",
                                   height: 15,

@@ -111,11 +111,23 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
         child: Row(
           children: [
             // Food Image
-            Image.network(
-              widget.food.foodImage,
-              height: 80,
+            Container(
               width: 80,
-              fit: BoxFit.fill,
+              height: 80,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.transparent,
+                  width: 0,
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Image.network(
+                widget.food.foodImage,
+                fit: BoxFit.cover,
+                width: 80,
+                height: 80,
+              ),
             ),
             const SizedBox(
               width: 10,
@@ -131,6 +143,8 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                     width: 180,
                     child: Text(
                       widget.food.foodName,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                           fontFamily: 'Comfortaa', fontSize: 17),
                     ),

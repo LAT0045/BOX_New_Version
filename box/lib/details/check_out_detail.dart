@@ -1,4 +1,5 @@
 import 'package:box/cards/checkout_food_card.dart';
+import 'package:box/screens/edit_checkout_info_screen.dart';
 import 'package:box/screens/successful_checkout_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,6 +41,11 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
+  late String _editedUsername = widget.username;
+  late String _editedPhoneNumber = widget.phoneNumber;
+  late String _editedAddress = widget.address;
+  bool _isInitialized = false;
+
   void _selectPaymentMethod(int value) {
     setState(() {
       _selectedValue = value;
@@ -76,9 +82,9 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
       databaseReference.push().set({
         'userId': widget.userCredential.user?.uid.toString(),
         'shopId': widget.foods[0].shopId,
-        'name': widget.username,
-        'address': widget.address,
-        'phoneNumber': widget.phoneNumber,
+        'name': _editedUsername,
+        'address': _editedAddress,
+        'phoneNumber': _editedPhoneNumber,
         'isScheduled': isScheduled,
         'dateScheduled': isScheduled
             ? "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"
@@ -109,9 +115,19 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
     _totalMoney = 0;
     setState(() {
       for (Food food in widget.foods) {
+        print("_______________________");
+        print(food.foodName);
+        print(food.foodPrice);
+        print(food.quantity);
+
         _totalMoney += calculateTotalPrice(food);
       }
     });
+
+    _editedUsername = widget.username;
+    _editedPhoneNumber = widget.phoneNumber;
+    _editedAddress = widget.address;
+    _isInitialized = true;
   }
 
   @override
@@ -183,7 +199,32 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                           fontWeight: FontWeight.bold),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        if (!_isInitialized) {
+                          return; // Return if not initialized yet
+                        }
+                        final editedData = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditUserInfoScreen(
+                              name: _editedUsername,
+                              phoneNumber: _editedPhoneNumber,
+                              address: _editedAddress,
+                            ),
+                          ),
+                        );
+
+                        if (editedData != null) {
+                          setState(() {
+                            _editedUsername =
+                                editedData['name'] ?? _editedUsername;
+                            _editedPhoneNumber =
+                                editedData['phoneNumber'] ?? _editedPhoneNumber;
+                            _editedAddress =
+                                editedData['address'] ?? _editedAddress;
+                          });
+                        }
+                      },
                       child: Text(
                         AppLocalizations.of(context)!.edit,
                         style: const TextStyle(
@@ -207,7 +248,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  widget.username,
+                  _editedUsername,
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -227,7 +268,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  widget.address,
+                  _editedAddress,
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -247,7 +288,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  widget.phoneNumber,
+                  _editedPhoneNumber,
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,

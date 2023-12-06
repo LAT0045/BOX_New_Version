@@ -1,11 +1,21 @@
+import 'package:box/screens/home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 
-class SignUpCongrateScreen extends StatelessWidget {
-  const SignUpCongrateScreen({super.key});
+class SignUpCongrateScreen extends StatefulWidget {
+  UserCredential userCredential;
+  String address;
 
+  SignUpCongrateScreen({required this.address, required this.userCredential});
+
+  @override
+  State<SignUpCongrateScreen> createState() => _SignUpCongrateScreenState();
+}
+
+class _SignUpCongrateScreenState extends State<SignUpCongrateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,17 +71,19 @@ class SignUpCongrateScreen extends StatelessWidget {
                   colors: [AppColors.orangeColor, AppColors.yellowColor],
                 )),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () =>
+                  onPressedStart(widget.userCredential, widget.address),
               style: TextButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20)),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shadowColor: Colors.transparent),
-              child: Text(
-                AppLocalizations.of(context)!.getStarted,
-                style: const TextStyle(
+              child: const Text(
+                "Bắt Đầu Thôi",
+                style: TextStyle(
                   fontFamily: 'Comfortaa',
                   fontSize: 20,
                   color: Colors.white,
@@ -84,6 +96,20 @@ class SignUpCongrateScreen extends StatelessWidget {
             height: 30,
           ),
         ]),
+      ),
+    );
+  }
+
+  //--------------------------------------------
+  // Functions
+
+  void onPressedStart(UserCredential userCredential, String address) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(
+          userCredential: userCredential,
+          address: address,
+        ), // Replace with your SuccessScreen widget
       ),
     );
   }

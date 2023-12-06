@@ -1,4 +1,5 @@
 import 'package:box/screens/shop_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import '../class/shop.dart';
 import '../utils/colors.dart';
 
-class ShopCard extends StatelessWidget {
+class ShopCard extends StatefulWidget {
   final Shop shop;
   final String username;
   final String phoneNumber;
@@ -20,6 +21,32 @@ class ShopCard extends StatelessWidget {
       required this.phoneNumber,
       required this.address,
       required this.userCredential});
+  @override
+  State<StatefulWidget> createState() {
+    return _ShopCardState();
+  }
+}
+
+class _ShopCardState extends State<ShopCard> {
+  double distance = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _updateDistance();
+  }
+
+  Future<void> _updateDistance() async {
+    LocationService locationService = LocationService();
+    double calculatedDistance =
+        await locationService.calculateDistanceBetweenAddresses(
+      widget.address,
+      widget.shop.shopAddress,
+    );
+    setState(() {
+      distance = calculatedDistance;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +55,11 @@ class ShopCard extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ShopScreen(
-              shop: shop,
-              username: username,
-              phoneNumber: phoneNumber,
-              address: address,
-              userCredential: userCredential,
+              shop: widget.shop,
+              username: widget.username,
+              phoneNumber: widget.phoneNumber,
+              address: widget.address,
+              userCredential: widget.userCredential,
             ),
           ),
         );
@@ -51,7 +78,7 @@ class ShopCard extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   radius: 50,
-                  backgroundImage: NetworkImage(shop.shopImage),
+                  backgroundImage: NetworkImage(widget.shop.shopImage),
                 ),
               ),
               Expanded(
@@ -61,7 +88,7 @@ class ShopCard extends StatelessWidget {
                     SizedBox(
                       width: 250,
                       child: Text(
-                        shop.shopName,
+                        widget.shop.shopName,
                         style: const TextStyle(
                             fontFamily: 'Comfortaa', fontSize: 18),
                         maxLines: 1,
@@ -81,11 +108,12 @@ class ShopCard extends StatelessWidget {
                               colorFilter: const ColorFilter.mode(
                                   AppColors.orangeColor, BlendMode.srcIn),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(
-                                "100m",
-                                style: TextStyle(
+                                "${distance.toStringAsFixed(2)} km",
+                                style: const TextStyle(
                                     fontFamily: 'Comfortaa', fontSize: 15),
                               ),
                             )
@@ -111,7 +139,7 @@ class ShopCard extends StatelessWidget {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 8.0),
                             child: Text(
-                              shop.ratingScore.toString(),
+                              widget.shop.ratingScore.toString(),
                               style: const TextStyle(
                                   fontFamily: 'Comfortaa', fontSize: 15),
                             ),

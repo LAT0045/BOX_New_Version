@@ -1,31 +1,36 @@
 import 'dart:io';
 import 'package:box/screens/signup_congrate_screen.dart';
-import 'package:box/service/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../utils/colors.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-class SignUpInfoScreen extends StatefulWidget {
-  final String phone;
+class EditInfoScreen extends StatefulWidget {
+  String name = "";
+  String avatar = "";
+  String phoneNumber = "";
   UserCredential userCredential;
 
-  SignUpInfoScreen({required this.phone, required this.userCredential});
-  @override
-  _SignUpInfoScreenState createState() => _SignUpInfoScreenState();
+  EditInfoScreen({required this.name, required this.avatar, required this.phoneNumber,required this.userCredential, Key? key}) : super(key: key);
+
+  _EditInfoScreenState createState() => _EditInfoScreenState();
+  
 }
 
-class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
+class _EditInfoScreenState extends State<EditInfoScreen> {
   File? _image;
   TextEditingController _nameController = TextEditingController();
-  LocationService locationService = LocationService();
+  TextEditingController _phoneController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.text = widget.name;
+    _phoneController.text = widget.phoneNumber;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,54 +38,79 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
         child: SafeArea(
           child: Column(children: [
             const SizedBox(
-              height: 20,
+              height: 35,
             ),
+      
+            // Align(
+            //   alignment: Alignment.centerLeft,
+            //   child: Padding(
+            //     padding: const EdgeInsets.only(left: 18.0),
+            //     child: GestureDetector(
+            //       onTap: onPressedBackBtn,
+            //       child: SvgPicture.asset(
+            //         "assets/svg/backarrow.svg",
+            //         width: 50,
+            //         height: 50,
+            //         colorFilter: const ColorFilter.mode(
+            //             AppColors.orangeColor, BlendMode.srcIn),
+            //       ),
+            //     ),
+            //   ),
+            // ),
 
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 18.0),
-                child: GestureDetector(
-                  onTap: onPressedBackBtn,
-                  child: SvgPicture.asset(
-                    "assets/svg/backarrow.svg",
-                    width: 50,
-                    height: 50,
-                    colorFilter: const ColorFilter.mode(
-                        AppColors.orangeColor, BlendMode.srcIn),
-                  ),
-                ),
-              ),
+            const Text(
+              'Chỉnh sửa thông tin',
+              style: TextStyle(fontSize: 25, fontFamily: 'Comfortaa', color: AppColors.orangeColor, fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(
-              height: 40,
+              height: 35,
             ),
-
+      
             // Name input
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 45.0),
               child: TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                    color: AppColors.orangeColor,
-                  )),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.orangeColor),
-                  ),
-                  hintText: "Tên của bạn là gì?",
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                      color: AppColors.orangeColor,
+                    )),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.orangeColor),
+                    ),
+                    hintText: 'Tên bạn là gì?',
+                    
                 ),
                 cursorColor: AppColors.orangeColor,
                 style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
               ),
             ),
 
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 45.0),
+            //   child: TextField(
+            //       controller: _phoneController,
+            //       decoration: const InputDecoration(
+            //         enabledBorder: UnderlineInputBorder(
+            //             borderSide: BorderSide(
+            //           color: AppColors.orangeColor,
+            //         )),
+            //         focusedBorder: UnderlineInputBorder(
+            //           borderSide: BorderSide(color: AppColors.orangeColor),
+            //         ),
+            //         hintText: "SĐT của bạn là gì?",
+            //     ),
+            //     cursorColor: AppColors.orangeColor,
+            //     style: const TextStyle(fontSize: 20, fontFamily: 'Comfortaa'),
+            //   ),
+            // ),
+      
             const SizedBox(
               height: 30,
             ),
-
+      
             //Avatar Text
             const Align(
                 alignment: Alignment.centerLeft,
@@ -93,40 +123,33 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
                         fontWeight: FontWeight.bold,
                       )),
                 )),
-
+      
             const SizedBox(
               height: 50,
             ),
-
+      
             //Avatar Picture
             Container(
               width: 200,
               height: 200,
               decoration: BoxDecoration(
-                shape: BoxShape.circle, // Đặt hình dạng là hình tròn
+                shape: BoxShape.circle,
                 image: _image != null
-                    ? DecorationImage(
-                        fit: BoxFit.cover,
-                        image: FileImage(_image!),
-                      )
-                    : null, // Hiển thị hình ảnh đã chọn trong khung tròn
-              ),
-              child: _image == null
-                  ? ClipOval(
-                      child: Image.asset(
-                        'assets/svg/avatest.jpg', // Đường dẫn đến hình ảnh mặc định
-                        fit: BoxFit.cover,
-                        width: 150,
-                        height: 150,
-                      ),
+                  ? DecorationImage(
+                      fit: BoxFit.cover,
+                      image: FileImage(_image!),
                     )
-                  : null,
+                  : DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(widget.avatar), 
+                    ),
+              ),
             ),
-
+      
             const SizedBox(
               height: 25,
             ),
-
+      
             //Choose Avatar
             TextButton(
               onPressed: onPressedChooseAva,
@@ -141,11 +164,11 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-
+      
             const SizedBox(
               height: 18,
             ),
-
+      
             // Update button
             Container(
               decoration: ShapeDecoration(
@@ -157,8 +180,8 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
               child: TextButton(
                 onPressed: onPressedUpdate,
                 style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 28, vertical: 15),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 28, vertical: 15),
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
@@ -174,7 +197,7 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
                 ),
               ),
             ),
-
+      
             const SizedBox(
               height: 30,
             ),
@@ -186,14 +209,24 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
 
   //--------------------------------------------
   // Functions
-  String getFileNameFromPath(String path) {
-    return path.split('/').last;
+
+  Future<void> deleteImageFromFirebaseStorage(String imageURL) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference imageRef = storage.refFromURL(imageURL);
+    
+    try {
+      await imageRef.delete();
+    } catch (e) {
+      print('Lỗi khi xóa hình ảnh từ Firebase Storage: $e');
+    }
   }
+  String getFileNameFromPath(String path) {
+  return path.split('/').last;
+  } 
 
   Future<String> uploadImageToFirebaseStorage(File file) async {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference storageReference =
-        storage.ref().child('Avatar/${getFileNameFromPath(file.path)}');
+    Reference storageReference = storage.ref().child('Avatar/${getFileNameFromPath(file.path)}');   
     UploadTask uploadTask = storageReference.putFile(file);
     TaskSnapshot snapshot = await uploadTask;
     String downloadURL = await snapshot.ref.getDownloadURL();
@@ -201,35 +234,35 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
   }
 
   Future<void> onPressedUpdate() async {
+    deleteImageFromFirebaseStorage(widget.avatar);
+    String imageURL = '';
+    String userName = _nameController.text;
     if (_image != null) {
-      String imageURL = await uploadImageToFirebaseStorage(_image!);
-      String userName = _nameController.text;
-
+      imageURL = await uploadImageToFirebaseStorage(_image!);
       if (userName.isNotEmpty) {
         await saveUserInfoToDatabase(userName, imageURL);
-        requestLocationPermission(widget.userCredential);
+        Navigator.pop(context);
       } else {
         print('Vui lòng nhập tên của bạn.');
       }
     } else {
-      print('Vui lòng chọn ảnh đại diện.');
+      imageURL = widget.avatar;
+      await saveUserInfoToDatabase(userName, imageURL);
     }
   }
 
   Future<void> saveUserInfoToDatabase(String userName, String imageURL) async {
     final databaseReference = FirebaseDatabase.instance.ref("Users");
-    DatabaseReference userReference =
-        databaseReference.child(widget.userCredential.user!.uid);
-    // Set user other information
-    userReference.set({
-      "name": userName,
-      "avatar": imageURL,
-      "phoneNumber": widget.phone,
-    }).catchError((error) {
-      print(error);
-    });
+      DatabaseReference userReference = databaseReference.child(widget.userCredential.user!.uid);
+      // Set user other information
+      userReference.update({
+        "name": userName,
+        "avatar": imageURL,
+      }).catchError((error) {
+        print(error);
+      });
   }
-
+  
   Future onPressedChooseAva() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -241,38 +274,6 @@ class _SignUpInfoScreenState extends State<SignUpInfoScreen> {
         print('No image selected.');
       }
     });
-  }
-
-  void getLocationAndAddress(UserCredential userCredential) async {
-    try {
-      Position position = await locationService.getCurrentLocation();
-      String address =
-          await locationService.getAddressFromCoordinates(position);
-
-      navigateToNextScreen(widget.userCredential, address);
-    } catch (error) {
-      // Xử lý lỗi
-    }
-  }
-
-  void requestLocationPermission(UserCredential userCredential) async {
-    PermissionStatus status = await Permission.location.request();
-    if (status.isGranted) {
-      getLocationAndAddress(userCredential);
-    } else {
-      // Access denied
-    }
-  }
-
-  void navigateToNextScreen(UserCredential userCredential, String address) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => SignUpCongrateScreen(
-          userCredential: userCredential,
-          address: address,
-        ), // Replace with your SuccessScreen widget
-      ),
-    );
   }
 
   void onPressedBackBtn() {}

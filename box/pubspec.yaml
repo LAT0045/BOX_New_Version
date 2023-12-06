@@ -30,6 +30,24 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^2.21.0
+  firebase_auth: ^4.12.1
+  pin_code_fields: ^8.0.1
+  firebase_storage: ^11.5.0
+  firebase_database: ^10.3.4
+  geolocator: ^10.1.0
+  geocoding: ^2.1.1
+  permission_handler: ^11.0.1
+  firebase_app_check: ^0.2.1+4
+  google_sign_in: ^6.1.5
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  google_maps_flutter: ^2.5.0
+  flutter_polyline_points: ^2.0.0
+  flutter_bloc: ^8.1.3
+  shared_preferences: ^2.2.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,20 +59,21 @@ dependencies:
   slide_countdown: ^0.6.0
   lottie: ^2.6.0
   dotted_decoration: ^2.0.0
-  flutter_localizations:
-    sdk: flutter
-  intl: any 
-  google_sign_in: ^6.1.5
-  firebase_auth: ^4.12.1
-  firebase_core: ^2.21.0
-  firebase_database: ^10.3.4
-  geolocator: ^10.1.0
-  geocoding: ^2.1.1
-  permission_handler: ^11.0.1
+  roundcheckbox: ^2.0.5
+  fluttertoast: ^8.2.2
+  image_picker: ^1.0.4
+  firebase_messaging: ^14.7.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  image_path: "assets/images/box_app_logo.png"
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -73,6 +92,7 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
