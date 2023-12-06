@@ -46,7 +46,6 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
   void _onPressDecrease() {
     setState(() {
       _quantity--;
-      print("TESTTTTTTTTTHERRRRRRRRREEEEEEEEE");
       widget.updateTotalFoods(1, true);
       widget.updateTotalPrice(widget.food, true);
       widget.updatePurchasedFoods(widget.food, true);

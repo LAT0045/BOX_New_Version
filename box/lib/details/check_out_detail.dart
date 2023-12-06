@@ -109,11 +109,6 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
     _totalMoney = 0;
     setState(() {
       for (Food food in widget.foods) {
-        print("_______________________");
-        print(food.foodName);
-        print(food.foodPrice);
-        print(food.quantity);
-
         _totalMoney += calculateTotalPrice(food);
       }
     });

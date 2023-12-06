@@ -1,4 +1,3 @@
-import 'package:box/cards/section_card.dart';
 import 'package:box/details/food_detail.dart';
 import 'package:box/details/order_food_detail.dart';
 import 'package:box/utils/colors.dart';
