@@ -1,12 +1,16 @@
 import 'package:box/cards/order_tracking_card.dart';
+import 'package:box/class/order.dart';
+import 'package:box/class/shop.dart';
 import 'package:box/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class OrderTab extends StatefulWidget {
-  final bool isEmpty;
+  final UserCredential userCredential;
 
-  const OrderTab({super.key, required this.isEmpty});
+  OrderTab({super.key, required this.userCredential});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,11 +19,45 @@ class OrderTab extends StatefulWidget {
 }
 
 class _OrderTabState extends State<OrderTab> {
+  bool isEmpty = false;
+  bool _isDoneGettingInfo = false;
+  final List<Order> _orders = [];
+  final List<Shop> _shops = [];
+  
+  Future<void> getInfo() async {
+    final databaseReference = FirebaseDatabase.instance;
+
+    final orderSnapshot = await databaseReference.ref("Orders").get();
+    final shopSnapshot = await databaseReference.ref("Shops").get();
+
+    final orderMap = orderSnapshot.value as Map;
+
+    final shopMap = shopSnapshot.value as Map;
+
+    shopMap.forEach((key, value) {
+      _shops.add(Shop.fromJson(
+          key.toString(), Map<String, dynamic>.from(value as Map)));
+    });
+
+    orderMap.forEach((key, value) {
+      _orders.add(Order.fromJson(
+          key.toString(), Map<String, dynamic>.from(value as Map)));
+    });
+    _isDoneGettingInfo = true;
+    
+    _orders.isEmpty ? this.isEmpty = true : this.isEmpty = false;
+    
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInfo();
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      
-        child: widget.isEmpty ? const EmptyOrder() : const Order());
+        child: isEmpty ? const EmptyOrder() : NotEmptyOrder(orders: _orders, shops: _shops,));
   }
 }
 
@@ -82,9 +120,18 @@ class EmptyOrder extends StatelessWidget {
   }
 }
 
-class Order extends StatelessWidget {
-  const Order({super.key});
+class NotEmptyOrder extends StatefulWidget {
+  final List<Order> orders;
+  final List<Shop> shops;
+  NotEmptyOrder({super.key, required this.orders,required this.shops});
 
+  @override
+  State<StatefulWidget> createState() {
+    return _NotEmptyOrderState();
+  }
+}
+
+class _NotEmptyOrderState extends State<NotEmptyOrder> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -103,10 +150,15 @@ class Order extends StatelessWidget {
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: 3,
+            itemCount: widget.orders.length,
             itemBuilder: (context, index) {
-              return const OrderTrackingCard();
-            }
+              final order = widget.orders[index];
+              final shop = widget.shops.firstWhere((shop) => shop.shopId == order.shopId); // Tìm cửa hàng tương ứng với đơn hàng
+              return OrderTrackingCard(
+                order: order,
+                shop: shop, // Chuyển thông tin cửa hàng vào OrderTrackingCard
+              );
+            },
           ),
         )
       ],

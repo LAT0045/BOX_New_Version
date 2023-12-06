@@ -675,23 +675,23 @@ class _HomeTabState extends State<HomeTab> {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
-                height: 250,
-                child: ListView.builder(
-                  itemCount: _shops.length,
-                  itemBuilder: (context, index) {
-                    return NearbyCard(
-                      shop: _shops[index],
-                      userAddress: widget.address,
-                      hasVoucher: true,
-                      username: _name,
-                      phoneNumber: _phoneNumber,
-                      address: widget.address,
-                      userCredential: widget.userCredential,
-                    );
-                  },
-                ),
-              ),
+              // SizedBox(
+              //   height: 250,
+              //   child: ListView.builder(
+              //     itemCount: _shops.length,
+              //     itemBuilder: (context, index) {
+              //       return NearbyCard(
+              //         shop: _shops[index],
+              //         userAddress: widget.address,
+              //         hasVoucher: true,
+              //         username: _name,
+              //         phoneNumber: _phoneNumber,
+              //         address: widget.address,
+              //         userCredential: widget.userCredential,
+              //       );
+              //     },
+              //   ),
+              // ),
             ],
           ),
         ),
