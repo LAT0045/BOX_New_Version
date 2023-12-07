@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -442,61 +444,64 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
           ),
 
           //Logout
-          Container(
-            width: 330,
-            height: 60,
-            decoration: const BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(
-                      color: AppColors.orangeColor, width: 1.5)), // Viền dưới
-            ),
-            child: ElevatedButton(
-              onPressed: signOutFromGoogle,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                alignment: Alignment.centerLeft,
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: 330,
+              height: 60,
+              decoration: const BoxDecoration(
+                border: Border(
+                    bottom: BorderSide(
+                        color: AppColors.orangeColor, width: 1.5)), // Viền dưới
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SvgPicture.asset(
-                    "assets/svg/logout.svg",
-                    width: 40,
-                    height: 40,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.orangeColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.signOut,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontFamily: 'Comfortaa',
-                      color: AppColors.orangeColor,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 100,
-                  ),
-                  Transform.rotate(
-                    angle: 3.14159265,
-                    child: SvgPicture.asset(
-                      "assets/svg/backarrow.svg",
-                      width: 30,
-                      height: 30,
+              child: ElevatedButton(
+                onPressed: signOutFromGoogle,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  alignment: Alignment.centerLeft,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      "assets/svg/logout.svg",
+                      width: 40,
+                      height: 40,
                       colorFilter: const ColorFilter.mode(
                         AppColors.orangeColor,
                         BlendMode.srcIn,
                       ),
                     ),
-                  )
-                ],
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      AppLocalizations.of(context)!.signOut,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Comfortaa',
+                        color: AppColors.orangeColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 100,
+                    ),
+                    Transform.rotate(
+                      angle: 3.14159265,
+                      child: SvgPicture.asset(
+                        "assets/svg/backarrow.svg",
+                        width: 30,
+                        height: 30,
+                        colorFilter: const ColorFilter.mode(
+                          AppColors.orangeColor,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

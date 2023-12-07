@@ -62,6 +62,7 @@ dependencies:
   image_picker: ^1.0.4
   firebase_messaging: ^14.7.6
   flutter_paypal_payment: ^1.0.6
+  awesome_notifications: ^0.8.2
 
 dev_dependencies:
   flutter_test:

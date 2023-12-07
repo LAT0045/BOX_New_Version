@@ -11,6 +11,22 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="AIzaSyDqDqn8Op87YfKOjIvWTNA1MpYmn3htW9M"
         />
+
+        <!-- Notification Service -->
+        <service
+            android:name="me.carda.awesome_notifications.AwesomeFirebaseMessagingService"
+            android:exported="false"
+            android:permission="com.google.android.c2dm.permission.BIND"/>
+
+        <!-- Notification Receiver -->
+        <receiver
+            android:name="me.carda.awesome_notifications.AwesomeNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="me.carda.awesome_notifications.notifications.action.CLICK"/>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

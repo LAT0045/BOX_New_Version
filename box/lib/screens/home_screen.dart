@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:box/tabs/favorite_tab.dart';
 import 'package:box/tabs/notification_tab.dart';
 import 'package:box/tabs/order_tab.dart';
@@ -5,9 +6,12 @@ import 'package:box/tabs/home_tab.dart';
 import 'package:box/tabs/personal_info_tab.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:box/class/my_notification.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserCredential userCredential;
@@ -31,6 +35,88 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> startOrderStatusListener() async {
+    final DatabaseReference orderReference =
+        FirebaseDatabase.instance.ref().child("Orders");
+    final String? userId = widget.userCredential.user?.uid.toString();
+
+    if (userId != null) {
+      orderReference
+          .orderByChild('userId')
+          .equalTo(userId)
+          .onChildChanged
+          .listen((event) {
+        // Handle status change
+        DataSnapshot dataSnapshot = event.snapshot;
+        String newStatus = (dataSnapshot.value as Map)["status"];
+
+        print(newStatus);
+
+        if (newStatus == 'ACCEPTED') {
+          showNotification(newStatus);
+        } else if (newStatus == 'DENIED') {
+          showNotification(newStatus);
+        } else if (newStatus == 'COMPLETED') {
+          showNotification(newStatus);
+        }
+      });
+    }
+  }
+
+  String getNotificationText(String status) {
+    switch (status) {
+      case "ACCEPTED":
+        return "Đơn hàng của bạn vừa được chấp nhận!";
+      case "DENIED":
+        return "Đơn hàng của bạn bị từ chối!";
+      case "COMPLETED":
+        return "Đơn hàng của bạn đã hoàn thành!";
+      default:
+        return "";
+    }
+  }
+
+  Future<void> showNotification(String status) async {
+    String title = "Thông báo đơn hàng";
+    String body = getNotificationText(status);
+
+    await AwesomeNotifications().createNotification(
+        content: NotificationContent(
+      id: 0,
+      channelKey: 'main_channel',
+      title: title,
+      body: body,
+      displayOnBackground: true,
+      displayOnForeground: true,
+    ));
+
+    MyNotification newNotification =
+        MyNotification(title, body, DateTime.now().toString());
+
+    saveNotificationToStorage(newNotification);
+  }
+
+  void saveNotificationToStorage(MyNotification notification) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve existing JSON strings
+    List<String>? jsonNotifications =
+        prefs.getStringList('notifications') ?? [];
+
+    // Convert Notification instance to a JSON string and add to the list
+    jsonNotifications.add(notification.toJson());
+
+    // Save the updated list
+    prefs.setStringList('notifications', jsonNotifications);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startOrderStatusListener();
+    //FirebaseMessaging.onBackgroundMessage(startOrderStatusListener);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List tabs = [
@@ -42,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
       OrderTab(
         userCredential: widget.userCredential,
       ),
-      const NotificationTab(isEmpty: false),
+      const NotificationTab(),
       PersonalInfoTab(
         userCredential: widget.userCredential,
       )

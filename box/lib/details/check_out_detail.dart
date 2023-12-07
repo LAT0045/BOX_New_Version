@@ -92,8 +92,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
             : "",
         'timeScheduled':
             isScheduled ? "${selectedTime.hour}:${selectedTime.minute}" : "",
-        'paymentMethod': _selectedValue == 1 ? "cash" : "online",
-        'status': "pending",
+        'paymentMethod': _selectedValue == 1 ? "CASH" : "ONLINE",
+        'status': "PENDING",
         'foods': widget.foods.map((food) => food.toJson()).toList(),
       });
 

@@ -1,9 +1,12 @@
+import 'package:box/class/my_notification.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NotificationCard extends StatelessWidget {
-  const NotificationCard({super.key});
+  final MyNotification notification;
+
+  const NotificationCard({super.key, required this.notification});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class NotificationCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tiêu đề thông báo",
+                    notification.title,
                     style: TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 16,
@@ -57,7 +60,7 @@ class NotificationCard extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
-                      "Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu.Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. ",
+                      notification.body,
                       style: TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 15,
@@ -71,7 +74,7 @@ class NotificationCard extends StatelessWidget {
                   SizedBox(
                     width: 200,
                     child: Text(
-                      "12:00",
+                      notification.time,
                       style: TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 15,
