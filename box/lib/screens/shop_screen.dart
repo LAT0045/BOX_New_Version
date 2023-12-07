@@ -17,6 +17,8 @@ class ShopScreen extends StatefulWidget {
   final String phoneNumber;
   final String address;
   final UserCredential userCredential;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   ShopScreen(
       {super.key,
@@ -24,7 +26,9 @@ class ShopScreen extends StatefulWidget {
       required this.username,
       required this.phoneNumber,
       required this.address,
-      required this.userCredential});
+      required this.userCredential,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   final List<VoucherCard> _vouchers = [
     const VoucherCard(),
@@ -308,6 +312,8 @@ class _ShopScreenState extends State<ShopScreen> {
                   updateTotalPrice: updateTotalPrice,
                   updatePurchasedFoods: updatePurchasedFood,
                   foods: purchasedFoods,
+                  favoriteFoods: widget.favoriteFoods,
+                  updateFavoriteFoods: widget.updateFavoriteFoods,
                 ),
 
               //

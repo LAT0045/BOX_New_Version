@@ -1,3 +1,4 @@
+import 'package:box/class/food.dart';
 import 'package:box/details/category_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ class CategoryCard extends StatelessWidget {
   final String phoneNumber;
   final String address;
   final UserCredential userCredential;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const CategoryCard(
       {super.key,
@@ -22,7 +25,9 @@ class CategoryCard extends StatelessWidget {
       required this.username,
       required this.phoneNumber,
       required this.address,
-      required this.userCredential});
+      required this.userCredential,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +42,8 @@ class CategoryCard extends StatelessWidget {
               phoneNumber: phoneNumber,
               address: address,
               userCredential: userCredential,
+              favoriteFoods: favoriteFoods,
+              updateFavoriteFoods: updateFavoriteFoods,
             ),
           ),
         );

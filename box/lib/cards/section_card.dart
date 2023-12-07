@@ -11,6 +11,8 @@ class SectionCard extends StatefulWidget {
   final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
   final List<Food> foods;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const SectionCard(
       {super.key,
@@ -18,7 +20,9 @@ class SectionCard extends StatefulWidget {
       required this.updateTotalFoods,
       required this.updateTotalPrice,
       required this.updatePurchasedFoods,
-      required this.foods});
+      required this.foods,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<SectionCard> createState() => _SectionCardState();
@@ -53,6 +57,8 @@ class _SectionCardState extends State<SectionCard> {
             updateTotalPrice: widget.updateTotalPrice,
             updatePurchasedFoods: widget.updatePurchasedFoods,
             foods: widget.foods,
+            favoriteFoods: widget.favoriteFoods,
+            updateFavoriteFoods: widget.updateFavoriteFoods,
           ),
       ],
     );

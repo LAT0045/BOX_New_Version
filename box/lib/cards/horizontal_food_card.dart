@@ -11,6 +11,8 @@ class HorizontalFoodCard extends StatefulWidget {
   final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
   final List<Food> foods;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const HorizontalFoodCard(
       {super.key,
@@ -18,7 +20,9 @@ class HorizontalFoodCard extends StatefulWidget {
       required this.updateTotalFoods,
       required this.updateTotalPrice,
       required this.updatePurchasedFoods,
-      required this.foods});
+      required this.foods,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -47,6 +51,8 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
             updateTotalPrice: widget.updateTotalPrice,
             updatePurchasedFoods: widget.updatePurchasedFoods,
             updateQuantity: updateQuantity,
+            favoriteFoods: widget.favoriteFoods,
+            updateFavoriteFoods: widget.updateFavoriteFoods,
           ),
         ),
       );

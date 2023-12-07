@@ -1,8 +1,20 @@
+import 'package:box/class/food.dart';
+import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
-class FavoriteFoodCard extends StatelessWidget {
-  const FavoriteFoodCard({super.key});
+class FavoriteFoodCard extends StatefulWidget {
+  final Food food;
+  final Function(Food, bool) updateFavoriteFoods;
+
+  const FavoriteFoodCard(
+      {super.key, required this.food, required this.updateFavoriteFoods});
+
+  @override
+  State<FavoriteFoodCard> createState() => _FavoriteFoodCardState();
+}
+
+class _FavoriteFoodCardState extends State<FavoriteFoodCard> {
+  bool _isFavorite = true;
 
   @override
   Widget build(BuildContext context) {
@@ -19,42 +31,48 @@ class FavoriteFoodCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Image.asset(
-              'assets/test/ca_phe_kem_trung.jpeg',
+            child: Image.network(
+              widget.food.foodImage,
               height: 80,
               width: 80,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           ),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+
+          //
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 width: 200,
                 child: Text(
-                  "Cà phê kem trứngggggggggggggggggggggg",
+                  widget.food.foodName,
                   style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: SizedBox(
-                  width: 200,
-                  child: Text(
-                    "Milano Coffee",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
+
+              //
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 10.0),
+              //   child: SizedBox(
+              //     width: 200,
+              //     child: Text(
+              //       "Milano Coffee",
+              //       style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
+              //       maxLines: 1,
+              //       overflow: TextOverflow.ellipsis,
+              //     ),
+              //   ),
+              // ),
+
+              //
               SizedBox(
                 width: 200,
                 child: Text(
-                  "25.000Đ",
+                  widget.food.foodPrice.toString(),
                   style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
                 ),
               )
@@ -66,10 +84,25 @@ class FavoriteFoodCard extends StatelessWidget {
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: SvgPicture.asset(
-                  "assets/svg/heart_icon.svg",
-                  height: 20,
-                  width: 20,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_isFavorite) {
+                        widget.updateFavoriteFoods(widget.food, true);
+                        _isFavorite = false;
+                      } else {
+                        widget.updateFavoriteFoods(widget.food, false);
+                        _isFavorite = true;
+                      }
+                    });
+                  },
+                  child: Icon(
+                    _isFavorite
+                        ? Icons.favorite_outlined
+                        : Icons.favorite_border_outlined,
+                    size: 30,
+                    color: AppColors.orangeColor,
+                  ),
                 ),
               ),
             ),
