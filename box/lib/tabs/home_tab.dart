@@ -303,10 +303,6 @@ class _HomeTabState extends State<HomeTab> {
     }
   }
 
-  void _onPressedSeeMore() {
-    // TODO: Thêm hàm xem thêm
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -543,6 +539,8 @@ class _HomeTabState extends State<HomeTab> {
                                                 fontSize: 35),
                                             textAlign: TextAlign.center,
                                           ),
+
+                                          //
                                           SvgPicture.asset(
                                             "assets/svg/flash_sale.svg",
                                             height: 35,
@@ -551,9 +549,13 @@ class _HomeTabState extends State<HomeTab> {
                                                 AppColors.orangeColor,
                                                 BlendMode.srcIn),
                                           ),
+
+                                          //
                                           const SizedBox(
-                                            height: 10,
+                                            height: 5,
                                           ),
+
+                                          //
                                           const SlideCountdownSeparated(
                                             duration: Duration(hours: 12),
                                             decoration: BoxDecoration(
@@ -562,7 +564,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
-                                            height: 20,
+                                            height: 15,
                                             width: 18,
                                           )
                                         ],
@@ -658,7 +660,7 @@ class _HomeTabState extends State<HomeTab> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: SizedBox(
-                          height: 200,
+                          height: 201,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: 5,

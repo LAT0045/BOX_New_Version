@@ -117,13 +117,6 @@ class _ShopScreenState extends State<ShopScreen> {
           purchasedFoods.add(food);
         }
       }
-
-      for (Food food in purchasedFoods) {
-        print("_______________________");
-        print(food.foodName);
-        print(food.foodPrice);
-        print(food.quantity);
-      }
     });
   }
 

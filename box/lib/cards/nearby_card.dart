@@ -1,6 +1,5 @@
 import 'package:box/class/shop.dart';
 import 'package:box/screens/shop_screen.dart';
-import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
