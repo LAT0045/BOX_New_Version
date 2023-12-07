@@ -46,18 +46,20 @@ class _HomeScreenState extends State<HomeScreen> {
           .equalTo(userId)
           .onChildChanged
           .listen((event) {
-        // Handle status change
+        //
         DataSnapshot dataSnapshot = event.snapshot;
+        String orderId = dataSnapshot.key.toString();
         String newStatus = (dataSnapshot.value as Map)["status"];
 
+        print(orderId);
         print(newStatus);
 
         if (newStatus == 'ACCEPTED') {
-          showNotification(newStatus);
+          showNotification(newStatus, orderId, userId);
         } else if (newStatus == 'DENIED') {
-          showNotification(newStatus);
+          showNotification(newStatus, orderId, userId);
         } else if (newStatus == 'COMPLETED') {
-          showNotification(newStatus);
+          showNotification(newStatus, orderId, userId);
         }
       });
     }
@@ -76,7 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> showNotification(String status) async {
+  Future<void> showNotification(
+      String status, String orderId, String userId) async {
     String title = "Thông báo đơn hàng";
     String body = getNotificationText(status);
 
@@ -91,30 +94,48 @@ class _HomeScreenState extends State<HomeScreen> {
     ));
 
     MyNotification newNotification =
-        MyNotification(title, body, DateTime.now().toString());
+        MyNotification(title, body, DateTime.now().toString(), orderId);
 
-    saveNotificationToStorage(newNotification);
+    final snapShot = await FirebaseDatabase.instance
+        .ref("Notifications")
+        .child(userId)
+        .child(orderId)
+        .get();
+
+    if (snapShot.exists) {
+      String oldBody = (snapShot.value as Map)["body"];
+
+      if (oldBody != body) {
+        pushNewNotification(newNotification, userId);
+      }
+    } else {
+      pushNewNotification(newNotification, userId);
+    }
   }
 
-  void saveNotificationToStorage(MyNotification notification) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> pushNewNotification(
+      MyNotification notification, String id) async {
+    try {
+      // Get a reference to the Realtime Database instance
+      DatabaseReference databaseReference =
+          FirebaseDatabase.instance.ref("Notifications").child(id);
 
-    // Retrieve existing JSON strings
-    List<String>? jsonNotifications =
-        prefs.getStringList('notifications') ?? [];
-
-    // Convert Notification instance to a JSON string and add to the list
-    jsonNotifications.add(notification.toJson());
-
-    // Save the updated list
-    prefs.setStringList('notifications', jsonNotifications);
+      // Add data
+      databaseReference.push().set({
+        'title': notification.title,
+        'body': notification.body,
+        'time': notification.time,
+        'orderId': notification.orderId
+      });
+    } catch (e) {
+      // Error
+    }
   }
 
   @override
   void initState() {
     super.initState();
     startOrderStatusListener();
-    //FirebaseMessaging.onBackgroundMessage(startOrderStatusListener);
   }
 
   @override
@@ -128,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
       OrderTab(
         userCredential: widget.userCredential,
       ),
-      const NotificationTab(),
+      NotificationTab(userCredential: widget.userCredential),
       PersonalInfoTab(
         userCredential: widget.userCredential,
       )

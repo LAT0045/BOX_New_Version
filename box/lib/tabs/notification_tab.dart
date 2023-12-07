@@ -1,13 +1,15 @@
 import 'package:box/cards/notification_card.dart';
 import 'package:box/class/my_notification.dart';
 import 'package:box/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationTab extends StatefulWidget {
-  const NotificationTab({super.key});
+  final UserCredential userCredential;
+  const NotificationTab({super.key, required this.userCredential});
 
   @override
   State<StatefulWidget> createState() {
@@ -16,32 +18,33 @@ class NotificationTab extends StatefulWidget {
 }
 
 class _NotificationTabState extends State<NotificationTab> {
-  List<MyNotification> notifications = [];
+  List<MyNotification> _notifications = [];
+  bool _isDoneGettingInfo = false;
 
-  void clearNotifications() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> loadNotifications() async {
+    final databaseReference = FirebaseDatabase.instance;
+    String? userId = widget.userCredential.user?.uid.toString();
 
-    // Clear the stored notifications in local storage
-    await prefs.remove('notifications');
+    if (userId != null) {
+      final snapShot =
+          await databaseReference.ref("Notifications").child(userId).get();
 
-    // Clear the notifications list in the state
-    setState(() {
-      notifications.clear();
-    });
-  }
+      // Get notifications
+      setState(() {
+        if (snapShot.exists) {
+          final notificationMap = snapShot.value as Map;
+          notificationMap.forEach((key, value) {
+            _notifications.add(MyNotification.fromJson(
+                Map<String, dynamic>.from(value as Map)));
+          });
 
-  void loadNotifications() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      // Retrieve stored JSON strings
-      List<String>? jsonNotifications =
-          prefs.getStringList('notifications') ?? [];
+          // Sort list based on time
+          _notifications.sort((a, b) => a.time.compareTo(b.time));
+        }
 
-      // Convert JSON strings to Notification instances
-      notifications = jsonNotifications
-          .map((json) => MyNotification.fromJson(json))
-          .toList();
-    });
+        _isDoneGettingInfo = true;
+      });
+    }
   }
 
   @override
@@ -53,36 +56,41 @@ class _NotificationTabState extends State<NotificationTab> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: notifications.isEmpty
-            ? const EmptyNotification()
-            : Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.notification,
-                      style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.orangeColor,
+    return !_isDoneGettingInfo
+        ? SafeArea(
+            child: Center(
+            child: CircularProgressIndicator(),
+          ))
+        : SafeArea(
+            child: _notifications.isEmpty
+                ? const EmptyNotification()
+                : Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 15.0),
+                        child: Text(
+                          AppLocalizations.of(context)!.notification,
+                          style: TextStyle(
+                            fontFamily: 'Comfortaa',
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.orangeColor,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
 
-                  //
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: notifications.length,
-                        itemBuilder: (context, index) {
-                          return NotificationCard(
-                            notification: notifications[index],
-                          );
-                        }),
-                  )
-                ],
-              ));
+                      //
+                      Expanded(
+                        child: ListView.builder(
+                            itemCount: _notifications.length,
+                            itemBuilder: (context, index) {
+                              return NotificationCard(
+                                notification: _notifications[index],
+                              );
+                            }),
+                      )
+                    ],
+                  ));
   }
 }
 
