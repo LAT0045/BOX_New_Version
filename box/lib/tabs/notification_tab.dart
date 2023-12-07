@@ -43,91 +43,42 @@ class EmptyNotification extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: 330,
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    color: AppColors.orangeColor, width: 1.5)), // Viền dưới
-          ),
-          child: ElevatedButton(
-            onPressed: onPressedVoucher,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFAFAFA),
-              foregroundColor: const Color(0xFFFAFAFA),
-              elevation: 0,
-              alignment: Alignment.centerLeft,
+
+        //
+        Expanded(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              "assets/svg/note.svg",
+              width: 100,
+              height: 100,
+              colorFilter: const ColorFilter.mode(
+                AppColors.orangeColor,
+                BlendMode.srcIn,
+              ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  "assets/svg/voucher.svg",
-                  width: 30,
-                  height: 30,
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.orangeColor,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  AppLocalizations.of(context)!.dealNotification,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Comfortaa',
-                    color: AppColors.grayColor,
-                  ),
-                ),
-                const SizedBox(
-                  width: 70,
-                ),
-                Transform.rotate(
-                  angle: 3.14159265,
-                  child: SvgPicture.asset(
-                    "assets/svg/backarrow.svg",
-                    width: 28,
-                    height: 28,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.orangeColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                )
-              ],
+
+            //
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ),
-        const SizedBox(
-          height: 150,
-        ),
-        SvgPicture.asset(
-          "assets/svg/note.svg",
-          width: 100,
-          height: 100,
-          colorFilter: const ColorFilter.mode(
-            AppColors.orangeColor,
-            BlendMode.srcIn,
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: Text(
-            AppLocalizations.of(context)!.orderNotification,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontFamily: 'Comfortaa',
-              fontSize: 18,
-              color: AppColors.grayColor,
+
+            //
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: Text(
+                AppLocalizations.of(context)!.orderNotification,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 18,
+                  color: AppColors.grayColor,
+                ),
+              ),
             ),
-          ),
-        ),
+          ],
+        ))
       ],
     );
   }
@@ -140,10 +91,10 @@ class Notification extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Padding(
+        Padding(
           padding: EdgeInsets.symmetric(vertical: 15.0),
           child: Text(
-            "Thông báo",
+            AppLocalizations.of(context)!.notification,
             style: TextStyle(
               fontFamily: 'Comfortaa',
               fontSize: 25,
@@ -152,72 +103,13 @@ class Notification extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: 330,
-          height: 50,
-          decoration: const BoxDecoration(
-            border: Border(
-                bottom: BorderSide(
-                    color: AppColors.orangeColor, width: 1.5)), // Viền dưới
-          ),
-          child: ElevatedButton(
-            onPressed: onPressedVoucher,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFAFAFA),
-              foregroundColor: const Color(0xFFFAFAFA),
-              elevation: 0,
-              alignment: Alignment.centerLeft,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SvgPicture.asset(
-                  "assets/svg/voucher.svg",
-                  width: 30,
-                  height: 30,
-                  colorFilter: const ColorFilter.mode(
-                    AppColors.orangeColor,
-                    BlendMode.srcIn,
-                  ),
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                const Text(
-                  "Thông báo ưu đãi",
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Comfortaa',
-                    color: AppColors.grayColor,
-                  ),
-                ),
-                const SizedBox(
-                  width: 70,
-                ),
-                Transform.rotate(
-                  angle: 3.14159265,
-                  child: SvgPicture.asset(
-                    "assets/svg/backarrow.svg",
-                    width: 28,
-                    height: 28,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.orangeColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(
-          height: 20,
-        ),
+
+        //
         Expanded(
           child: ListView.builder(
               itemCount: 3,
               itemBuilder: (context, index) {
-                return const NotificationCard();
+                return NotificationCard();
               }),
         )
       ],

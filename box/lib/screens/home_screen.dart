@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       OrderTab(
         userCredential: widget.userCredential,
       ),
-      const NotificationTab(isEmpty: true),
+      const NotificationTab(isEmpty: false),
       PersonalInfoTab(
         userCredential: widget.userCredential,
       )

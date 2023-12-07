@@ -1,5 +1,6 @@
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class NotificationCard extends StatelessWidget {
   const NotificationCard({super.key});
@@ -17,59 +18,68 @@ class NotificationCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(5.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Image.asset(
-                'assets/test/ca_phe_kem_trung.jpeg',
-                height: 70,
-                width: 70,
-                fit: BoxFit.fill,
+              child: SvgPicture.asset(
+                "assets/svg/envelope.svg",
+                width: 25,
+                height: 25,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.orangeColor,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: Text(
+
+            //
+            SizedBox(
+              width: 10,
+            ),
+
+            //
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     "Tiêu đề thông báo",
                     style: TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 16,
                         color: Color(0xFF000000),
                         fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.0),
-                  child: SizedBox(
-                    width: 230,
+
+                  //
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Text(
                       "Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu.Tình yêu chỉ là hạt cát, vì đồ ăn đã lấn át tình yêu. ",
                       style: TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 15,
                           color: Color(0xFF000000)),
-                      maxLines: 5,
-                      overflow: TextOverflow.ellipsis,
+                      //maxLines: 5,
+                      //overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 200,
-                  child: Text(
-                    "12:00",
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 15,
-                        color: AppColors.darkGrayColor),
+
+                  //
+                  SizedBox(
+                    width: 200,
+                    child: Text(
+                      "12:00",
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 15,
+                          color: AppColors.darkGrayColor),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

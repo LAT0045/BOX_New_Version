@@ -382,8 +382,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
 
             RadioListTile(
                 value: 1,
-                title: const Text(
-                  "Thanh toán tiền mặt",
+                title: Text(
+                  AppLocalizations.of(context)!.cashPayment,
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
                 groupValue: _selectedValue,
@@ -392,8 +392,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
 
             RadioListTile(
                 value: 2,
-                title: const Text(
-                  "Thanh toán online",
+                title: Text(
+                  AppLocalizations.of(context)!.onlinePayment,
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
                 groupValue: _selectedValue,
