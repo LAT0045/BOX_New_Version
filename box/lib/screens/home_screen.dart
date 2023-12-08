@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:box/class/food.dart';
 import 'package:box/class/section.dart';
@@ -62,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _favoriteFoodIds.removeWhere((element) => element == food.foodId);
         _favoriteFoods.removeWhere((element) => element.foodId == food.foodId);
       });
+
       databaseReference.child(food.foodId).remove();
     } else {
       setState(() {
@@ -69,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _favoriteFoods.add(food);
       });
 
-      databaseReference.push().set(food.foodId);
+      databaseReference.child(food.foodId).set("1");
     }
   }
 
@@ -113,6 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         final favoriteMap = favoriteSnapshot.value as Map;
         favoriteMap.forEach((key, value) {
+          print("TESTTTTTTTTTTTT");
+          print(key);
+          print(value);
           _favoriteFoodIds.add(value);
         });
       });

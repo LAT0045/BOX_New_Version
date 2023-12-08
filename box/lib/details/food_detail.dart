@@ -99,6 +99,10 @@ class _FoodDetailState extends State<FoodDetail> {
     setState(() {
       favoriteFoods = widget.favoriteFoods;
       _isFavorite = isFavoriteFood(widget.food, favoriteFoods);
+
+      for (String food in favoriteFoods) {
+        print(food);
+      }
     });
   }
 
