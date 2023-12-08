@@ -5,8 +5,10 @@ import 'package:box/class/option.dart';
 import 'package:box/class/option_detail.dart';
 import 'package:box/class/order.dart';
 import 'package:box/class/shop.dart';
+import 'package:box/screens/successful_order_screen.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,6 +43,7 @@ class DeliveryDetail extends StatefulWidget {
 
 class _DeliveryDetailState extends State<DeliveryDetail> {
   int _totalMoney = 0;
+  DateTime date = DateTime.now();
   int calculateTotalPrice(Food food) {
     int res = food.foodPrice;
 
@@ -48,7 +51,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
       res += calculateOptionDetail(option.optionList);
     }
 
-    return res;
+    return res * food.quantity;
   }
 
   int calculateOptionDetail(List<OptionDetail> optionDetails) {
@@ -59,9 +62,136 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
     }
 
     return res;
-}
+  }
 
-   @override
+  Future<void> pushNewInvoice() async {
+    try {
+      // Get a reference to the Realtime Database instance
+      DatabaseReference databaseReference =
+          FirebaseDatabase.instance.ref("Invoices");
+
+      databaseReference.push().set({
+        'userId': widget.userCredential.user?.uid.toString(),
+        'shopId': widget.order.shopId,
+        'name': widget.order.name,
+        'address': widget.order.address,
+        'phoneNumber': widget.order.phoneNumber,
+        'createdDate': "${date.day}/${date.month}/${date.year}",
+        'totalPrice': _totalMoney,
+        'foods': widget.foods.map((food) => food.toJson()).toList(),
+      });
+
+      DatabaseReference databaseReference2 =
+          FirebaseDatabase.instance.ref("Orders");
+      DatabaseReference orderReference =
+          databaseReference2.child(widget.order.orderId);
+
+      orderReference.update({
+        "status": "COMPLETED",
+      }).catchError((error) {
+        print(error);
+      });
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => SuccessfulOrderScreen(
+                  userCredential: widget.userCredential,
+                  address: widget.address,
+                  status: true,
+                )),
+      );
+    } catch (e) {
+      // Error
+    }
+  }
+
+  Future<void> cancelOrder() async {
+    try {
+      DatabaseReference databaseReference =
+          FirebaseDatabase.instance.ref("Orders");
+      DatabaseReference orderReference =
+          databaseReference.child(widget.order.orderId);
+
+      orderReference.update({
+        "status": "DENIED",
+      }).catchError((error) {
+        print(error);
+      });
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => SuccessfulOrderScreen(
+                  userCredential: widget.userCredential,
+                  address: widget.address,
+                  status: false,
+                )),
+      );
+    } catch (e) {
+      // Error
+    }
+  }
+
+  Future<void> _showCancelConfirmationDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Bạn có chắc chắn muốn hủy đơn?",
+            style: const TextStyle(
+              fontFamily: 'Comfortaa',
+              fontSize: 20,
+              fontWeight: FontWeight.bold),),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng dialog
+                cancelOrder(); // Hủy đơn hàng
+              },
+              style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              child: Text(
+                "Yes",
+                style: const TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.mediumOrangeColor)
+              
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Đóng dialog
+              },
+              style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor:  AppColors.mediumOrangeColor // Màu xám khi nút bị disable
+                ),
+              child: Text(
+                "Cancel",
+                style: const TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   void initState() {
     super.initState();
     _totalMoney = 0;
@@ -76,29 +206,9 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
-    List deliverySteps = [
-      {
-        "title": "Shipper đến cửa hàng",
-        "address": "Địa chỉ cửa hàng",
-        "time": "14:00"
-      },
-      {
-        "title": "Shipper nhận đồ ăn",
-        "address": "Địa chỉ cửa hàng",
-        "time": "14:00"
-      },
-      {
-        "title": "Shipp đến chỗ giao hàng",
-        "address": "Địa chỉ nhà",
-        "time": "14:00"
-      },
-      {"title": "Shipper giao đồ ăn", "address": "Địa chỉ nhà", "time": "14:00"}
-    ];
-
-    int currentIndex = 0;
-
     return Scaffold(
       body: SingleChildScrollView(
         child: SafeArea(
@@ -115,8 +225,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: GestureDetector(
-                        onTap: () {
-                        },
+                        onTap: () {},
                         child: SvgPicture.asset(
                           "assets/svg/backarrow.svg",
                           height: 30,
@@ -276,32 +385,45 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             ),
 
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: DeliveryStepper(
-                status: widget.order.status,
-              )
-            ),
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: DeliveryStepper(
+                  status: widget.order.status,
+                )),
 
             // Button
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
               child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 50, vertical: 10),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      backgroundColor: AppColors.mediumOrangeColor),
-                  child: const Text(
-                    "Đã Nhận Món Thành Công",
-                    style: TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 18,
-                        color: Colors.white),
-                  )),
+                onPressed: () {
+                  if (widget.order.status == "PENDING") {
+                    _showCancelConfirmationDialog();
+                  } else if (widget.order.status == "DELIVERING") {
+                    pushNewInvoice();
+                  }
+                },
+                style: TextButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: (widget.order.status == "PENDING" ||
+                          widget.order.status == "DELIVERING")
+                      ? AppColors.mediumOrangeColor
+                      : Colors.grey, // Màu xám khi nút bị disable
+                ),
+                child: Text(
+                  (widget.order.status == "PENDING")
+                      ? "Hủy Đơn Hàng"
+                      : "Đã Nhận Món Thành Công",
+                  style: TextStyle(
+                    fontFamily: 'Comfortaa',
+                    fontSize: 18,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             )
           ],
         )),

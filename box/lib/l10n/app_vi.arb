@@ -84,5 +84,9 @@
     "date": "Ngày Hẹn",
     "time": "Giờ hẹn",
     "total": "Tổng Cộng",
-    "orderCheckOut": "Đặt Hàng"
+    "orderCheckOut": "Đặt Hàng",
+
+    "pending" : "Chờ xác nhận",
+    "accepted" : "Đã xác nhận",
+    "delivering" : "Đang giao"
 }

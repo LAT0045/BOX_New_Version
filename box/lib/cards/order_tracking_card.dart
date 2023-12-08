@@ -6,6 +6,7 @@ import 'package:box/details/delivery_detail.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderTrackingCard extends StatefulWidget {
   final Order order;
@@ -34,8 +35,18 @@ class OrderTrackingCard extends StatefulWidget {
 }
 
 class _OrderTrackingCardState extends State<OrderTrackingCard> {
+  String status ='';
+
   @override
   Widget build(BuildContext context) {
+    if(widget.order.status == "PENDING"){
+      status = AppLocalizations.of(context)!.pending;
+    }else if(widget.order.status == "ACCEPTED"){
+      status = AppLocalizations.of(context)!.accepted;
+    }else{
+      status = AppLocalizations.of(context)!.delivering;
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       height: 150,
@@ -108,7 +119,7 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
                     SizedBox(
                       width: 200,
                       child: Text(
-                        widget.order.status,
+                        status,
                         style: TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 15,

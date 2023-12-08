@@ -70,9 +70,8 @@ class SuccessfulCheckoutScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                        builder: (context) => OrderTab(
-                            userCredential: userCredential,
-                            address: address,)),
+                        builder: (context) => HomeScreen(
+                            userCredential: userCredential, address: address)),
                   );
                 },
                 style: TextButton.styleFrom(
