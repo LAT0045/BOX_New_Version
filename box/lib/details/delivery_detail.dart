@@ -1,11 +1,37 @@
+import 'package:box/cards/checkout_food_card.dart';
+import 'package:box/cards/delivery_food_card.dart';
+import 'package:box/class/food.dart';
+import 'package:box/class/option.dart';
+import 'package:box/class/option_detail.dart';
+import 'package:box/class/order.dart';
+import 'package:box/class/shop.dart';
 import 'package:box/utils/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeliveryDetail extends StatefulWidget {
-  final String shopName;
+  final Order order;
+  final Shop shop;
+  final String foodImage;
+  final List<Food> foods;
+  final String username;
+  final String phoneNumber;
+  final String address;
+  final UserCredential userCredential;
 
-  const DeliveryDetail({super.key, required this.shopName});
+  const DeliveryDetail({
+    Key? key,
+    required this.order,
+    required this.shop,
+    required this.foodImage,
+    required this.foods,
+    required this.username,
+    required this.phoneNumber,
+    required this.address,
+    required this.userCredential,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +40,42 @@ class DeliveryDetail extends StatefulWidget {
 }
 
 class _DeliveryDetailState extends State<DeliveryDetail> {
+  int _totalMoney = 0;
+  int calculateTotalPrice(Food food) {
+    int res = food.foodPrice;
+
+    for (Option option in food.options) {
+      res += calculateOptionDetail(option.optionList);
+    }
+
+    return res;
+  }
+
+  int calculateOptionDetail(List<OptionDetail> optionDetails) {
+    int res = 0;
+
+    for (OptionDetail optionDetail in optionDetails) {
+      res += optionDetail.price;
+    }
+
+    return res;
+}
+
+   @override
+  void initState() {
+    super.initState();
+    _totalMoney = 0;
+    setState(() {
+      for (Food food in widget.foods) {
+        print("_______________________");
+        print(food.foodName);
+        print(food.foodPrice);
+        print(food.quantity);
+
+        _totalMoney += calculateTotalPrice(food);
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     List deliverySteps = [
@@ -53,7 +115,8 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                        },
                         child: SvgPicture.asset(
                           "assets/svg/backarrow.svg",
                           height: 30,
@@ -66,7 +129,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        widget.shopName,
+                        widget.shop.shopName,
                         style: const TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 20,
@@ -97,12 +160,12 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  "Tên của người nhận",
+                  widget.username,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -113,12 +176,12 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  "Địa chỉ của người nhận",
+                  widget.order.address,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -129,12 +192,12 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             const SizedBox(
               height: 10,
             ),
-            const SizedBox(
+            SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  "Số điện thoại của người nhận",
+                  widget.phoneNumber,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -147,8 +210,46 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
               height: 20.0,
             ),
 
-            // Chosen food section
-            //SectionCard(sectionName: "Các Món Đã Chọn", widgets: widgets),
+            for (int i = 0; i < widget.foods.length; i++)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: DeliveryFoodCard(food: widget.foods[i]),
+              ),
+
+            const SizedBox(
+              height: 20.0,
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      AppLocalizations.of(context)!.total,
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "${_totalMoney.toString()}Đ",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 23,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.orangeColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
             const SizedBox(
               height: 20.0,
@@ -160,7 +261,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  "Dự Kiến",
+                  "Tình trạng",
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 18,
@@ -174,18 +275,12 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
               height: 10,
             ),
 
-            for (int i = 0; i < deliverySteps.length; i++)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: DeliveryStepper(
-                  index: i,
-                  currentIndex: currentIndex,
-                  title: deliverySteps[i]["title"],
-                  address: deliverySteps[i]["address"],
-                  time: deliverySteps[i]["time"],
-                  maxIndex: deliverySteps.length,
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25.0),
+              child: DeliveryStepper(
+                status: widget.order.status,
+              )
+            ),
 
             // Button
             Padding(
@@ -216,42 +311,90 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
 }
 
 class DeliveryStepper extends StatelessWidget {
-  final int index;
-  final int currentIndex;
-  final String title;
-  final String address;
-  final String time;
-  final int maxIndex;
+  final String status;
+  final Map<String, int> statusMap = {
+    "PENDING": 1,
+    "ACCEPTED": 2,
+    "DELIVERING": 3,
+  };
 
-  const DeliveryStepper(
-      {super.key,
-      required this.index,
-      required this.currentIndex,
-      required this.title,
-      required this.address,
-      required this.time,
-      required this.maxIndex});
+  final Map<String, String> statusText = {
+    "PENDING": "Chờ xác nhận",
+    "ACCEPTED": "Đã chấp nhận",
+    "DELIVERING": "Đang giao hàng",
+  };
+
+  DeliveryStepper({
+    Key? key,
+    required this.status,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    int currentIndex = statusMap[status] ?? 0;
+
+    List<String> deliverySteps = [
+      statusText["PENDING"]!,
+      statusText["ACCEPTED"]!,
+      statusText["DELIVERING"]!,
+    ];
+
+    return Column(
+      children: [
+        for (int i = 0; i < deliverySteps.length; i++)
+          _buildStep(
+            title: deliverySteps[i],
+            currentIndex: currentIndex,
+            index: i + 1,
+            maxIndex: deliverySteps.length,
+          )
+      ],
+    );
+  }
+
+  Widget _buildStep({
+    required String title,
+    required int currentIndex,
+    required int index,
+    required int maxIndex,
+  }) {
+    bool isCurrentStep = index == currentIndex;
+    bool isPastStep = index < currentIndex;
+
+    String statusTitle;
+    if (isCurrentStep) {
+      statusTitle = "Đang thực hiện";
+    } else if (isPastStep) {
+      statusTitle = "Đã xong";
+    } else {
+      statusTitle = "Đang chờ";
+    }
+
     return Column(
       children: [
         Row(
           children: [
             CircleAvatar(
-              backgroundColor: index <= currentIndex
+              backgroundColor: isCurrentStep
                   ? AppColors.mediumOrangeColor
-                  : AppColors.grayColor,
+                  : isPastStep
+                      ? AppColors.mediumOrangeColor.withOpacity(0.5)
+                      : AppColors.grayColor,
               radius: 10,
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Text(
                 title,
-                style: const TextStyle(
-                    fontFamily: 'Comfortaa',
-                    fontSize: 18,
-                    color: AppColors.orangeColor),
+                style: TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 18,
+                  color: isCurrentStep
+                      ? AppColors.orangeColor
+                      : isPastStep
+                          ? AppColors.mediumOrangeColor.withOpacity(0.5)
+                          : AppColors.grayColor,
+                ),
               ),
             )
           ],
@@ -259,15 +402,18 @@ class DeliveryStepper extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Container(
+            height: 70,
             width: double.infinity,
             decoration: BoxDecoration(
-              border: index < maxIndex - 1
+              border: index < maxIndex
                   ? Border(
                       left: BorderSide(
-                          color: index + 1 <= currentIndex
-                              ? AppColors.mediumOrangeColor
-                              : AppColors.grayColor,
-                          width: 2.0))
+                        color: isPastStep
+                            ? AppColors.mediumOrangeColor.withOpacity(0.5)
+                            : AppColors.grayColor,
+                        width: 2.0,
+                      ),
+                    )
                   : null,
             ),
             child: Padding(
@@ -275,30 +421,18 @@ class DeliveryStepper extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
-                      "Địa điểm: $address",
-                      style: const TextStyle(
-                          fontFamily: 'Comfortaa',
-                          fontSize: 15,
-                          color: AppColors.grayColor),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      "Dự kiến: $time",
-                      style: const TextStyle(
-                          fontFamily: 'Comfortaa',
-                          fontSize: 15,
-                          color: AppColors.grayColor),
+                      "Tình trạng: $statusTitle",
+                      style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 15,
+                        color: isPastStep
+                            ? AppColors.mediumOrangeColor.withOpacity(0.5)
+                            : AppColors.grayColor,
+                      ),
                     ),
                   ),
                 ],

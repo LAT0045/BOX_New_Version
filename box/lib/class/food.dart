@@ -74,7 +74,7 @@ class Food {
         options,
         json['isOutOfStock'] ?? "",
         json['sectionId'] ?? "",
-        0,
+        json['quantity'] ?? 0,
         "");
   }
 

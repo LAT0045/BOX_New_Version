@@ -256,15 +256,15 @@ class _HomeTabState extends State<HomeTab> {
         databaseReference2.child(widget.userCredential.user!.uid);
 
     final snapshot = await userReference.get();
-    if (snapshot.exists) {
-      setState(() {
-        _name = (snapshot.value as Map)["name"];
-        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
-            AppLocalizations.of(context)!.notUpdate;
-      });
-    } else {
-      // User info doesn't exist
-    }
+      if (snapshot.exists) {
+        setState(() {
+          _name = (snapshot.value as Map)["name"];
+          _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+              AppLocalizations.of(context)!.notUpdate;
+        });
+      } else {
+        // User info doesn't exist
+      }
     _updateDistance();
 
     _isDoneGettingInfo = true;
@@ -708,7 +708,7 @@ class _HomeTabState extends State<HomeTab> {
               )
             : SafeArea(
                 child: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(AppColors.orangeColor),),
               )));
   }
 }

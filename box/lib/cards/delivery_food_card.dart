@@ -1,72 +1,154 @@
+import 'package:box/class/food.dart';
+import 'package:box/class/option.dart';
+import 'package:box/class/option_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DeliveryFoodCard extends StatelessWidget {
-  const DeliveryFoodCard({super.key});
+class DeliveryFoodCard extends StatefulWidget {
+ final Food food;
+
+  const DeliveryFoodCard({super.key, required this.food});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _DeliveryFoodCardState();
+  }
+}
+
+class _DeliveryFoodCardState extends State<DeliveryFoodCard> {
+  int _quantity = 0;
+  int _totalFoodPrice = 0;
+
+  int calculateTotalPrice(Food food) {
+    int res = food.foodPrice;
+
+    for (Option option in food.options) {
+      res += calculateOptionDetail(option.optionList);
+    }
+    res *= food.quantity;
+    return res;
+  }
+
+  int calculateOptionDetail(List<OptionDetail> optionDetails) {
+    int res = 0;
+
+    for (OptionDetail optionDetail in optionDetails) {
+      res += optionDetail.price;
+    }
+
+    return res;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _quantity = widget.food.quantity;
+      _totalFoodPrice = calculateTotalPrice(widget.food);
+    });
+  }
+
+  @override
+  void dispose() {
+    setState(() {
+      _quantity = 0;
+      _totalFoodPrice = 0;
+    });
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 80,
-        child: Row(
-          children: [
-            Image.asset(
-              'assets/test/ca_phe_kem_trung.jpeg',
-              height: 80,
-              width: 80,
-              fit: BoxFit.fill,
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 200,
-                    child: Text(
-                      "Cà Phê Kem Trứng",
-                      style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                      width: 200,
-                      child: Text(
-                        "29.000Đ",
-                        style: TextStyle(
-                          fontFamily: 'Comfortaa',
-                          fontSize: 15,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      )),
-                ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Food Image
+        Image.network(
+          widget.food.foodImage,
+          height: 80,
+          width: 80,
+          fit: BoxFit.fill,
+        ),
+
+        const SizedBox(
+          width: 10,
+        ),
+
+        //Food details
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Food name
+              SizedBox(
+                width: 210,
+                child: Text(
+                  widget.food.foodName,
+                  style: const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
+                ),
               ),
-            ),
-            const Expanded(
+
+              // Food price
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
                 child: SizedBox(
-              height: 80,
-              child: Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                  padding: EdgeInsets.all(15.0),
+                  width: 210,
                   child: Text(
-                    "x2",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 15),
+                    "${_totalFoodPrice.toString()}Đ",
+                    style:
+                        const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
                   ),
                 ),
               ),
-            ))
-          ],
-        ),
-      ),
+
+              //
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Topping and notes
+                  Column(
+                    children: [
+                      for (int i = 0; i < widget.food.options.length; i++)
+                        //Add
+                        SizedBox(
+                            width: 210,
+                            child: Text(
+                              "${widget.food.options[i].optionName}: ${widget.food.options[i].optionList.map((optionDetail) => optionDetail.name).join(', ')}",
+                              style: TextStyle(
+                                  fontFamily: 'Comfortaa',
+                                  color: Colors.grey[600]),
+                            )),
+
+                      //Note
+                      SizedBox(
+                          width: 210,
+                          child: Text(
+                            "${AppLocalizations.of(context)!.note}: ${widget.food.foodNote}",
+                            style: TextStyle(
+                                fontFamily: 'Comfortaa',
+                                color: Colors.grey[600]),
+                          ))
+                    ],
+                  ),
+
+                  // Quantity
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      "x"+_quantity.toString(),
+                      style: TextStyle(fontFamily: 'Comfortaa',color: Colors.grey[600]),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }
