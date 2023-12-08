@@ -60,7 +60,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
       res += calculateOptionDetail(option.optionList);
     }
 
-    return res;
+    return res*food.quantity;
   }
 
   int calculateOptionDetail(List<OptionDetail> optionDetails) {

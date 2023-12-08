@@ -264,6 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
         updateFavoriteFoods: updateFavoriteFood,
       ),
       OrderTab(
+        address: widget.address,
         userCredential: widget.userCredential,
       ),
       NotificationTab(userCredential: widget.userCredential),

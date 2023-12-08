@@ -87,6 +87,9 @@ class Order{
     };
   }
 
+  String get orderId {
+    return _orderId;
+  }
 
   String get address {
     return _address;

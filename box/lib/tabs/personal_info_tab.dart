@@ -197,7 +197,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor, width: 1.5)), // Viền dưới
             ),
             child: ElevatedButton(
-              onPressed: onPressedOrder,
+              onPressed: onPressedPayments,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.white,
@@ -205,14 +205,14 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 alignment: Alignment.centerLeft,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
                     "assets/svg/order.svg",
                     width: 40,
                     height: 40,
                     colorFilter: const ColorFilter.mode(
-                      AppColors.orangeColor, // Màu mới bạn muốn thay đổi
+                      AppColors.orangeColor,
                       BlendMode.srcIn,
                     ),
                   ),
@@ -227,17 +227,15 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor,
                     ),
                   ),
-                  const SizedBox(
-                    width: 110,
-                  ),
+                  Spacer(),
                   Transform.rotate(
                     angle: 3.14159265,
                     child: SvgPicture.asset(
-                      "assets/svg/backarrow.svg", // Đường dẫn đến tệp SVG
+                      "assets/svg/backarrow.svg",
                       width: 30,
                       height: 30,
                       colorFilter: const ColorFilter.mode(
-                        AppColors.orangeColor, // Màu mới bạn muốn thay đổi
+                        AppColors.orangeColor,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -269,7 +267,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 alignment: Alignment.centerLeft,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
                     "assets/svg/buyagain.svg",
@@ -291,9 +289,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor,
                     ),
                   ),
-                  const SizedBox(
-                    width: 130,
-                  ),
+                  Spacer(),
                   Transform.rotate(
                     angle: 3.14159265,
                     child: SvgPicture.asset(
@@ -333,7 +329,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 alignment: Alignment.centerLeft,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
                     "assets/svg/voucher.svg",
@@ -355,9 +351,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor,
                     ),
                   ),
-                  const SizedBox(
-                    width: 140,
-                  ),
+                  Spacer(),
                   Transform.rotate(
                     angle: 3.14159265,
                     child: SvgPicture.asset(
@@ -397,7 +391,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 alignment: Alignment.centerLeft,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
                     "assets/svg/payments.svg",
@@ -419,9 +413,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor,
                     ),
                   ),
-                  const SizedBox(
-                    width: 81,
-                  ),
+                  Spacer(),
                   Transform.rotate(
                     angle: 3.14159265,
                     child: SvgPicture.asset(

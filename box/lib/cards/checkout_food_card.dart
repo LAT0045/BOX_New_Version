@@ -142,7 +142,7 @@ class _CheckOutFoodCardState extends State<CheckOutFoodCard> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
-                      _quantity.toString(),
+                      "x" + _quantity.toString(),
                       style: const TextStyle(fontFamily: 'Comfortaa'),
                     ),
                   ),

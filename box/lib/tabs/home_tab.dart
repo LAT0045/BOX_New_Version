@@ -696,7 +696,10 @@ class _HomeTabState extends State<HomeTab> {
               )
             : SafeArea(
                 child: Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation<Color>(AppColors.orangeColor),
+                ),
               )));
   }
 }

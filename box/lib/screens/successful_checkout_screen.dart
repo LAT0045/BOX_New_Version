@@ -1,4 +1,5 @@
 import 'package:box/screens/home_screen.dart';
+import 'package:box/tabs/order_tab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -66,7 +67,13 @@ class SuccessfulCheckoutScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => HomeScreen(
+                            userCredential: userCredential, address: address)),
+                  );
+                },
                 style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     shape: RoundedRectangleBorder(
