@@ -1,6 +1,6 @@
+import 'package:box/class/food.dart';
 import 'package:box/class/shop.dart';
 import 'package:box/screens/shop_screen.dart';
-import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,17 +14,21 @@ class NearbyCard extends StatefulWidget {
   final String phoneNumber;
   final String address;
   final UserCredential userCredential;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
-  const NearbyCard({
-    Key? key,
-    required this.userAddress,
-    required this.shop,
-    required this.hasVoucher,
-    required this.username,
-    required this.phoneNumber,
-    required this.address,
-    required this.userCredential,
-  }) : super(key: key);
+  const NearbyCard(
+      {Key? key,
+      required this.userAddress,
+      required this.shop,
+      required this.hasVoucher,
+      required this.username,
+      required this.phoneNumber,
+      required this.address,
+      required this.userCredential,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -65,6 +69,8 @@ class _NearbyCardState extends State<NearbyCard> {
               phoneNumber: widget.phoneNumber,
               address: widget.address,
               userCredential: widget.userCredential,
+              favoriteFoods: widget.favoriteFoods,
+              updateFavoriteFoods: widget.updateFavoriteFoods,
             ),
           ),
         );

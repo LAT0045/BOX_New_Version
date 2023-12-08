@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -451,7 +453,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 alignment: Alignment.centerLeft,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SvgPicture.asset(
                     "assets/svg/logout.svg",
@@ -473,7 +475,9 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor,
                     ),
                   ),
-                  Spacer(),
+                  const SizedBox(
+                    width: 100,
+                  ),
                   Transform.rotate(
                     angle: 3.14159265,
                     child: SvgPicture.asset(

@@ -1,4 +1,5 @@
 import 'package:box/cards/favorite_food_card.dart';
+import 'package:box/class/food.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -6,8 +7,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FavoriteTab extends StatefulWidget {
   final bool isEmpty;
+  final List<Food> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
-  const FavoriteTab({super.key, required this.isEmpty});
+  const FavoriteTab(
+      {super.key,
+      required this.isEmpty,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +26,34 @@ class _FavoriteTabState extends State<FavoriteTab> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: widget.isEmpty ? const EmptyFavorite() : const Favorite());
+        child: widget.isEmpty
+            ? const EmptyFavorite()
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Text(
+                      AppLocalizations.of(context)!.favoriteDishes,
+                      style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.orangeColor,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: widget.favoriteFoods.length,
+                        itemBuilder: (context, index) {
+                          return FavoriteFoodCard(
+                            food: widget.favoriteFoods[index],
+                            updateFavoriteFoods: widget.updateFavoriteFoods,
+                          );
+                        }),
+                  )
+                ],
+              ));
   }
 }
 
@@ -84,37 +118,6 @@ class EmptyFavorite extends StatelessWidget {
                   ),
                 ),
               )),
-        )
-      ],
-    );
-  }
-}
-
-class Favorite extends StatelessWidget {
-  const Favorite({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
-          child: Text(
-            AppLocalizations.of(context)!.favoriteDishes,
-            style: const TextStyle(
-              fontFamily: 'Comfortaa',
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: AppColors.orangeColor,
-            ),
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return const FavoriteFoodCard();
-              }),
         )
       ],
     );

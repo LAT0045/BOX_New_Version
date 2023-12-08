@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:box/screens/home_screen.dart';
 import 'package:box/screens/otp_screen.dart';
 import 'package:box/screens/signup_screen.dart';
@@ -404,13 +405,16 @@ class _LoginScreenState extends State<LoginScreen> {
         .push(MaterialPageRoute(builder: (context) => const SignUpScreen()));
   }
 
-  void navigateToHomeScreen(UserCredential userCredential, String address) {
+  void navigateToHomeScreen(
+      UserCredential userCredential, String address) async {
+    await AwesomeNotifications().requestPermissionToSendNotifications();
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => HomeScreen(
           userCredential: userCredential,
           address: address,
-        ), // Replace with your SuccessScreen widget
+        ),
       ),
     );
   }

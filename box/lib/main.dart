@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:box/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,20 @@ void main() async {
       messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
       appId: '1:1049009016949:android:3aa88260719a2baf89283c',
     ),
+  );
+
+  //'resource://drawable/box_app_logo'
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'main_channel',
+        channelName: 'main_channel',
+        channelDescription: 'main_channel notifications',
+        enableLights: true,
+        importance: NotificationImportance.Max,
+      )
+    ],
   );
 
   runApp(const MyApp());

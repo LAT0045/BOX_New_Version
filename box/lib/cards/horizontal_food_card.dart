@@ -11,6 +11,8 @@ class HorizontalFoodCard extends StatefulWidget {
   final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
   final List<Food> foods;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const HorizontalFoodCard(
       {super.key,
@@ -18,7 +20,9 @@ class HorizontalFoodCard extends StatefulWidget {
       required this.updateTotalFoods,
       required this.updateTotalPrice,
       required this.updatePurchasedFoods,
-      required this.foods});
+      required this.foods,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -47,6 +51,8 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
             updateTotalPrice: widget.updateTotalPrice,
             updatePurchasedFoods: widget.updatePurchasedFoods,
             updateQuantity: updateQuantity,
+            favoriteFoods: widget.favoriteFoods,
+            updateFavoriteFoods: widget.updateFavoriteFoods,
           ),
         ),
       );
@@ -106,29 +112,19 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
-        height: 80,
+        height: 100,
         width: double.infinity,
         child: Row(
           children: [
             // Food Image
-            Container(
+            Image.network(
+              widget.food.foodImage,
+              fit: BoxFit.cover,
               width: 80,
               height: 80,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.transparent,
-                  width: 0,
-                ),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: Image.network(
-                widget.food.foodImage,
-                fit: BoxFit.cover,
-                width: 80,
-                height: 80,
-              ),
             ),
+
+            //
             const SizedBox(
               width: 10,
             ),
@@ -149,9 +145,13 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                           fontFamily: 'Comfortaa', fontSize: 17),
                     ),
                   ),
+
+                  //
                   const SizedBox(
                     height: 10,
                   ),
+
+                  //
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,

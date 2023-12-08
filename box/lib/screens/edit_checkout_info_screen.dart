@@ -117,7 +117,7 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
       Placemark? placemark = placemarks.first;
       setState(() {
         newAddress =
-            "${placemark?.street}, ${placemark?.subLocality}, ${placemark?.subAdministrativeArea}, ${placemark?.administrativeArea}";
+            "${placemark.street}, ${placemark.subLocality}, ${placemark.subAdministrativeArea}, ${placemark.administrativeArea}";
         _addressController.text = newAddress;
         _selectedLocation = tappedPoint;
         _markers.clear();
@@ -202,9 +202,9 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 ],
               ),
             ),
-
             Padding(
-              padding: const EdgeInsets.only(top: 5, left: 20, right: 20, bottom: 10),
+              padding: const EdgeInsets.only(
+                  top: 5, left: 20, right: 20, bottom: 10),
               child: TextField(
                 decoration: InputDecoration(
                   filled: true,
@@ -216,7 +216,8 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                       _updateLocationFromAddress(_addressController.text);
                     },
                   ),
-                  contentPadding: const EdgeInsets.only(left: 20, bottom: 5, right: 5),
+                  contentPadding:
+                      const EdgeInsets.only(left: 20, bottom: 5, right: 5),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(color: Colors.white),
@@ -226,15 +227,13 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                     borderSide: const BorderSide(color: Colors.white),
                   ),
                 ),
-                style:
-                    const TextStyle(fontSize: 17, fontFamily: 'Comfortaa'),
+                style: const TextStyle(fontSize: 17, fontFamily: 'Comfortaa'),
                 onChanged: (value) {
                   newAddress = value;
                 },
                 controller: _addressController,
               ),
             ),
-
             Container(
               height: 450,
               child: GoogleMap(
@@ -252,9 +251,9 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                 },
               ),
             ),
-
-            SizedBox(height: 20,),
-
+            SizedBox(
+              height: 20,
+            ),
             Container(
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
@@ -274,7 +273,8 @@ class _EditUserInfoScreenState extends State<EditUserInfoScreen> {
                   Navigator.pop(context, editedData);
                 },
                 style: TextButton.styleFrom(
-                  padding: const EdgeInsets.only(top: 15, bottom: 15, left: 30, right: 30),
+                  padding: const EdgeInsets.only(
+                      top: 15, bottom: 15, left: 30, right: 30),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

@@ -4,6 +4,7 @@ import 'package:box/screens/successful_checkout_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -78,7 +79,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
       DatabaseReference databaseReference =
           FirebaseDatabase.instance.ref("Orders");
 
-      // Add data to a specific node (e.g., 'users')
+      // Add data
       databaseReference.push().set({
         'userId': widget.userCredential.user?.uid.toString(),
         'shopId': widget.foods[0].shopId,
@@ -105,6 +106,59 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
       );
     } catch (e) {
       // Error
+    }
+  }
+
+  void checkOutPayPal(String money) {
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => PaypalCheckoutView(
+              sandboxMode: true,
+              clientId:
+                  "ARA2HLL2SbIBVJ2hTeV_N_3B4YsBnRdw4B3Dee5W1PO9UdCSgOHAPGCQeG7rPizD6hLAN_38yQJLbdE5",
+              secretKey:
+                  "EKxLbi3dlt-QNxpBTvV7ipBEEBVFFDj8eSEOGA_mB6_dFZKlqOaV85aDftTbNTIOZEuH3tbFon-xe7L6",
+              transactions: [
+                {
+                  "amount": {
+                    "total": money,
+                    "currency": "USD",
+                    "details": {
+                      "subtotal": money,
+                      "shipping": '0',
+                      "shipping_discount": 0
+                    }
+                  },
+                  "description": "The payment transaction description.",
+                  "item_list": {
+                    "items": [],
+                  }
+                }
+              ],
+              note: "Contact us for any questions on your order.",
+              onSuccess: (Map params) async {
+                Navigator.pop(context);
+                pushNewOrder();
+              },
+              onCancel: () {
+                Navigator.pop(context);
+              },
+              onError: (error) {
+                // Handle error
+                Navigator.pop(context);
+              },
+            )));
+  }
+
+  void checkOutOrder() {
+    if (_selectedValue == 2) {
+      // Convert vnd to usd
+      double moneyUsd = _totalMoney * 0.000041;
+      moneyUsd = double.parse(moneyUsd.toStringAsFixed(1));
+      print(moneyUsd.toString());
+
+      checkOutPayPal(moneyUsd.toString());
+    } else {
+      pushNewOrder();
     }
   }
 
@@ -328,8 +382,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
 
             RadioListTile(
                 value: 1,
-                title: const Text(
-                  "Thanh toán tiền mặt",
+                title: Text(
+                  AppLocalizations.of(context)!.cashPayment,
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
                 groupValue: _selectedValue,
@@ -338,8 +392,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
 
             RadioListTile(
                 value: 2,
-                title: const Text(
-                  "Thanh toán online",
+                title: Text(
+                  AppLocalizations.of(context)!.onlinePayment,
                   style: TextStyle(fontFamily: 'Comfortaa'),
                 ),
                 groupValue: _selectedValue,
@@ -549,7 +603,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: TextButton(
-                  onPressed: pushNewOrder,
+                  onPressed: checkOutOrder,
                   style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       shape: RoundedRectangleBorder(

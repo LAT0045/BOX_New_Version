@@ -80,6 +80,8 @@
     "checkOutInfo": "Checkout Information",
     "edit": "Edit",
     "paymentMethod": "Payment Method",
+    "cashPayment": "Pay with cash",
+    "onlinePayment": "Online payment",
     "schedule": "Schedule A Date",
     "date": "Date",
     "time": "Time",

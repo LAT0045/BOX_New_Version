@@ -1,6 +1,5 @@
 import 'package:box/cards/category_card.dart';
 import 'package:box/cards/food_card.dart';
-import 'package:box/cards/lastest_card.dart';
 import 'package:box/cards/nearby_card.dart';
 import 'package:box/class/food.dart';
 import 'package:box/class/section.dart';
@@ -11,7 +10,6 @@ import 'package:box/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,9 +19,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class HomeTab extends StatefulWidget {
   final String address;
   final UserCredential userCredential;
+  final List<Food> foods;
+  final List<Shop> shops;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const HomeTab(
-      {super.key, required this.address, required this.userCredential});
+      {super.key,
+      required this.address,
+      required this.userCredential,
+      required this.foods,
+      required this.shops,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -40,18 +48,19 @@ class _HomeTabState extends State<HomeTab> {
     {"imagePath": 'assets/images/banner_3.png'}
   ];
   int _currentIndex = 0;
-  bool _isDoneGettingInfo = false;
+  bool _isDoneUpdatingDistance = false;
 
-  final List<Shop> _shops = [];
-  final List<Shop> _fastFoodShops = [];
-  final List<Shop> _drinkShops = [];
-  final List<Shop> _vietnameseShops = [];
-  final List<Shop> _koreanShops = [];
-  final List<Shop> _japaneseShops = [];
+  List<Shop> _shops = [];
+  List<Shop> _fastFoodShops = [];
+  List<Shop> _drinkShops = [];
+  List<Shop> _vietnameseShops = [];
+  List<Shop> _koreanShops = [];
+  List<Shop> _japaneseShops = [];
 
   String _phoneNumber = "";
   String _name = "";
 
+  //__________________________________________________
   List<CategoryCard> _initializeCategories(BuildContext context) {
     final List<CategoryCard> categories = [
       CategoryCard(
@@ -62,6 +71,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/voucher.svg",
@@ -71,6 +82,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/all.svg",
@@ -80,6 +93,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/fastfood.svg",
@@ -89,6 +104,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/bubble_tea.svg",
@@ -98,6 +115,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/vietnamese_food.svg",
@@ -107,6 +126,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/korean_food.svg",
@@ -116,6 +137,8 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       ),
       CategoryCard(
         iconPath: "assets/svg/japanese_food.svg",
@@ -125,27 +148,15 @@ class _HomeTabState extends State<HomeTab> {
         phoneNumber: _phoneNumber,
         address: widget.address,
         userCredential: widget.userCredential,
+        favoriteFoods: widget.favoriteFoods,
+        updateFavoriteFoods: widget.updateFavoriteFoods,
       )
     ];
 
     return categories;
   }
 
-  final List<LastestCard> _testCards = [
-    const LastestCard(
-      imagePath: "assets/test/milano_coffee.jpg",
-      shopName: "Milano Coffee",
-      iconType: "voucher",
-      otherInfo: "Mã giảm 20%",
-    ),
-    const LastestCard(
-      imagePath: "assets/test/milano_coffee.jpg",
-      shopName: "Milano Coffee",
-      iconType: "location",
-      otherInfo: "100m",
-    )
-  ];
-
+  //____________________SORT SHOP_____________________
   int getShopById(String shopId) {
     for (int i = 0; i < _shops.length; i++) {
       if (_shops[i].shopId == shopId) {
@@ -173,6 +184,16 @@ class _HomeTabState extends State<HomeTab> {
     }
   }
 
+  bool isExisted(List<Shop> shops, Shop curShop) {
+    for (Shop shop in shops) {
+      if (shop.shopId == curShop.shopId) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void sortShop(Shop shop, String type) {
     switch (type) {
       case "fastfood":
@@ -193,18 +214,25 @@ class _HomeTabState extends State<HomeTab> {
       default:
     }
   }
+  //____________________END SORT SHOP__________________
 
-  bool isExisted(List<Shop> shops, Shop curShop) {
-    for (Shop shop in shops) {
-      if (shop.shopId == curShop.shopId) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
+  //____________________DISTANCE______________________
   Future<void> _updateDistance() async {
+    // Sort shop
+    setState(() {
+      for (Food food in widget.foods) {
+        int shopIndex = getShopById(food.shopId);
+
+        if (shopIndex != -1) {
+          sortShop(_shops[shopIndex], food.foodType);
+
+          for (Section section in _shops[shopIndex].sections) {
+            addFoodToSection(food, section);
+          }
+        }
+      }
+    });
+
     for (int i = 0; i < _shops.length; i++) {
       LocationService locationService = LocationService();
       double calculatedDistance =
@@ -256,23 +284,26 @@ class _HomeTabState extends State<HomeTab> {
         databaseReference2.child(widget.userCredential.user!.uid);
 
     final snapshot = await userReference.get();
-      if (snapshot.exists) {
-        setState(() {
-          _name = (snapshot.value as Map)["name"];
-          _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
-              AppLocalizations.of(context)!.notUpdate;
-        });
-      } else {
-        // User info doesn't exist
-      }
+    if (snapshot.exists) {
+      setState(() {
+        _name = (snapshot.value as Map)["name"];
+        _phoneNumber = (snapshot.value as Map)["phoneNumber"] ??
+            AppLocalizations.of(context)!.notUpdate;
+      });
+    } else {
+      // User info doesn't exist
+    }
     _updateDistance();
 
-    _isDoneGettingInfo = true;
+    _isDoneUpdatingDistance = true;
   }
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _shops = widget.shops;
+    });
     _currentAddress = widget.address;
     _loadSavedAddress();
   }
@@ -282,8 +313,7 @@ class _HomeTabState extends State<HomeTab> {
     if (newAddress.isEmpty) {
       setState(() {
         _currentAddress = prefs.getString('savedAddress') ?? widget.address;
-
-        getInfo();
+        _updateDistance();
       });
     }
   }
@@ -303,14 +333,10 @@ class _HomeTabState extends State<HomeTab> {
     }
   }
 
-  void _onPressedSeeMore() {
-    // TODO: Thêm hàm xem thêm
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: _isDoneGettingInfo
+        body: _isDoneUpdatingDistance
             ? SingleChildScrollView(
                 child: SafeArea(
                   child: Column(
@@ -543,6 +569,8 @@ class _HomeTabState extends State<HomeTab> {
                                                 fontSize: 35),
                                             textAlign: TextAlign.center,
                                           ),
+
+                                          //
                                           SvgPicture.asset(
                                             "assets/svg/flash_sale.svg",
                                             height: 35,
@@ -551,9 +579,13 @@ class _HomeTabState extends State<HomeTab> {
                                                 AppColors.orangeColor,
                                                 BlendMode.srcIn),
                                           ),
+
+                                          //
                                           const SizedBox(
-                                            height: 10,
+                                            height: 5,
                                           ),
+
+                                          //
                                           const SlideCountdownSeparated(
                                             duration: Duration(hours: 12),
                                             decoration: BoxDecoration(
@@ -562,7 +594,7 @@ class _HomeTabState extends State<HomeTab> {
                                                 fontSize: 10,
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
-                                            height: 20,
+                                            height: 15,
                                             width: 18,
                                           )
                                         ],
@@ -613,15 +645,17 @@ class _HomeTabState extends State<HomeTab> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 120,
-                        child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _testCards.length,
-                            itemBuilder: (context, index) {
-                              return _testCards[index];
-                            }),
-                      ),
+
+                      //
+                      // SizedBox(
+                      //   height: 120,
+                      //   child: ListView.builder(
+                      //       scrollDirection: Axis.horizontal,
+                      //       itemCount: _testCards.length,
+                      //       itemBuilder: (context, index) {
+                      //         return _testCards[index];
+                      //       }),
+                      // ),
 
                       Container(
                         height: 10,
@@ -658,7 +692,7 @@ class _HomeTabState extends State<HomeTab> {
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: SizedBox(
-                          height: 200,
+                          height: 201,
                           child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemCount: 5,
@@ -699,6 +733,8 @@ class _HomeTabState extends State<HomeTab> {
                                 phoneNumber: _phoneNumber,
                                 address: widget.address,
                                 userCredential: widget.userCredential,
+                                favoriteFoods: widget.favoriteFoods,
+                                updateFavoriteFoods: widget.updateFavoriteFoods,
                               );
                             }),
                       )

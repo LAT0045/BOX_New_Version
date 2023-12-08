@@ -80,6 +80,8 @@
     "checkOutInfo": "Thông Tin Đặt Hàng",
     "edit": "Chỉnh Sửa",
     "paymentMethod": "Phương Thức Thanh Toán",
+    "cashPayment": "Thanh toán bằng tiền mặt",
+    "onlinePayment": "Thanh toán online",
     "schedule": "Đặt Lịch Hẹn",
     "date": "Ngày Hẹn",
     "time": "Giờ hẹn",

@@ -1,3 +1,4 @@
+import 'package:box/class/food.dart';
 import 'package:box/screens/shop_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class ShopCard extends StatefulWidget {
   final String phoneNumber;
   final String address;
   final UserCredential userCredential;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const ShopCard(
       {super.key,
@@ -19,7 +22,9 @@ class ShopCard extends StatefulWidget {
       required this.username,
       required this.phoneNumber,
       required this.address,
-      required this.userCredential});
+      required this.userCredential,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
   @override
   State<StatefulWidget> createState() {
     return _ShopCardState();
@@ -59,6 +64,8 @@ class _ShopCardState extends State<ShopCard> {
               phoneNumber: widget.phoneNumber,
               address: widget.address,
               userCredential: widget.userCredential,
+              favoriteFoods: widget.favoriteFoods,
+              updateFavoriteFoods: widget.updateFavoriteFoods,
             ),
           ),
         );

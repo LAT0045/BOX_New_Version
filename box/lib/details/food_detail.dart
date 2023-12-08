@@ -12,6 +12,8 @@ class FoodDetail extends StatefulWidget {
   final Function(Food, bool) updateTotalPrice;
   final Function(Food, bool) updatePurchasedFoods;
   final Function(int, bool) updateQuantity;
+  final List<String> favoriteFoods;
+  final Function(Food, bool) updateFavoriteFoods;
 
   const FoodDetail(
       {super.key,
@@ -19,7 +21,9 @@ class FoodDetail extends StatefulWidget {
       required this.updateTotalFoods,
       required this.updateTotalPrice,
       required this.updatePurchasedFoods,
-      required this.updateQuantity});
+      required this.updateQuantity,
+      required this.favoriteFoods,
+      required this.updateFavoriteFoods});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,6 +34,8 @@ class FoodDetail extends StatefulWidget {
 class _FoodDetailState extends State<FoodDetail> {
   Food chosenFood = Food.empty();
   TextEditingController textEditingController = TextEditingController();
+  bool _isFavorite = false;
+  List<String> favoriteFoods = [];
 
   void updateOptions(OptionDetail optionDetail, bool isRemoved, bool isOptional,
       String optionName) {
@@ -69,6 +75,18 @@ class _FoodDetailState extends State<FoodDetail> {
     Navigator.of(context).pop();
   }
 
+  bool isFavoriteFood(Food food, List<String> favoriteFoods) {
+    if (favoriteFoods.isNotEmpty) {
+      for (String id in favoriteFoods) {
+        if (id == food.foodId) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +95,11 @@ class _FoodDetailState extends State<FoodDetail> {
     for (int i = 0; i < chosenFood.options.length; i++) {
       chosenFood.options[i].optionList = [];
     }
+
+    setState(() {
+      favoriteFoods = widget.favoriteFoods;
+      _isFavorite = isFavoriteFood(widget.food, favoriteFoods);
+    });
   }
 
   @override
@@ -121,23 +144,31 @@ class _FoodDetailState extends State<FoodDetail> {
             height: 20,
           ),
 
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: SizedBox(
+              width: double.infinity,
+              child: Text(
+                widget.food.foodName,
+                style: const TextStyle(
+                    fontFamily: 'Comfortaa',
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
+          //
+          const SizedBox(
+            height: 10,
+          ),
+
           //Name and price
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SizedBox(
-                  width: 250,
-                  child: Text(
-                    widget.food.foodName,
-                    style: const TextStyle(
-                        fontFamily: 'Comfortaa',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-
                 //
                 Text(
                   "${widget.food.foodPrice.toString()}Đ",
@@ -145,6 +176,28 @@ class _FoodDetailState extends State<FoodDetail> {
                       fontFamily: 'Comfortaa',
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
+                ),
+
+                //
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (_isFavorite) {
+                        widget.updateFavoriteFoods(widget.food, true);
+                        _isFavorite = false;
+                      } else {
+                        widget.updateFavoriteFoods(widget.food, false);
+                        _isFavorite = true;
+                      }
+                    });
+                  },
+                  child: Icon(
+                    _isFavorite
+                        ? Icons.favorite_outlined
+                        : Icons.favorite_border_outlined,
+                    size: 30,
+                    color: AppColors.orangeColor,
+                  ),
                 ),
               ],
             ),
