@@ -16,6 +16,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:box/class/my_notification.dart';
 
@@ -173,6 +174,8 @@ class _HomeScreenState extends State<HomeScreen> {
           showNotification(newStatus, orderId, userId);
         } else if (newStatus == 'COMPLETED') {
           showNotification(newStatus, orderId, userId);
+        } else if (newStatus == 'DELIVERING') {
+          showNotification(newStatus, orderId, userId);
         }
       });
     }
@@ -186,6 +189,8 @@ class _HomeScreenState extends State<HomeScreen> {
         return "Đơn hàng của bạn bị từ chối!";
       case "COMPLETED":
         return "Đơn hàng của bạn đã hoàn thành!";
+      case "DELIVERING":
+        return "Đơn hàng đang trên đường tới chỗ bạn!";
       default:
         return "";
     }
@@ -209,36 +214,42 @@ class _HomeScreenState extends State<HomeScreen> {
     MyNotification newNotification =
         MyNotification(title, body, DateTime.now().toString(), orderId);
 
+    String formattedDateTime =
+        DateFormat('yyyy_MM_dd_HH_mm_ss').format(DateTime.now());
+    String notificationId = orderId + formattedDateTime;
+    print(notificationId);
+
     final snapShot = await FirebaseDatabase.instance
         .ref("Notifications")
         .child(userId)
-        .child(orderId)
+        .child(notificationId)
         .get();
 
     if (snapShot.exists) {
       String oldBody = (snapShot.value as Map)["body"];
 
       if (oldBody != body) {
-        pushNewNotification(newNotification, userId);
+        pushNewNotification(newNotification, userId, notificationId);
       }
     } else {
-      pushNewNotification(newNotification, userId);
+      pushNewNotification(newNotification, userId, notificationId);
     }
   }
 
   Future<void> pushNewNotification(
-      MyNotification notification, String id) async {
+      MyNotification notification, String id, String notificationId) async {
     try {
       // Get a reference to the Realtime Database instance
-      DatabaseReference databaseReference =
-          FirebaseDatabase.instance.ref("Notifications").child(id);
+      DatabaseReference databaseReference = FirebaseDatabase.instance
+          .ref("Notifications")
+          .child(id)
+          .child(notificationId);
 
       // Add data
-      databaseReference.push().set({
+      databaseReference.set({
         'title': notification.title,
         'body': notification.body,
-        'time': notification.time,
-        'orderId': notification.orderId
+        'time': notification.time
       });
     } catch (e) {
       // Error
