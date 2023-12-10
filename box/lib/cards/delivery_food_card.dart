@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DeliveryFoodCard extends StatefulWidget {
- final Food food;
+  final Food food;
 
   const DeliveryFoodCard({super.key, required this.food});
 
@@ -49,15 +49,13 @@ class _DeliveryFoodCardState extends State<DeliveryFoodCard> {
     });
   }
 
-  @override
-  void dispose() {
-    setState(() {
-      _quantity = 0;
-      _totalFoodPrice = 0;
-    });
+  // @override
+  // void dispose() {
+  //   _quantity = 0;
+  //   _totalFoodPrice = 0;
 
-    super.dispose();
-  }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +63,14 @@ class _DeliveryFoodCardState extends State<DeliveryFoodCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Food Image
-        Image.network(
-          widget.food.foodImage,
-          height: 80,
-          width: 80,
-          fit: BoxFit.fill,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            widget.food.foodImage,
+            fit: BoxFit.cover,
+            width: 80,
+            height: 80,
+          ),
         ),
 
         const SizedBox(
@@ -139,8 +140,9 @@ class _DeliveryFoodCardState extends State<DeliveryFoodCard> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
-                      "x"+_quantity.toString(),
-                      style: TextStyle(fontFamily: 'Comfortaa',color: Colors.grey[600]),
+                      "x" + _quantity.toString(),
+                      style: TextStyle(
+                          fontFamily: 'Comfortaa', color: Colors.grey[600]),
                     ),
                   ),
                 ],

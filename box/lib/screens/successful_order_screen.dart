@@ -54,21 +54,25 @@ class SuccessfulOrderScreen extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            Text(
-              status
-                  ? "Hi vọng bạn đã có một trải nghiệm tuyệt vời"
-                  : "Xin lỗi bạn vì trải nghiệm không tốt!",
-              style: const TextStyle(
-                fontFamily: 'Comfortaa',
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                status
+                    ? "Hi vọng bạn đã có một trải nghiệm tuyệt vời!"
+                    : "Xin lỗi bạn vì trải nghiệm không tốt!",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             const SizedBox(
               height: 90,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: TextButton(
                 onPressed: () {
                   Navigator.of(context).push(

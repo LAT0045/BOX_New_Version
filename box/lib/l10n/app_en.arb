@@ -90,5 +90,8 @@
 
     "pending" : "Pending",
     "accepted" : "Accepted",
-    "delivering" : "Delivering"
+    "delivering" : "Delivering",
+    "completed" : "Completed",
+    "denied" : "Denied"
+
 }

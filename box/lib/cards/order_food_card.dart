@@ -90,11 +90,14 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Food Image
-        Image.network(
-          widget.food.foodImage,
-          height: 80,
-          width: 80,
-          fit: BoxFit.fill,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image.network(
+            widget.food.foodImage,
+            fit: BoxFit.cover,
+            width: 80,
+            height: 80,
+          ),
         ),
 
         const SizedBox(

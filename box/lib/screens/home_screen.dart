@@ -249,7 +249,8 @@ class _HomeScreenState extends State<HomeScreen> {
       databaseReference.set({
         'title': notification.title,
         'body': notification.body,
-        'time': notification.time
+        'time': notification.time,
+        //'orderId' : notification.orderId,
       });
     } catch (e) {
       // Error
@@ -286,6 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       NotificationTab(userCredential: widget.userCredential),
       PersonalInfoTab(
+        address: widget.address,
         userCredential: widget.userCredential,
       )
     ];

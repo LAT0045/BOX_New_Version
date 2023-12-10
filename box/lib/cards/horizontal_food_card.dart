@@ -117,11 +117,14 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
         child: Row(
           children: [
             // Food Image
-            Image.network(
-              widget.food.foodImage,
-              fit: BoxFit.cover,
-              width: 80,
-              height: 80,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10), 
+              child: Image.network(
+                widget.food.foodImage,
+                fit: BoxFit.cover,
+                width: 80,
+                height: 80,
+              ),
             ),
 
             //

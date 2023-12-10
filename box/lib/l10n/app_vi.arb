@@ -81,7 +81,7 @@
     "edit": "Chỉnh Sửa",
     "paymentMethod": "Phương Thức Thanh Toán",
     "cashPayment": "Thanh toán bằng tiền mặt",
-    "onlinePayment": "Thanh toán online",
+    "onlinePayment": "Thanh toán qua PayPal",
     "schedule": "Đặt Lịch Hẹn",
     "date": "Ngày Hẹn",
     "time": "Giờ hẹn",
@@ -90,5 +90,7 @@
 
     "pending" : "Chờ xác nhận",
     "accepted" : "Đã xác nhận",
-    "delivering" : "Đang giao"
+    "delivering" : "Đang giao",
+    "completed" : "Đã hoàn thành",
+    "denied" : "Đã hủy"
 }

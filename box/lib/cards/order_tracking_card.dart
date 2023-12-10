@@ -43,8 +43,12 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
       status = AppLocalizations.of(context)!.pending;
     }else if(widget.order.status == "ACCEPTED"){
       status = AppLocalizations.of(context)!.accepted;
-    }else{
+    }else if (widget.order.status == "DELIVERING"){
       status = AppLocalizations.of(context)!.delivering;
+    }else if(widget.order.status == "COMPLETED"){
+      status = AppLocalizations.of(context)!.completed;
+    }else{
+      status = AppLocalizations.of(context)!.denied;
     }
 
     return Container(

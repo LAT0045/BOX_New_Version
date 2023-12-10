@@ -5,6 +5,7 @@ import 'package:box/class/food.dart';
 import 'package:box/class/section.dart';
 import 'package:box/class/shop.dart';
 import 'package:box/screens/map_screen.dart';
+import 'package:box/screens/search_screen.dart';
 import 'package:box/service/location_service.dart';
 import 'package:box/utils/colors.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -392,30 +393,62 @@ class _HomeTabState extends State<HomeTab> {
                       // Search bar
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(
-                                    width: 0, style: BorderStyle.none)),
-                            hintText:
-                                AppLocalizations.of(context)!.homeHintText,
-                            hintStyle: const TextStyle(fontFamily: 'Comfortaa'),
-                            suffixIcon: Container(
-                              margin: const EdgeInsets.only(right: 15.0),
-                              child: SvgPicture.asset(
-                                "assets/svg/search_icon.svg",
-                                colorFilter: const ColorFilter.mode(
-                                    AppColors.orangeColor, BlendMode.srcIn),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SearchScreen(
+                                  shops: _shops,
+                                  username: _name,
+                                  phoneNumber: _phoneNumber,
+                                  address: widget.address,
+                                  userCredential: widget.userCredential,
+                                  favoriteFoods: widget.favoriteFoods,
+                                  updateFavoriteFoods:
+                                      widget.updateFavoriteFoods,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: AppColors.lightGrayColor,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15.0, vertical: 10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.max,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      "Hôm nay bạn muốn ăn gì?",
+                                      style: TextStyle(
+                                        fontFamily: 'Comfortaa',
+                                        fontSize: 16.0,
+                                        color: AppColors.grayColor,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: SvgPicture.asset(
+                                      "assets/svg/search_icon.svg",
+                                      colorFilter: const ColorFilter.mode(
+                                          AppColors.orangeColor,
+                                          BlendMode.srcIn),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            suffixIconConstraints: const BoxConstraints(
-                                maxHeight: 35, maxWidth: 35),
-                            fillColor: AppColors.lightGrayColor,
-                            filled: true,
-                            contentPadding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            isDense: true,
                           ),
                         ),
                       ),
@@ -675,8 +708,10 @@ class _HomeTabState extends State<HomeTab> {
                       SizedBox(
                         height: 250,
                         child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
+                          itemCount: 10,
+                          itemBuilder: (context, index) {
+                            if (_shops[index].distance < 4.0) {
+                              _shops.sort((a, b) => a.distance.compareTo(b.distance));
                               return NearbyCard(
                                 shop: _shops[index],
                                 userAddress: widget.address,
@@ -688,7 +723,11 @@ class _HomeTabState extends State<HomeTab> {
                                 favoriteFoods: widget.favoriteFoods,
                                 updateFavoriteFoods: widget.updateFavoriteFoods,
                               );
-                            }),
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          },
+                        ),
                       )
                     ],
                   ),

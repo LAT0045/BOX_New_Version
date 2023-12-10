@@ -39,7 +39,7 @@ class _NotificationTabState extends State<NotificationTab> {
           });
 
           // Sort list based on time
-          _notifications.sort((a, b) => a.time.compareTo(b.time));
+          _notifications.sort((a, b) => b.time.compareTo(a.time));
         }
 
         _isDoneGettingInfo = true;

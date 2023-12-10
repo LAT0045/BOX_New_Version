@@ -225,7 +225,9 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
                         child: SvgPicture.asset(
                           "assets/svg/backarrow.svg",
                           height: 30,

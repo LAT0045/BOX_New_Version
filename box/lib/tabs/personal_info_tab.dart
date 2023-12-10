@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:box/details/order_history_detail.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +12,9 @@ import '../utils/colors.dart';
 
 class PersonalInfoTab extends StatefulWidget {
   final UserCredential userCredential;
+    final String address;
 
-  const PersonalInfoTab({super.key, required this.userCredential});
+  const PersonalInfoTab({super.key, required this.userCredential, required this.address});
 
   @override
   State<PersonalInfoTab> createState() => _PersonalInfoTabState();
@@ -197,7 +199,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                       color: AppColors.orangeColor, width: 1.5)), // Viền dưới
             ),
             child: ElevatedButton(
-              onPressed: onPressedPayments,
+              onPressed: onPressedOrder,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.white,
@@ -436,64 +438,59 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
           ),
 
           //Logout
-          GestureDetector(
-            onTap: () {},
-            child: Container(
-              width: 330,
-              height: 60,
-              decoration: const BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        color: AppColors.orangeColor, width: 1.5)), // Viền dưới
+          Container(
+            width: 330,
+            height: 60,
+            decoration: const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      color: AppColors.orangeColor, width: 1.5)), // Viền dưới
+            ),
+            child: ElevatedButton(
+              onPressed: signOutFromGoogle,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                alignment: Alignment.centerLeft,
               ),
-              child: ElevatedButton(
-                onPressed: signOutFromGoogle,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  alignment: Alignment.centerLeft,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/svg/logout.svg",
-                      width: 40,
-                      height: 40,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    "assets/svg/payments.svg",
+                    width: 40,
+                    height: 40,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.orangeColor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.payment,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Comfortaa',
+                      color: AppColors.orangeColor,
+                    ),
+                  ),
+                  Spacer(),
+                  Transform.rotate(
+                    angle: 3.14159265,
+                    child: SvgPicture.asset(
+                      "assets/svg/backarrow.svg",
+                      width: 30,
+                      height: 30,
                       colorFilter: const ColorFilter.mode(
                         AppColors.orangeColor,
                         BlendMode.srcIn,
                       ),
                     ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      AppLocalizations.of(context)!.signOut,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Comfortaa',
-                        color: AppColors.orangeColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 100,
-                    ),
-                    Transform.rotate(
-                      angle: 3.14159265,
-                      child: SvgPicture.asset(
-                        "assets/svg/backarrow.svg",
-                        width: 30,
-                        height: 30,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.orangeColor,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           ),
@@ -525,7 +522,17 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
     );
   }
 
-  void onPressedOrder() {}
+  void onPressedOrder() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderHistoryDetail(
+          userCredential: widget.userCredential,
+          address: widget.address
+        ),
+      ),
+    );
+  }
 
   void onPressedBuyAgain() {}
 
