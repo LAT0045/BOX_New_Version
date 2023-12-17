@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:intl/intl.dart';
 import '../class/food.dart';
 import '../class/option.dart';
 import '../class/option_detail.dart';
@@ -103,7 +103,7 @@ class _CheckOutFoodCardState extends State<CheckOutFoodCard> {
                 child: SizedBox(
                   width: 210,
                   child: Text(
-                    "${_totalFoodPrice.toString()}Đ",
+                    "${NumberFormat.decimalPattern().format(_totalFoodPrice).replaceAll(',', '.').toString()}Đ",
                     style:
                         const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
                   ),

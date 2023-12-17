@@ -1,5 +1,6 @@
 import 'package:box/cards/section_card.dart';
 import 'package:box/cards/voucher_card.dart';
+import 'package:box/details/chat_detail.dart';
 import 'package:box/screens/order_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import '../class/option.dart';
 import '../class/option_detail.dart';
 import '../class/shop.dart';
 import '../utils/colors.dart';
+import 'package:intl/intl.dart';
 
 class ShopScreen extends StatefulWidget {
   final Shop shop;
@@ -160,7 +162,7 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
 
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
 
               // Shop name and rating
@@ -182,24 +184,28 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Row(children: [
-                      SvgPicture.asset(
-                        "assets/svg/star.svg",
-                        height: 20,
-                        width: 20,
-                        colorFilter: const ColorFilter.mode(
-                            AppColors.orangeColor, BlendMode.srcIn),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatDetail(
+                              userCredential: widget.userCredential,
+                              shop: widget.shop,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/svg/chat.svg', 
+                        width: 28,
+                        height: 28, 
+                        colorFilter: ColorFilter.mode(
+                          AppColors.orangeColor,
+                        BlendMode.srcIn),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 3, left: 5),
-                        child: Text(
-                          "${widget.shop.ratingScore}/5.0",
-                          style: const TextStyle(
-                              fontFamily: 'Comfortaa', fontSize: 15),
-                        ),
-                      )
-                    ]),
-                  )
+                      // Căn chỉnh
+                    ))
                 ],
               ),
 
@@ -269,6 +275,31 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
               ),
 
+              const SizedBox(
+                height: 10,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(children: [
+                  SvgPicture.asset(
+                    "assets/svg/star.svg",
+                    height: 20,
+                    width: 20,
+                    colorFilter: const ColorFilter.mode(
+                        AppColors.orangeColor, BlendMode.srcIn),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 3, left: 10),
+                    child: Text(
+                      "${widget.shop.ratingScore}/5.0",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa', fontSize: 15),
+                    ),
+                  ),
+                ]),
+              ),
+
               Padding(
                 padding: const EdgeInsets.only(top: 30),
                 child: Container(
@@ -324,15 +355,16 @@ class _ShopScreenState extends State<ShopScreen> {
           ),
         ),
         Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
+          left: 15,
+          right: 15,
+          bottom: 10,
           child: Container(
             height: 50,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(35),
-                    topRight: Radius.circular(35)),
+            decoration: BoxDecoration(
+                // borderRadius: BorderRadius.only(
+                //     topLeft: Radius.circular(35),
+                //     topRight: Radius.circular(35)),
+                borderRadius: BorderRadius.circular(18),
                 color: AppColors.mediumOrangeColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -352,7 +384,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       fontSize: 15),
                 ),
                 Text(
-                  "$totalPriceĐ",
+                  "${NumberFormat.decimalPattern().format(totalPrice).replaceAll(',', '.')}Đ",
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       color: Colors.white,

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 import '../class/food.dart';
 import '../class/option.dart';
@@ -46,6 +47,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
   late String _editedPhoneNumber = widget.phoneNumber;
   late String _editedAddress = widget.address;
   bool _isInitialized = false;
+
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _selectPaymentMethod(int value) {
     setState(() {
@@ -112,44 +115,82 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
   void checkOutPayPal(String money) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
-              sandboxMode: true,
-              clientId:
-                  "ARA2HLL2SbIBVJ2hTeV_N_3B4YsBnRdw4B3Dee5W1PO9UdCSgOHAPGCQeG7rPizD6hLAN_38yQJLbdE5",
-              secretKey:
-                  "EKxLbi3dlt-QNxpBTvV7ipBEEBVFFDj8eSEOGA_mB6_dFZKlqOaV85aDftTbNTIOZEuH3tbFon-xe7L6",
-              transactions: [
-                {
-                  "amount": {
-                    "total": money,
-                    "currency": "USD",
-                    "details": {
-                      "subtotal": money,
-                      "shipping": '0',
-                      "shipping_discount": 0
-                    }
-                  },
-                  "description": "The payment transaction description.",
-                  "item_list": {
-                    "items": [],
+            sandboxMode: true,
+            clientId:
+                "ARA2HLL2SbIBVJ2hTeV_N_3B4YsBnRdw4B3Dee5W1PO9UdCSgOHAPGCQeG7rPizD6hLAN_38yQJLbdE5",
+            secretKey:
+                "EKxLbi3dlt-QNxpBTvV7ipBEEBVFFDj8eSEOGA_mB6_dFZKlqOaV85aDftTbNTIOZEuH3tbFon-xe7L6",
+            transactions: [
+              {
+                "amount": {
+                  "total": money,
+                  "currency": "USD",
+                  "details": {
+                    "subtotal": money,
+                    "shipping": '0',
+                    "shipping_discount": 0
                   }
+                },
+                "description": "The payment transaction description.",
+                "item_list": {
+                  "items": [],
                 }
-              ],
-              note: "Contact us for any questions on your order.",
-              onSuccess: (Map params) async {
-                Navigator.pop(context);
-                pushNewOrder();
-              },
-              onCancel: () {
-                Navigator.pop(context);
-              },
-              onError: (error) {
-                // Handle error
-                Navigator.pop(context);
-              },
-            )));
+              }
+            ],
+            note: "Contact us for any questions on your order.",
+            onSuccess: (Map params) async {
+              Navigator.pop(context);
+              pushNewOrder();
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            },
+            onError: (error) {
+              // Handle error
+              Navigator.pop(context);
+            },
+          )));
   }
 
   void checkOutOrder() {
+    if (_editedUsername.isEmpty || _editedPhoneNumber.isEmpty || _editedAddress.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Thông báo',
+              style: const TextStyle(
+                fontFamily: 'Comfortaa',
+                fontSize: 18,
+                color: AppColors.orangeColor,
+                fontWeight: FontWeight.bold),),
+            content: Text(
+              'Vui lòng nhập đầy đủ thông tin',
+                style: const TextStyle(
+                fontFamily: 'Comfortaa',
+                fontSize: 16,
+                fontWeight: FontWeight.bold),
+              ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Đóng',
+                  style: const TextStyle(
+                    fontFamily: 'Comfortaa',
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
     if (_selectedValue == 2) {
       // Convert vnd to usd
       double moneyUsd = _totalMoney * 0.000041;
@@ -587,7 +628,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Text(
-                      "${_totalMoney.toString()}Đ",
+                      "${NumberFormat.decimalPattern().format(_totalMoney).replaceAll(',', '.').toString()}Đ",
                       style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 20,

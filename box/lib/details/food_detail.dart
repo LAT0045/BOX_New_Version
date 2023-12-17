@@ -1,7 +1,7 @@
 import 'package:box/cards/option_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:intl/intl.dart';
 import '../class/food.dart';
 import '../class/option_detail.dart';
 import '../utils/colors.dart';
@@ -175,7 +175,7 @@ class _FoodDetailState extends State<FoodDetail> {
               children: [
                 //
                 Text(
-                  "${widget.food.foodPrice.toString()}Đ",
+                  "${NumberFormat.decimalPattern().format(widget.food.foodPrice).replaceAll(',', '.').toString()}Đ",
                   style: const TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 20,

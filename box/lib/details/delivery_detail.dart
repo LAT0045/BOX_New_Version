@@ -12,6 +12,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
 class DeliveryDetail extends StatefulWidget {
   final Order order;
@@ -276,7 +277,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  widget.username,
+                  widget.order.name,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -308,7 +309,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  widget.phoneNumber,
+                  widget.order.phoneNumber,
                   style: TextStyle(
                       fontFamily: 'Comfortaa',
                       fontSize: 15,
@@ -350,7 +351,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Text(
-                      "${_totalMoney.toString()}Đ",
+                      "${NumberFormat.decimalPattern().format(_totalMoney).replaceAll(',', '.').toString()}Đ",
                       style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 23,
@@ -440,12 +441,14 @@ class DeliveryStepper extends StatelessWidget {
     "PENDING": 1,
     "ACCEPTED": 2,
     "DELIVERING": 3,
+    "COMPLETED": 4,
   };
 
   final Map<String, String> statusText = {
     "PENDING": "Chờ xác nhận",
     "ACCEPTED": "Đã chấp nhận",
     "DELIVERING": "Đang giao hàng",
+    "COMPLETED": "Đã hoàn thành",
   };
 
   DeliveryStepper({
@@ -461,6 +464,7 @@ class DeliveryStepper extends StatelessWidget {
       statusText["PENDING"]!,
       statusText["ACCEPTED"]!,
       statusText["DELIVERING"]!,
+      statusText["COMPLETED"]!,
     ];
 
     return Column(
@@ -484,13 +488,16 @@ class DeliveryStepper extends StatelessWidget {
   }) {
     bool isCurrentStep = index == currentIndex;
     bool isPastStep = index < currentIndex;
+    bool isCompletedStep = index == 4;
 
     String statusTitle;
-    if (isCurrentStep) {
+    if(isCompletedStep){
+      statusTitle = "Đơn hàng được giao thành công";
+    }else if (isCurrentStep) {
       statusTitle = "Đang thực hiện";
     } else if (isPastStep) {
       statusTitle = "Đã xong";
-    } else {
+    }else {
       statusTitle = "Đang chờ";
     }
 
@@ -532,7 +539,7 @@ class DeliveryStepper extends StatelessWidget {
               border: index < maxIndex
                   ? Border(
                       left: BorderSide(
-                        color: isPastStep
+                        color: isPastStep 
                             ? AppColors.mediumOrangeColor.withOpacity(0.5)
                             : AppColors.grayColor,
                         width: 2.0,
@@ -553,9 +560,9 @@ class DeliveryStepper extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 15,
-                        color: isPastStep
+                        color: isPastStep 
                             ? AppColors.mediumOrangeColor.withOpacity(0.5)
-                            : AppColors.grayColor,
+                            : status == "COMPLETED"? AppColors.mediumOrangeColor : AppColors.grayColor,
                       ),
                     ),
                   ),

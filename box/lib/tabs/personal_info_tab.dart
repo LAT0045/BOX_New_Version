@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:box/details/chat_detail.dart';
 import 'package:box/details/order_history_detail.dart';
+import 'package:box/screens/chat_list_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -251,6 +253,68 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
             height: 10,
           ),
 
+          //Message
+          Container(
+            width: 330,
+            height: 60,
+            decoration: const BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(
+                      color: AppColors.orangeColor, width: 1.5)), // Viền dưới
+            ),
+            child: ElevatedButton(
+              onPressed: onPressMessage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                alignment: Alignment.centerLeft,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SvgPicture.asset(
+                    "assets/svg/chat.svg",
+                    width: 35,
+                    height: 35,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.orangeColor, // Màu mới bạn muốn thay đổi
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    AppLocalizations.of(context)!.message,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Comfortaa',
+                      color: AppColors.orangeColor,
+                    ),
+                  ),
+                  Spacer(),
+                  Transform.rotate(
+                    angle: 3.14159265,
+                    child: SvgPicture.asset(
+                      "assets/svg/backarrow.svg", // Đường dẫn đến tệp SVG
+                      width: 30,
+                      height: 30,
+                      colorFilter: const ColorFilter.mode(
+                        AppColors.orangeColor, // Màu mới bạn muốn thay đổi
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(
+            height: 10,
+          ),
+
           //BuyAgain
           Container(
             width: 330,
@@ -458,7 +522,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SvgPicture.asset(
-                    "assets/svg/payments.svg",
+                    "assets/svg/logout.svg",
                     width: 40,
                     height: 40,
                     colorFilter: const ColorFilter.mode(
@@ -470,7 +534,7 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
                     width: 10,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.payment,
+                    AppLocalizations.of(context)!.signOut,
                     style: const TextStyle(
                       fontSize: 20,
                       fontFamily: 'Comfortaa',
@@ -534,7 +598,20 @@ class _PersonalInfoTabState extends State<PersonalInfoTab> {
     );
   }
 
-  void onPressedBuyAgain() {}
+  void onPressMessage(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChatListScreen(
+          userCredential: widget.userCredential,
+        ),
+      ),
+    );
+  }
+
+  void onPressedBuyAgain() {
+    
+  }
 
   void onPressedFavour() {}
 

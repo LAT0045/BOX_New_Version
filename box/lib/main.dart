@@ -1,5 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:box/details/chat_detail.dart';
 import 'package:box/details/order_history_detail.dart';
+import 'package:box/screens/chat_list_screen.dart';
+//import 'package:box/screens/test.dart';
 import 'package:box/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +45,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -55,6 +57,7 @@ class MyApp extends StatelessWidget {
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
+        //home: ChatDetail(currentUserID: "vn3QmJyI73Sa4lZKejBy6atigku1", shopID: "1",));
         home: LoginScreen());
   }
 }

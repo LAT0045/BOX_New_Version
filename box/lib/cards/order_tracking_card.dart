@@ -127,7 +127,7 @@ class _OrderTrackingCardState extends State<OrderTrackingCard> {
                         style: TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 15,
-                            color: AppColors.greenColor),
+                            color: widget.order.status == "DENIED" ? Colors.red : AppColors.greenColor,),
                       ),
                     ),
                     SizedBox(

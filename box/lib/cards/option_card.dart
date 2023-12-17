@@ -1,6 +1,8 @@
 import 'package:box/class/option_detail.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
 
 import '../class/option.dart';
 
@@ -125,7 +127,7 @@ class _OptionCardState extends State<OptionCard> {
                   Row(
                     children: [
                       Text(
-                        "${option.optionList[i].price.toString()}Đ",
+                        "${NumberFormat.decimalPattern().format(option.optionList[i].price).replaceAll(',', '.')}Đ",
                         style: const TextStyle(
                             fontFamily: 'Comfortaa',
                             fontSize: 18,

@@ -196,8 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> showNotification(
-      String status, String orderId, String userId) async {
+  Future<void> showNotification(String status, String orderId, String userId) async {
     String title = "Thông báo đơn hàng";
     String body = getNotificationText(status);
 
@@ -215,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
         MyNotification(title, body, DateTime.now().toString(), orderId);
 
     String formattedDateTime =
-        DateFormat('yyyy_MM_dd_HH_mm_ss').format(DateTime.now());
+        DateFormat('yyyy_MM_dd_HH_mm').format(DateTime.now());
     String notificationId = orderId + formattedDateTime;
     print(notificationId);
 
@@ -250,7 +249,6 @@ class _HomeScreenState extends State<HomeScreen> {
         'title': notification.title,
         'body': notification.body,
         'time': notification.time,
-        //'orderId' : notification.orderId,
       });
     } catch (e) {
       // Error

@@ -2,6 +2,7 @@ import 'package:box/details/food_detail.dart';
 import 'package:box/details/order_food_detail.dart';
 import 'package:box/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../class/food.dart';
 
@@ -161,7 +162,7 @@ class _HorizontalFoodCardState extends State<HorizontalFoodCard> {
                     children: [
                       // Price
                       Text(
-                        "${widget.food.foodPrice}Đ",
+                        "${NumberFormat.decimalPattern().format(widget.food.foodPrice).replaceAll(',', '.')}Đ",
                         style: const TextStyle(
                             fontFamily: 'Comfortaa', fontSize: 17),
                       ),

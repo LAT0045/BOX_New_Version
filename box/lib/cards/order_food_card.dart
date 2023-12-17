@@ -5,6 +5,7 @@ import '../class/food.dart';
 import '../class/option.dart';
 import '../class/option_detail.dart';
 import '../utils/colors.dart';
+import 'package:intl/intl.dart';
 
 class OrderFoodCard extends StatefulWidget {
   final Food food;
@@ -125,7 +126,7 @@ class _OrderFoodCardState extends State<OrderFoodCard> {
                 child: SizedBox(
                   width: 210,
                   child: Text(
-                    "${_totalFoodPrice.toString()}Đ",
+                    "${NumberFormat.decimalPattern().format(_totalFoodPrice).replaceAll(',', '.').toString()}Đ",
                     style:
                         const TextStyle(fontFamily: 'Comfortaa', fontSize: 17),
                   ),

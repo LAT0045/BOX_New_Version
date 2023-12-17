@@ -57,6 +57,7 @@
     "repurchase": "Repurchase",
     "payment": "Payment",
     "signOut": "Sign Out",
+    "message" : "Message",
 
     "favorite": "Favorite",
     "account": "Account",
