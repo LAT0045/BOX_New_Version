@@ -16,6 +16,8 @@ class OrderScreen extends StatefulWidget {
   final String username;
   final String phoneNumber;
   final String address;
+  final String shopAddress;
+  final String shopId;
   final UserCredential userCredential;
 
   const OrderScreen(
@@ -27,6 +29,8 @@ class OrderScreen extends StatefulWidget {
       required this.username,
       required this.phoneNumber,
       required this.address,
+      required this.shopAddress,
+      required this.shopId,
       required this.userCredential});
 
   @override
@@ -116,6 +120,8 @@ class _OrderScreenState extends State<OrderScreen> {
                               phoneNumber: widget.phoneNumber,
                               address: widget.address,
                               userCredential: widget.userCredential,
+                              shopAddress: widget.shopAddress,
+                              shopId: widget.shopId,
                             )),
                   );
                 },

@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:box/cards/checkout_food_card.dart';
+import 'package:box/details/all_voucher_detail.dart';
 import 'package:box/screens/edit_checkout_info_screen.dart';
 import 'package:box/screens/successful_checkout_screen.dart';
+import 'package:box/service/location_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -17,16 +21,20 @@ import '../utils/colors.dart';
 class CheckOutDetail extends StatefulWidget {
   final List<Food> foods;
   final String username;
+  final String shopAddress;
   final String phoneNumber;
   final String address;
+  final String shopId;
   final UserCredential userCredential;
 
   const CheckOutDetail(
       {super.key,
       required this.foods,
       required this.username,
+      required this.shopAddress,
       required this.phoneNumber,
       required this.address,
+      required this.shopId,
       required this.userCredential});
 
   @override
@@ -38,6 +46,7 @@ class CheckOutDetail extends StatefulWidget {
 class _CheckOutDetailState extends State<CheckOutDetail> {
   int _selectedValue = 1;
   int _totalMoney = 0;
+  int _subTotalMoney = 0;
   bool isScheduled = false;
 
   DateTime selectedDate = DateTime.now();
@@ -46,7 +55,12 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
   late String _editedUsername = widget.username;
   late String _editedPhoneNumber = widget.phoneNumber;
   late String _editedAddress = widget.address;
+
+  int? returnedDiscount;
+  int? discountQuantity;
   bool _isInitialized = false;
+  int shippingFee = 0;
+  double distance = 0;
 
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -56,14 +70,80 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
     });
   }
 
-  int calculateTotalPrice(Food food) {
+  int calculateSubtotalPrice(Food food) {
     int res = food.foodPrice;
 
     for (Option option in food.options) {
       res += calculateOptionDetail(option.optionList);
     }
 
-    return res*food.quantity;
+    return res * food.quantity;
+  }
+
+  int calculateTotalPrice(Food food) {
+    int res = calculateSubtotalPrice(food);
+    return res;
+  }
+
+  void updateTotalAmount() {
+    setState(() {
+      _totalMoney = 0;
+      for (Food food in widget.foods) {
+        int totalPrice = calculateTotalPrice(food);
+        _totalMoney += totalPrice;
+      }
+      _totalMoney += shippingFee;
+      _totalMoney -= returnedDiscount ?? 0;
+    });
+  }
+
+  Future<double> calculateDistance(
+      String shopAddress, String orderAddress) async {
+    LocationService locationService = LocationService();
+    double distance = await locationService.calculateDistanceBetweenAddresses(
+      shopAddress,
+      orderAddress,
+    );
+    return double.parse(distance.toStringAsFixed(2));
+  }
+
+  Future<int> calculateShippingFee(
+      String shopAddress, String orderAddress) async {
+    const baseFee = 15000;
+    const feePerKm = 5000;
+
+    double distance = await calculateDistance(shopAddress, orderAddress);
+
+    if (distance <= 3.0) {
+      return baseFee;
+    } else {
+      final extraKm = distance - 3.0;
+      final extraFee = (extraKm * feePerKm).ceil();
+      double roundedNumber = (baseFee + extraFee + 50).roundToDouble() -
+          ((baseFee + extraFee + 50).roundToDouble() % 100);
+      return roundedNumber.ceil();
+    }
+  }
+
+  void updateShippingInfo() {
+    calculateShippingFee(widget.shopAddress, _editedAddress).then((fee) {
+      setState(() {
+        shippingFee = fee;
+        updateTotalAmount();
+        print(shippingFee);
+      });
+    }).catchError((error) {
+      // Xử lý lỗi nếu có
+    });
+
+    calculateDistance(widget.shopAddress, _editedAddress)
+        .then((calculatedDistance) {
+      setState(() {
+        distance = calculatedDistance;
+      });
+    }).catchError((error) {
+      // Xử lý lỗi nếu có
+    });
   }
 
   int calculateOptionDetail(List<OptionDetail> optionDetails) {
@@ -98,6 +178,8 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
         'paymentMethod': _selectedValue == 1 ? "CASH" : "ONLINE",
         'status': "PENDING",
         'foods': widget.foods.map((food) => food.toJson()).toList(),
+        'discount': returnedDiscount ?? 0,
+        'shippingFee': shippingFee,
       });
 
       Navigator.of(context).push(
@@ -115,45 +197,47 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
   void checkOutPayPal(String money) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
-            sandboxMode: true,
-            clientId:
-                "ARA2HLL2SbIBVJ2hTeV_N_3B4YsBnRdw4B3Dee5W1PO9UdCSgOHAPGCQeG7rPizD6hLAN_38yQJLbdE5",
-            secretKey:
-                "EKxLbi3dlt-QNxpBTvV7ipBEEBVFFDj8eSEOGA_mB6_dFZKlqOaV85aDftTbNTIOZEuH3tbFon-xe7L6",
-            transactions: [
-              {
-                "amount": {
-                  "total": money,
-                  "currency": "USD",
-                  "details": {
-                    "subtotal": money,
-                    "shipping": '0',
-                    "shipping_discount": 0
+              sandboxMode: true,
+              clientId:
+                  "ARA2HLL2SbIBVJ2hTeV_N_3B4YsBnRdw4B3Dee5W1PO9UdCSgOHAPGCQeG7rPizD6hLAN_38yQJLbdE5",
+              secretKey:
+                  "EKxLbi3dlt-QNxpBTvV7ipBEEBVFFDj8eSEOGA_mB6_dFZKlqOaV85aDftTbNTIOZEuH3tbFon-xe7L6",
+              transactions: [
+                {
+                  "amount": {
+                    "total": money,
+                    "currency": "USD",
+                    "details": {
+                      "subtotal": money,
+                      "shipping": '0',
+                      "shipping_discount": 0
+                    }
+                  },
+                  "description": "The payment transaction description.",
+                  "item_list": {
+                    "items": [],
                   }
-                },
-                "description": "The payment transaction description.",
-                "item_list": {
-                  "items": [],
                 }
-              }
-            ],
-            note: "Contact us for any questions on your order.",
-            onSuccess: (Map params) async {
-              Navigator.pop(context);
-              pushNewOrder();
-            },
-            onCancel: () {
-              Navigator.pop(context);
-            },
-            onError: (error) {
-              // Handle error
-              Navigator.pop(context);
-            },
-          )));
+              ],
+              note: "Contact us for any questions on your order.",
+              onSuccess: (Map params) async {
+                Navigator.pop(context);
+                pushNewOrder();
+              },
+              onCancel: () {
+                Navigator.pop(context);
+              },
+              onError: (error) {
+                // Handle error
+                Navigator.pop(context);
+              },
+            )));
   }
 
   void checkOutOrder() {
-    if (_editedUsername.isEmpty || _editedPhoneNumber.isEmpty || _editedAddress.isEmpty) {
+    if (_editedUsername.isEmpty ||
+        _editedPhoneNumber.isEmpty ||
+        _editedAddress.isEmpty) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -161,17 +245,18 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
             title: Text(
               'Thông báo',
               style: const TextStyle(
-                fontFamily: 'Comfortaa',
-                fontSize: 18,
-                color: AppColors.orangeColor,
-                fontWeight: FontWeight.bold),),
+                  fontFamily: 'Comfortaa',
+                  fontSize: 18,
+                  color: AppColors.orangeColor,
+                  fontWeight: FontWeight.bold),
+            ),
             content: Text(
               'Vui lòng nhập đầy đủ thông tin',
-                style: const TextStyle(
-                fontFamily: 'Comfortaa',
-                fontSize: 16,
-                fontWeight: FontWeight.bold),
-              ),
+              style: const TextStyle(
+                  fontFamily: 'Comfortaa',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold),
+            ),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -180,9 +265,9 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                 child: Text(
                   'Đóng',
                   style: const TextStyle(
-                    fontFamily: 'Comfortaa',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                      fontFamily: 'Comfortaa',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -216,6 +301,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
         print(food.quantity);
 
         _totalMoney += calculateTotalPrice(food);
+        _subTotalMoney += calculateSubtotalPrice(food);
       }
     });
 
@@ -318,6 +404,7 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
                             _editedAddress =
                                 editedData['address'] ?? _editedAddress;
                           });
+                          updateShippingInfo();
                         }
                       },
                       child: Text(
@@ -603,12 +690,168 @@ class _CheckOutDetailState extends State<CheckOutDetail> {
               ),
             ),
 
+            const SizedBox(
+              height: 20,
+            ),
+
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Tạm tính",
+                      style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "${NumberFormat.decimalPattern().format(_subTotalMoney).replaceAll(',', '.').toString()}Đ",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 16,
+                          color: AppColors.orangeColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
             //
             const SizedBox(
               height: 20,
             ),
 
-            // Checkout money
+            //Shipping fee
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Phí giao hàng " + " ( ${distance} km )",
+                      style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "${NumberFormat.decimalPattern().format(shippingFee).replaceAll(',', '.').toString()}Đ",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 16,
+                          color: AppColors.mediumOrangeColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            Visibility(
+              visible: returnedDiscount != null && returnedDiscount != 0,
+              child: SizedBox(
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        "Mã giảm giá ",
+                        style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: Text(
+                        "-" +
+                            "${NumberFormat.decimalPattern().format(returnedDiscount ?? 0).replaceAll(',', '.').toString()}Đ",
+                        style: const TextStyle(
+                            fontFamily: 'Comfortaa',
+                            fontSize: 16,
+                            color: Color.fromRGBO(245, 131, 49, 1)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            Container(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () async {
+                  final discount = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AllVoucherDetail(
+                        shopId: widget.shopId,
+                        subTotal: _subTotalMoney,
+                        ship: shippingFee,
+                      ),
+                    ),
+                  );
+
+                  if (discount != null) {
+                    setState(() {
+                      returnedDiscount = discount;
+                      updateTotalAmount();
+                    });
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 8),
+                      child: Text(
+                        returnedDiscount != null && returnedDiscount != 0
+                        ?"Đã áp dụng mã giảm"
+                        :"Thêm mã giảm", style: const TextStyle(
+                            fontFamily: 'Comfortaa',
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.mediumOrangeColor),),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18,
+                      color: AppColors.mediumOrangeColor, // Màu cam
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
             SizedBox(
               width: double.infinity,
               child: Row(

@@ -1,8 +1,11 @@
 import 'package:box/cards/section_card.dart';
 import 'package:box/cards/voucher_card.dart';
+import 'package:box/class/voucher.dart';
 import 'package:box/details/chat_detail.dart';
+import 'package:box/details/shop_voucher_detail.dart';
 import 'package:box/screens/order_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,11 +35,11 @@ class ShopScreen extends StatefulWidget {
       required this.favoriteFoods,
       required this.updateFavoriteFoods});
 
-  final List<VoucherCard> _vouchers = [
-    const VoucherCard(),
-    const VoucherCard(),
-    const VoucherCard()
-  ];
+  // final List<VoucherCard> _vouchers = [
+  //   const VoucherCard(),
+  //   const VoucherCard(),
+  //   const VoucherCard()
+  // ];
 
   @override
   State<StatefulWidget> createState() {
@@ -48,6 +51,46 @@ class _ShopScreenState extends State<ShopScreen> {
   int totalFoods = 0;
   int totalPrice = 0;
   List<Food> purchasedFoods = [];
+  List<Voucher> listVouchers = [];
+  bool _isDoneGettingInfo = false;
+
+  Future<List<Voucher>> getVouchers() async {
+    final databaseReference = FirebaseDatabase.instance;
+    final snapShot = await databaseReference.ref("Vouchers").get();
+    final voucherMap = snapShot.value as Map;
+
+    List<Voucher> vouchers = []; // List to hold fetched vouchers
+
+    if (snapShot.value != null) {
+      voucherMap.forEach((key, value) {
+        Map<String, dynamic> voucherData =
+            Map<String, dynamic>.from(value as Map);
+        Voucher voucher = Voucher.fromJson(key.toString(), voucherData);
+        if (voucher.shopId == widget.shop.shopId || voucher.shopId == "admin") {
+          DateTime endDate = DateFormat('dd/MM/yyyy').parse(voucher.endDate);
+          if (endDate.isAfter(DateTime.now())) {
+            vouchers.add(voucher);
+          }
+        }
+      });
+    }
+
+    _isDoneGettingInfo = true;
+    return vouchers;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadVouchers();
+  }
+
+  void loadVouchers() async {
+    List<Voucher> fetchedVouchers = await getVouchers();
+    setState(() {
+      listVouchers = fetchedVouchers;
+    });
+  }
 
   void updateTotalFoods(int quantity, bool isDecreased) {
     setState(() {
@@ -183,29 +226,28 @@ class _ShopScreenState extends State<ShopScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ChatDetail(
-                              userCredential: widget.userCredential,
-                              shop: widget.shop,
+                      padding: const EdgeInsets.only(right: 10),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatDetail(
+                                userCredential: widget.userCredential,
+                                shop: widget.shop,
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/svg/chat.svg', 
-                        width: 28,
-                        height: 28, 
-                        colorFilter: ColorFilter.mode(
-                          AppColors.orangeColor,
-                        BlendMode.srcIn),
-                      ),
-                      // Căn chỉnh
-                    ))
+                          );
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/svg/chat.svg',
+                          width: 28,
+                          height: 28,
+                          colorFilter: ColorFilter.mode(
+                              AppColors.orangeColor, BlendMode.srcIn),
+                        ),
+                        // Căn chỉnh
+                      ))
                 ],
               ),
 
@@ -309,29 +351,69 @@ class _ShopScreenState extends State<ShopScreen> {
               ),
 
               // Voucher
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(10.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
                       "Mã Giảm Giá",
                       style: TextStyle(
-                          fontFamily: 'Comfortaa',
-                          fontSize: 20,
-                          color: AppColors.orangeColor),
+                        fontFamily: 'Comfortaa',
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.orangeColor,
+                      ),
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ShopVoucherDetail(vouchers: listVouchers),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        "Xem Tất Cả",
+                        style: TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 14,
+                          color: AppColors.blueColor,
+                          decoration: TextDecoration.underline,
+                          decorationColor: AppColors.blueColor,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              for (int i = 0; i < widget._vouchers.length; i++)
+              for (int i = 0; i < listVouchers.length && i < 2; i++)
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: widget._vouchers[i],
-                ),
-
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          'assets/svg/voucher_shop.svg',
+                          width: 20,
+                          height: 20,
+                        ),
+                        SizedBox(width: 8),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Nhập: "${listVouchers[i].voucherCode}" - ${listVouchers[i].voucherName}',
+                            style: TextStyle(
+                              fontFamily: "Comfortaa",
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )),
               const SizedBox(
                 height: 10,
               ),
@@ -361,11 +443,20 @@ class _ShopScreenState extends State<ShopScreen> {
           child: Container(
             height: 50,
             decoration: BoxDecoration(
-                // borderRadius: BorderRadius.only(
-                //     topLeft: Radius.circular(35),
-                //     topRight: Radius.circular(35)),
-                borderRadius: BorderRadius.circular(18),
-                color: AppColors.mediumOrangeColor),
+              // borderRadius: BorderRadius.only(
+              //     topLeft: Radius.circular(35),
+              //     topRight: Radius.circular(35)),
+              borderRadius: BorderRadius.circular(18),
+              color: AppColors.mediumOrangeColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 4,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -405,6 +496,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                 phoneNumber: widget.phoneNumber,
                                 address: widget.address,
                                 userCredential: widget.userCredential,
+                                shopAddress: widget.shop.shopAddress,
+                                shopId: widget.shop.shopId,
                               )),
                     );
                   },

@@ -1,12 +1,25 @@
+import 'package:box/cards/voucher_detail_card.dart';
+import 'package:box/class/voucher.dart';
 import 'package:box/utils/colors.dart';
 import 'package:dotted_decoration/dotted_decoration.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 
-class VoucherCard extends StatelessWidget {
-  const VoucherCard({super.key});
 
+class VoucherCard extends StatefulWidget {
+  final Voucher voucher;
+
+  const VoucherCard({super.key, required this.voucher});
+  @override
+  State<StatefulWidget> createState() {
+    return _VoucherCardState();
+  }
+}
+
+class _VoucherCardState extends State<VoucherCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -44,19 +57,21 @@ class VoucherCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Voucher info
-                  const Text(
-                    "Giảm 20%",
-                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 18),
+                  Text(
+                    widget.voucher.voucherName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontFamily: 'Comfortaa', fontSize: 16),
                   ),
 
                   // Condition
-                  const Padding(
+                  Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.0),
                     child: Text(
-                      "Đơn tối thiểu 50.000Đ",
+                      "Đơn tối thiểu " + "${NumberFormat.decimalPattern().format(widget.voucher.orderCondition).replaceAll(',', '.')}Đ",
                       style: TextStyle(
                         fontFamily: 'Comfortaa',
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -69,15 +84,15 @@ class VoucherCard extends StatelessWidget {
                         width: 10,
                         height: 10,
                         colorFilter:
-                            const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+                            const ColorFilter.mode(Colors.red, BlendMode.srcIn,),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
-                      const Text(
-                        "Hết hạn: 20/08/2023",
+                      Text(
+                        "Hết hạn: " + widget.voucher.endDate,
                         style: TextStyle(
-                            fontFamily: 'Comfortaa', color: Colors.red),
+                            fontFamily: 'Comfortaa', color: Colors.red, fontSize: 14),
                       )
                     ],
                   )
@@ -101,7 +116,7 @@ class VoucherCard extends StatelessWidget {
               child: Text(
                 AppLocalizations.of(context)!.save,
                 style: const TextStyle(
-                    fontFamily: 'Comfortaa', color: AppColors.orangeColor),
+                    fontFamily: 'Comfortaa', color: AppColors.orangeColor, fontSize: 15),
               ),
             ),
           )

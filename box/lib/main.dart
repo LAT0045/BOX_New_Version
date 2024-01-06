@@ -1,8 +1,8 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:box/cards/voucher_card.dart';
 import 'package:box/details/chat_detail.dart';
 import 'package:box/details/order_history_detail.dart';
-import 'package:box/screens/chat_list_screen.dart';
-//import 'package:box/screens/test.dart';
+import 'package:box/cards/voucher_detail_card.dart';
 import 'package:box/screens/login_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

@@ -13,6 +13,8 @@ class Order{
   late String _timeScheduled;
   late String _userId; 
   late String _phoneNumber;
+  late int _shippingFee;
+  late int _discount; 
 
   Order(
     this._orderId,
@@ -27,6 +29,8 @@ class Order{
     this._status,
     this._timeScheduled,
     this._userId,
+    this._shippingFee,
+    this._discount,
     
   );
 
@@ -65,6 +69,8 @@ class Order{
       json['status'] ?? '',
       json['timeScheduled'] ?? '',
       json['userId'] ?? '',
+      json['shippingFee'] ?? 0,
+      json['discount'] ?? 0,
     );
   }
 
@@ -84,6 +90,9 @@ class Order{
       'status': _status,
       'timeScheduled': _timeScheduled,
       'userId': _userId,
+      'shippingFee': _shippingFee,
+      'discount': _discount,
+
     };
   }
 
@@ -137,6 +146,14 @@ class Order{
 
   String get phoneNumber {
     return _phoneNumber;
+  }
+
+  int get shippingFee {
+    return _shippingFee;
+  }
+
+  int get discount {
+    return _discount;
   }
 
   

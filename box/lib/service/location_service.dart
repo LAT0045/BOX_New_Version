@@ -59,7 +59,7 @@ class LocationService {
         longitude2,
       );
       
-      double distanceInKm = distanceInMeters / 1000; // Chuyển đổi từ mét sang kilômét
+      double distanceInKm = distanceInMeters / 1000;
       return distanceInKm;
     } else {
       print('Could not find locations for the addresses.');

@@ -80,6 +80,8 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
         'createdDate': "${date.day}/${date.month}/${date.year}",
         'totalPrice': _totalMoney,
         'foods': widget.foods.map((food) => food.toJson()).toList(),
+        'discount': widget.order.discount,
+        'shippingFee': widget.order.shippingFee,
       });
 
       DatabaseReference databaseReference2 =
@@ -140,9 +142,10 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
           title: Text(
             "Bạn có chắc chắn muốn hủy đơn?",
             style: const TextStyle(
-              fontFamily: 'Comfortaa',
-              fontSize: 20,
-              fontWeight: FontWeight.bold),),
+                fontFamily: 'Comfortaa',
+                fontSize: 20,
+                fontWeight: FontWeight.bold),
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -150,21 +153,18 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                 cancelOrder(); // Hủy đơn hàng
               },
               style: TextButton.styleFrom(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-              child: Text(
-                "Yes",
-                style: const TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.mediumOrangeColor)
-              
               ),
+              child: Text("Yes",
+                  style: const TextStyle(
+                      fontFamily: 'Comfortaa',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.mediumOrangeColor)),
             ),
             TextButton(
               onPressed: () {
@@ -176,15 +176,15 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  backgroundColor:  AppColors.mediumOrangeColor // Màu xám khi nút bị disable
-                ),
-              child: Text(
-                "Cancel",
-                style: const TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white)),
+                  backgroundColor:
+                      AppColors.mediumOrangeColor // Màu xám khi nút bị disable
+                  ),
+              child: Text("Cancel",
+                  style: const TextStyle(
+                      fontFamily: 'Comfortaa',
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
             ),
           ],
         );
@@ -331,7 +331,112 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
             const SizedBox(
               height: 20.0,
             ),
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Tạm tính",
+                      style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "${NumberFormat.decimalPattern().format(_totalMoney).replaceAll(',', '.').toString()}Đ",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 16,
+                          color: AppColors.orangeColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
 
+            //
+            const SizedBox(
+              height: 20,
+            ),
+
+            //Shipping fee
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: Text(
+                      "Phí giao hàng ",
+                      style: const TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      "${NumberFormat.decimalPattern().format(widget.order.shippingFee).replaceAll(',', '.').toString()}Đ",
+                      style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 16,
+                          color: AppColors.mediumOrangeColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            Visibility(
+              visible: widget.order.discount != 0, 
+              child: SizedBox(
+                width: double.infinity,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: Text(
+                        "Mã giảm giá ",
+                        style: const TextStyle(
+                          fontFamily: 'Comfortaa',
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 20.0),
+                      child: Text(
+                        "-" +
+                            "${NumberFormat.decimalPattern().format(widget.order.discount).replaceAll(',', '.').toString()}Đ",
+                        style: const TextStyle(
+                            fontFamily: 'Comfortaa',
+                            fontSize: 16,
+                            color: Color.fromRGBO(245, 131, 49, 1)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               width: double.infinity,
               child: Row(
@@ -351,7 +456,7 @@ class _DeliveryDetailState extends State<DeliveryDetail> {
                   Padding(
                     padding: const EdgeInsets.only(right: 20.0),
                     child: Text(
-                      "${NumberFormat.decimalPattern().format(_totalMoney).replaceAll(',', '.').toString()}Đ",
+                      "${NumberFormat.decimalPattern().format((_totalMoney + widget.order.shippingFee) - widget.order.discount).replaceAll(',', '.').toString()}Đ",
                       style: const TextStyle(
                           fontFamily: 'Comfortaa',
                           fontSize: 23,
@@ -491,13 +596,13 @@ class DeliveryStepper extends StatelessWidget {
     bool isCompletedStep = index == 4;
 
     String statusTitle;
-    if(isCompletedStep){
+    if (isCompletedStep) {
       statusTitle = "Đơn hàng được giao thành công";
-    }else if (isCurrentStep) {
+    } else if (isCurrentStep) {
       statusTitle = "Đang thực hiện";
     } else if (isPastStep) {
       statusTitle = "Đã xong";
-    }else {
+    } else {
       statusTitle = "Đang chờ";
     }
 
@@ -539,7 +644,7 @@ class DeliveryStepper extends StatelessWidget {
               border: index < maxIndex
                   ? Border(
                       left: BorderSide(
-                        color: isPastStep 
+                        color: isPastStep
                             ? AppColors.mediumOrangeColor.withOpacity(0.5)
                             : AppColors.grayColor,
                         width: 2.0,
@@ -560,9 +665,11 @@ class DeliveryStepper extends StatelessWidget {
                       style: TextStyle(
                         fontFamily: 'Comfortaa',
                         fontSize: 15,
-                        color: isPastStep 
+                        color: isPastStep
                             ? AppColors.mediumOrangeColor.withOpacity(0.5)
-                            : status == "COMPLETED"? AppColors.mediumOrangeColor : AppColors.grayColor,
+                            : status == "COMPLETED"
+                                ? AppColors.mediumOrangeColor
+                                : AppColors.grayColor,
                       ),
                     ),
                   ),
